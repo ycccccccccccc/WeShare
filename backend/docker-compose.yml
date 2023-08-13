@@ -1,0 +1,11 @@
+version: '3.8'
+
+networks:
+  weshare-network:
+    driver: bridge
+
+services:
+  weshare:
+    build: .
+    ports:
+      - "3000:3000"
