@@ -16,7 +16,7 @@ DO $$ BEGIN
             password VARCHAR(255) NOT NULL,
             rating FLOAT,
             photo VARCHAR(255),
-            phine INT
+            phone INT
         );
     END IF;
 END $$;
