@@ -58,5 +58,14 @@ module.exports = {
         }
     },
 
+    getUser: async ( res, id ) => {
+        try {
+            const sql = 'SELECT name, rating FROM user WHERE id = ?'
+            const [results] = await db.query(sql, [id]);
+            return results[0]
+        } catch (err) {
+            return util.databaseError(err,'getUser',res);
+        }
+    },
     
 }
