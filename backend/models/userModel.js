@@ -7,7 +7,7 @@ module.exports = {
     signup: async ( res, name, email, password ) => {
         try {
             const hashPwd = bcrypt.hashSync(password, 10);
-            const sql = 'INSERT INTO users (Name, Email, Password) VALUES (?,?,?)'
+            const sql = 'INSERT INTO user (Name, Email, Password) VALUES (?,?,?)'
             const [results] = await db.query(sql, [name,email,hashPwd])
             const user = {
                 id: results.insertId, 
