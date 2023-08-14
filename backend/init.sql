@@ -11,13 +11,12 @@ DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'user') THEN
         CREATE TABLE user (
             id SERIAL PRIMARY KEY,
-            provider VARCHAR(255) NOT NULL,
             name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
-            picture VARCHAR(255),
             password VARCHAR(255) NOT NULL,
-            introduction VARCHAR(255),
-            tags VARCHAR(255)
+            rating FLOAT,
+            photo VARCHAR(255),
+            phine INT
         );
     END IF;
 END $$;
