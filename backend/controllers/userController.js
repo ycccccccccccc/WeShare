@@ -36,6 +36,6 @@ module.exports = {
             return res.status(403).json({ error: 'Email already exists' });
         }
         const result = await userModel.signup(res,name,email,password)
-        return result.status(200).json({ data: result })
+        return res.status(200).json({ data: result })
     },
 }
