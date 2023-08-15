@@ -27,7 +27,8 @@ module.exports = {
     },
     getItem: async ( res, id ) => {
         try {
-            const seller_id = await this.getSeller(res, id).id;
+            const sellerResult = await this.getSeller(res, id);
+            const seller_id = sellerResult.seller_id;
             const user = await getUser(res, seller_id);
             const sql = 'SELECT seller_id, title, image, introduction, cost, tag, item_location \
             FROM item WHERE id = ?'
