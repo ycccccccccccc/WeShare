@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS item (
     seller_id INT NOT NULL,
     buyer_id INT,
     title VARCHAR(255) NOT NULL,
-    image VARCHAR(255) NOT NULL,
+    image VARCHAR(255),
     introduction VARCHAR(255) NOT NULL,
     cost INT NOT NULL,
     tag ENUM('食品', '日用品', '衣物', '美妝', '家具', '優惠卷', '其他') NOT NULL,
