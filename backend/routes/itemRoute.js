@@ -22,7 +22,7 @@ const upload = multer({
   });
 
 router.post('/', [util.authorize_json, util.authorize_bearer], itemController.addItem);
-router.get('/:id', [util.authorize_json, util.authorize_bearer], itemController.getItems);
+router.get('/:id', [util.authorize_json, util.authorize_bearer], itemController.getItem);
 router.get('/', [util.authorize_json, util.authorize_bearer], itemController.getItems);
 router.put('/:id', [util.authorize_json, util.authorize_bearer], itemController.addBuyer);
 router.put('/:id', [util.authorize_json, util.authorize_bearer], itemController.updateItem);

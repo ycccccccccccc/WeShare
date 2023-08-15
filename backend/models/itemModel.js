@@ -60,7 +60,7 @@ module.exports = {
             const sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
             FROM item LEFT JOIN user ON item.seller_id = user.id\
             WHERE item.id <= ? \
-            ORDER BY post.id DESC LIMIT ?'
+            ORDER BY item.id DESC LIMIT ?'
             const [results] = await db.query(sql, [item_id, limit]);
             let items = [];
             results.map(data => {
