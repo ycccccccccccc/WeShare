@@ -1,3 +1,7 @@
+
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'pwd';
+flush privileges;
+
 -- Create the 'weshare' database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS weshare;
 CREATE DATABASE IF NOT EXISTS weshare_test;
@@ -32,5 +36,7 @@ CREATE TABLE IF NOT EXISTS item (
     CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE,
     CONSTRAINT item_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
 );
+
+
 
 
