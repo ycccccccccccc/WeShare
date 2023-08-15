@@ -1,6 +1,9 @@
-import styles from "../styles/Itemcard.module.scss";
+/* eslint-disable react/prop-types */
 import Image from 'next/image';
-export default function Itemcard() {
+import styles from "../styles/Itemcard.module.scss";
+
+export default function Itemcard({ onMoreClick }) {
+  const sampleAddress = "台北市南港區東新街170巷47號1樓";
   return (
     <div>
       <div className={styles.ItemBoard}>
@@ -16,7 +19,7 @@ export default function Itemcard() {
           <div className={styles.ItemDetailName}>物品: 棉被</div>
           <div className={styles.ItemDetailPrice}>價格: 200元/個</div>
         </div>
-        <div className={styles.more}>更多</div>
+        <button type='button' className={styles.more} onClick={() => onMoreClick(sampleAddress)}>更多</button>
       </div>
     </div>
   );
