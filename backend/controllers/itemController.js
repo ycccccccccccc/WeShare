@@ -74,7 +74,7 @@ module.exports = {
             }
         });
 
-        const pic_path = `https://${process.env.id}/images/item_${item_id}.${file_name[file_name.length-1]}`;
+        const pic_path = `https://${process.env.ip}/images/item_${item_id}.${file_name[file_name.length-1]}`;
         const result = await updateItemPhoto(res, item_id, pic_path);
         return res.status(200).json({ item: result });
     }
