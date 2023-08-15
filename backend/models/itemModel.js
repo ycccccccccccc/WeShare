@@ -1,14 +1,12 @@
-const bcrypt = require('bcrypt');
 const util = require('../utils/util')
 const { db } = require('../utils/util');
-const { getUser } = require('./userModel');
 
 module.exports = {
 
-    addItem: async ( res, seller_id, title, image, introduction, cost, tag, location ) => {
+    addItem: async ( res, seller_id, title, image, introduction, cost, tag, location, expired_at ) => {
         try {
-            const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, location) VALUES (?,?,?,?,?,?,?)'
-            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, location])
+            const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, location, expired_at) VALUES (?,?,?,?,?,?,?,?)'
+            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, location, expired_at])
             const item = {
                 id: results.insertId, 
             };
@@ -17,22 +15,15 @@ module.exports = {
             return util.databaseError(err,'addItem',res);
         }
     },
-    getSeller: async ( res, id ) => {
-        try {
-            const sql = 'SELECT seller_id FROM item WHERE id = ?'
-            const [results] = await db.query(sql, [id])
-            return results[0];
-        } catch (err) {
-            return util.databaseError(err,'getSeller',res);
-        }
-    },
+
     getItem: async ( res, id ) => {
         try {
-            const seller_id = this.getSeller(id).id;
-            const user = await getUser(res, seller_id);
-            const sql = 'SELECT seller_id, title, image, introduction, cost, tag, location \
-            FROM item WHERE id = ?'
-            const [results] = await db.query(sql, [id]);
+            const sql = `
+            SELECT i.seller_id, i.title, i.image, i.introduction, i.cost, i.tag, i.location, i.buyer_id, i.expired_at, u.name, u.rating
+            FROM item AS i LEFT JOIN user AS u 
+            ON i.seller_id = u.id
+            WHERE i.seller_id = ?`
+            const [[results]] = await db.query(sql, [id]);
             const item = {
                 id: id,
                 title: results.title, 
@@ -43,9 +34,9 @@ module.exports = {
                 location: results.location,
                 buyer_id: results.buyer_id,
                 user: {
-                    id: seller_id,
-                    name: user.name,
-                    rating: user.rating
+                    id: results.seller_id,
+                    name: results.name,
+                    rating: results.rating
                 }
             };
             return item;
@@ -53,6 +44,7 @@ module.exports = {
             return util.databaseError(err,'getItem',res);
         }
     },
+    
     getItems: async ( res, item_id, limit ) => {
         try {
             limit = limit + 1;

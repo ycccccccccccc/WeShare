@@ -14,7 +14,6 @@ module.exports = {
         }
         // 確認密碼跟信箱相符
         const result = await userModel.signin(res, email, password);
-	console.log(result)
         if ( !result ) {
             return res.status(403).json({ error: "Wrong Password" }); 
         } else {
