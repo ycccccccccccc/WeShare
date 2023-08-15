@@ -77,11 +77,10 @@ module.exports = {
             }
             if(results.length === 0){
                 return [];
-            }
-            console.log(results);
+            };
             let items = [];
+	    results.map(test => {console.log(test.id)});
             results.map(result => {
-                console.log(result)
                 const item = {
                     id: result.id,
                     title: result.title, 
@@ -101,6 +100,7 @@ module.exports = {
                 };
                 items.push(item);
             })
+	    console.log(items);
             return items;            
         } catch (err) {
             return util.databaseError(err,'getItems',res);
