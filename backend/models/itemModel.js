@@ -66,57 +66,53 @@ module.exports = {
             FROM item LEFT JOIN user ON item.seller_id = user.id\
             WHERE item.id <= ${item_id}\
             ORDER BY item.id DESC LIMIT ?`;
-            console.log(sql);
             const [results] = await db.query(sql, [limit]);
             if(results.length === 0){
                 return [];
-            };
-            let items = [];
-
-	    results.map(test => {console.log(test.id)});
-     
-            for(let i = 0; i < results.length; i++){
-                const item = {
-                    id: results[i].id,
-                    title: results[i].title, 
-                    image: results[i].image, 
-                    introduction: results[i].introduction, 
-                    cost: results[i].cost, 
-                    tag: results[i].tag, 
-                    costco: results[i].costco,
-                    item_location: results[i].item_location,
-                    buyer_id: results[i].buyer_id,
-                    expires_at: results[i].expires_at,
-                    user: {
-                        id: results[i].seller_id,
-                        name: results[i].name,
-                        rating: results[i].rating
-                    }
-                };
-                items.push(item);
             }
-            // results.map(result => {
-            //     console.log(result)
+            let items = [];
+            // for(let i = 0; i < results.length; i++){
             //     const item = {
-            //         id: result.id,
-            //         title: result.title, 
-            //         image: result.image, 
-            //         introduction: result.introduction, 
-            //         cost: result.cost, 
-            //         tag: result.tag, 
-            //         costco: result.costco,
-            //         item_location: result.item_location,
-            //         buyer_id: result.buyer_id,
-            //         expires_at: result.expires_at,
+            //         id: results[i].id,
+            //         title: results[i].title, 
+            //         image: results[i].image, 
+            //         introduction: results[i].introduction, 
+            //         cost: results[i].cost, 
+            //         tag: results[i].tag, 
+            //         costco: results[i].costco,
+            //         item_location: results[i].item_location,
+            //         buyer_id: results[i].buyer_id,
+            //         expires_at: results[i].expires_at,
             //         user: {
-            //             id: result.seller_id,
-            //             name: result.name,
-            //             rating: result.rating
+            //             id: results[i].seller_id,
+            //             name: results[i].name,
+            //             rating: results[i].rating
             //         }
             //     };
             //     items.push(item);
-            // })
-	    return items;            
+            // }
+            results.map(result => {
+                // console.log(result)
+                const item = {
+                    id: result.id,
+                    title: result.title, 
+                    image: result.image, 
+                    introduction: result.introduction, 
+                    cost: result.cost, 
+                    tag: result.tag, 
+                    costco: result.costco,
+                    item_location: result.item_location,
+                    buyer_id: result.buyer_id,
+                    expires_at: result.expires_at,
+                    user: {
+                        id: result.seller_id,
+                        name: result.name,
+                        rating: result.rating
+                    }
+                };
+                items.push(item);
+            })
+            return items;            
         } catch (err) {
             return util.databaseError(err,'getItems',res);
         }
@@ -163,3 +159,4 @@ module.exports = {
     }
     
 }
+
