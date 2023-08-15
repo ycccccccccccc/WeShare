@@ -14,10 +14,11 @@ module.exports = {
         }
         // 確認密碼跟信箱相符
         const result = await userModel.signin(res, email, password);
+	console.log(result)
         if ( !result ) {
             return res.status(403).json({ error: "Wrong Password" }); 
         } else {
-            return res.status(200).json({ data: user_info.data }); 
+            return res.status(200).json({ data: result }); 
         }
     },
     signup: async (req, res) => {
@@ -31,7 +32,7 @@ module.exports = {
             return res.status(400).json({ error: 'Email format is incorrect' });
         }
         // 確認信箱存在
-        const existUser = await userModel.findUser(email);
+        const existUser = await userModel.findUser(res,email);
         if ( existUser ) {
             return res.status(403).json({ error: 'Email already exists' });
         }
