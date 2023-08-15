@@ -55,7 +55,7 @@ module.exports = {
     },
     getItems: async ( res, item_id, limit ) => {
         try {
-            limit = limit +1;
+            limit = limit + 1;
             const sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.location, item.buyer_id, item.seller_id, user.name, user.rating \
             FROM item LEFT JOIN user ON item.seller_id = user.id\
             WHERE item.id <= ? \
@@ -90,7 +90,7 @@ module.exports = {
     updateItem: async ( res, id, title, introduction, cost, tag, location) => {
         try {
             const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, location = ? WHERE id = ?'
-            const [results] = await db.query(sql, [title, introduction, cost, tag, location, id]);
+            await db.query(sql, [title, introduction, cost, tag, location, id]);
             const item = {
                 id: id,
             };
@@ -102,7 +102,7 @@ module.exports = {
     updateItemPhoto: async ( res, id, url ) => {
         try{
             const sql = 'UPDATE item SET photo = ? WHERE id = ?'
-            const result = await queryPromise(sql, [url, id]);
+            await queryPromise(sql, [url, id]);
             const path = {
                 photo: url 
             }
@@ -114,7 +114,7 @@ module.exports = {
     addBuyer: async ( res, id, buyer_id ) => {
         try{
             const sql = 'UPDATE item SET buyer_id = ? WHERE id = ?'
-            const result = await queryPromise(sql, [buyer_id, id]);
+            await queryPromise(sql, [buyer_id, id]);
             const item = {
                 id: id,
                 buyer_id: buyer_id

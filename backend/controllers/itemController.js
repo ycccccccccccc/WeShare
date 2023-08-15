@@ -4,7 +4,6 @@ require('dotenv').config();
 
 module.exports = {
     addItem: async (req, res) => {
-        util.authorize_bearer(req, res, next);
         const seller_id = req.user.id;
         const { title, image, introduction, cost, tag, location } = req.body;
         if ( !title || !image || !introduction || !cost || !tag || !location ) {    
@@ -14,13 +13,11 @@ module.exports = {
         return res.status(200).json({ item: result });
     },
     getItem: async (req, res) => {
-        util.authorize_bearer(req, res, next);
         const item_id = parseInt(req.params.id);
         const item = await itemModel.getItem(res, item_id);
         return res.status(200).json({ item: item });
     },
     getItems: async (req, res) => {
-        util.authorize_bearer(req, res, next);
         let cursor = req.query.cursor;
         let jsonObject = '';
         if(cursor){
@@ -49,10 +46,9 @@ module.exports = {
         return res.status(200).json({ 'data':{
             'posts': result,
             'next_cursor': base64String
-        } })
+        }})
     },
     updateItem: async (req, res) => {
-        util.authorize_bearer(req, res, next);
         const item_id = parseInt(req.params.id);
         const seller_id = await itemModel.getSeller(res, item_id);
         if( req.user.id !== seller_id.id){
