@@ -52,7 +52,7 @@ module.exports = {
         return res.status(200).json({ 'data':{
             'items': result,
             'next_cursor': base64String
-        } })
+        }})
     },
     updateItem: async (req, res) => {
         const item_id = parseInt(req.params.id);

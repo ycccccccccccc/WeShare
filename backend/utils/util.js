@@ -8,16 +8,6 @@ const db = mysql.createPool({
     database: 'weshare'
 });
 
-db.getConnection()
-    .then(connection => {
-        console.log('Connected to the database!');
-        connection.release(); // Release the connection back to the pool
-    })
-    .catch(error => {
-        console.error('Error connecting to the database:', error);
-    });
-
-
 module.exports = {
 
     db: db,

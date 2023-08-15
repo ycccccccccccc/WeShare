@@ -1,5 +1,33 @@
 version: "3.8"
 services:
+  
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=pwd
+      - MYSQL_DATABASE=weshare
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - weshare-network
+
+  weshare:
+    container_name: weshare
+    build: .
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=pwd
+      - DB_HOST=mysql
+    networks:
+      - weshare-network
+    depends_on:
+      - mysql
+    ports:
+      - "3000:3000"
+
   nginx:
     image: nginx:alpine3.17
     container_name: nginx
@@ -13,49 +41,6 @@ services:
     restart: always
     networks:
       - my_network
-
-  mysql:
-    image: mysql
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: "$DB_password"
-      MYSQL_HOST: "$DOCKER_DB_host"
-      MYSQL_DATABASE: weshare
-    command: --init-file /docker-entrypoint-initdb.d/init.sql
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: always
-    networks:
-      - my_network
-
-  # redis:
-  #   image: redis:6.0.20-alpine
-  #   container_name: redis
-  #   ports:
-  #     - "6379:6379"
-  #   restart: always
-  #   networks:
-  #     - my_network
-
-  server:
-    container_name: server
-    image: node:20.5.0-alpine3.18
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    networks:
-      - my_network
-    command: sh -c "while ! nc -z mysql 3306; do sleep 1; done && node server.js"
-    depends_on:
-      - mysql
-      # - redis
-
-networks:
-  my_network:
-    driver: bridge
 
 volumes:
   mysql_data:

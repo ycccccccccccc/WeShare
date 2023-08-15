@@ -1,4 +1,5 @@
-SET NAMES utf8mb4;
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'pwd';
+flush privileges;
 
 -- Create the 'weshare' database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS weshare;
@@ -40,4 +41,8 @@ CREATE TABLE IF NOT EXISTS item (
     expires_at DATETIME NOT NULL,
     CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE,
     CONSTRAINT item_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+);
+
+
+
+
