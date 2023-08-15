@@ -5,7 +5,7 @@ const { getUser } = require('./userModel');
 
 module.exports = {
 
-    addItem: async ( res, seller_id, title, image, introduction, cost, tag, location ) => {
+    addItem: async ( seller_id, title, image, introduction, cost, tag, location ) => {
         try {
             const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, location) VALUES (?,?,?,?,?,?,?)'
             const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, location])
@@ -17,7 +17,7 @@ module.exports = {
             return util.databaseError(err,'addItem',res);
         }
     },
-    getSeller: async ( res, id ) => {
+    getSeller: async ( id ) => {
         try {
             const sql = 'SELECT seller_id FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id])
@@ -26,7 +26,7 @@ module.exports = {
             return util.databaseError(err,'getSeller',res);
         }
     },
-    getItem: async ( res, id ) => {
+    getItem: async ( id ) => {
         try {
             const seller_id = this.getSeller(id).id;
             const user = await getUser(res, seller_id);
@@ -53,7 +53,7 @@ module.exports = {
             return util.databaseError(err,'getItem',res);
         }
     },
-    getItems: async ( res, item_id, limit ) => {
+    getItems: async ( item_id, limit ) => {
         try {
             limit = limit + 1;
             const sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.location, item.buyer_id, item.seller_id, user.name, user.rating \
@@ -87,7 +87,7 @@ module.exports = {
             return util.databaseError(err,'getItems',res);
         }
     },
-    updateItem: async ( res, id, title, introduction, cost, tag, location) => {
+    updateItem: async ( id, title, introduction, cost, tag, location) => {
         try {
             const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, location = ? WHERE id = ?'
             await db.query(sql, [title, introduction, cost, tag, location, id]);
@@ -111,7 +111,7 @@ module.exports = {
             return util.databaseError(err,'updateItemPhoto',res);
         }
     },
-    addBuyer: async ( res, id, buyer_id ) => {
+    addBuyer: async ( id, buyer_id ) => {
         try{
             const sql = 'UPDATE item SET buyer_id = ? WHERE id = ?'
             await queryPromise(sql, [buyer_id, id]);
