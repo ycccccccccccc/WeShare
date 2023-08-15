@@ -5,10 +5,10 @@ const { getUser } = require('./userModel');
 
 module.exports = {
 
-    addItem: async ( res, seller_id, title, image, introduction, cost, tag, location ) => {
+    addItem: async ( res, seller_id, title, image, introduction, cost, tag, costco, location, expires_at ) => {
         try {
-            const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, location) VALUES (?,?,?,?,?,?,?)'
-            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, location])
+            const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, costco, location, expires_at) VALUES (?,?,?,?,?,?,?,?,?)'
+            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, costco, location, expires_at])
             const item = {
                 id: results.insertId, 
             };
@@ -40,8 +40,10 @@ module.exports = {
                 introduction: results.introduction, 
                 cost: results.cost, 
                 tag: results.tag, 
+                costco: results.costco,
                 location: results.location,
                 buyer_id: results.buyer_id,
+                expires_at: results.expires_at,
                 user: {
                     id: seller_id,
                     name: user.name,
@@ -70,8 +72,10 @@ module.exports = {
                     introduction: data.introduction, 
                     cost: data.cost, 
                     tag: data.tag, 
-                    location: data.location,
-                    buyer_id: data.buyer_id,
+                    costco: results.costco,
+                    location: results.location,
+                    buyer_id: results.buyer_id,
+                    expires_at: results.expires_at,
                     user: {
                         id: data.seller_id,
                         name: data.name,
@@ -87,10 +91,10 @@ module.exports = {
             return util.databaseError(err,'getItems',res);
         }
     },
-    updateItem: async ( res, id, title, introduction, cost, tag, location) => {
+    updateItem: async ( res, id, title, introduction, cost, tag, costco, location, expires_at) => {
         try {
-            const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, location = ? WHERE id = ?'
-            const [results] = await db.query(sql, [title, introduction, cost, tag, location, id]);
+            const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, costco = ?, location = ?, expires_at = ? WHERE id = ?'
+            const [results] = await db.query(sql, [title, introduction, cost, tag, costco, location, expires_at]);
             const item = {
                 id: id,
             };

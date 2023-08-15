@@ -5,11 +5,17 @@ require('dotenv').config();
 module.exports = {
     addItem: async (req, res) => {
         const seller_id = req.user.id;
-        const { title, image, introduction, cost, tag, location } = req.body;
-        if ( !title || !image || !introduction || !cost || !tag || !location ) {    
+        const { title, image, introduction, cost, tag, costco, location, expires_at } = req.body;
+        if ( !title || !image || !introduction || !cost || !tag || !costco || !location || !expires_at) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const result = await itemModel.addItem(res, seller_id, title, image, introduction, cost, tag, location);
+        const result = await itemModel.addItem(res, seller_id, title, image, introduction, cost, tag, costco, location, expires_at);
+        return res.status(200).json({ item: result });
+    },
+    addBuyer: async (req, res) => {
+        const buyer_id = req.user.id;
+        const item_id = parseInt(req.params.id);
+        const result = await itemModel.addBuyer(res, item_id, buyer_id);
         return res.status(200).json({ item: result });
     },
     getItem: async (req, res) => {
@@ -21,7 +27,7 @@ module.exports = {
         let cursor = req.query.cursor;
         let jsonObject = '';
         if(cursor){
-            // 将 Base64 字符串解码为 Buffer
+            // 將 Base64 字符串解碼為 Buffer
             const buffer = Buffer.from(cursor, 'base64');
             const decodedString = buffer.toString('utf-8');
             jsonObject = JSON.parse(decodedString);
@@ -44,7 +50,7 @@ module.exports = {
             base64String = null;
         }
         return res.status(200).json({ 'data':{
-            'posts': result,
+            'items': result,
             'next_cursor': base64String
         } })
     },
@@ -54,8 +60,8 @@ module.exports = {
         if( req.user.id !== seller_id.id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
-        const { title, introduction, cost, tag, location } = req.body;
-        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, location);
+        const { title, introduction, cost, tag, costco, location, expires_at } = req.body;
+        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, costco, location, expires_at);
         return res.status(200).json({ item: result });
     },
     updateItemPhoto: async (req, res) => {
