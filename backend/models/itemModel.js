@@ -71,28 +71,7 @@ module.exports = {
                 return [];
             }
             let items = [];
-            // for(let i = 0; i < results.length; i++){
-            //     const item = {
-            //         id: results[i].id,
-            //         title: results[i].title, 
-            //         image: results[i].image, 
-            //         introduction: results[i].introduction, 
-            //         cost: results[i].cost, 
-            //         tag: results[i].tag, 
-            //         costco: results[i].costco,
-            //         item_location: results[i].item_location,
-            //         buyer_id: results[i].buyer_id,
-            //         expires_at: results[i].expires_at,
-            //         user: {
-            //             id: results[i].seller_id,
-            //             name: results[i].name,
-            //             rating: results[i].rating
-            //         }
-            //     };
-            //     items.push(item);
-            // }
             results.map(result => {
-                // console.log(result)
                 const item = {
                     id: result.id,
                     title: result.title, 
