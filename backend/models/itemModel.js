@@ -64,10 +64,10 @@ module.exports = {
             }
             const sql = `SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
             FROM item LEFT JOIN user ON item.seller_id = user.id\
-            WHERE item.id <= ${item_id} \
+            WHERE item.id <= ${item_id}\
             ORDER BY item.id DESC LIMIT ?`;
             console.log(sql);
-            const results = await db.query(sql, [limit]);
+            const [results] = await db.query(sql, [limit]);
             if(results.length === 0){
                 return [];
             };
