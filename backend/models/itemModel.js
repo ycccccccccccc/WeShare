@@ -33,6 +33,7 @@ module.exports = {
             const sql = 'SELECT seller_id, title, image, introduction, cost, tag, item_location \
             FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id]);
+            console.log(results);
             const item = {
                 id: id,
                 title: results[0].title, 
@@ -63,6 +64,7 @@ module.exports = {
             WHERE item.id <= ? \
             ORDER BY item.id DESC LIMIT ?'
             const [results] = await db.query(sql, [item_id, limit]);
+            console.log(results);
             let items = [];
             results.map(data => {
                 const item = {
