@@ -35,15 +35,15 @@ module.exports = {
             const [results] = await db.query(sql, [id]);
             const item = {
                 id: id,
-                title: results.title, 
-                image: results.image, 
-                introduction: results.introduction, 
-                cost: results.cost, 
-                tag: results.tag, 
-                costco: results.costco,
-                item_location: results.item_location,
-                buyer_id: results.buyer_id,
-                expires_at: results.expires_at,
+                title: results[0].title, 
+                image: results[0].image, 
+                introduction: results[0].introduction, 
+                cost: results[0].cost, 
+                tag: results[0].tag, 
+                costco: results[0].costco,
+                item_location: results[0].item_location,
+                buyer_id: results[0].buyer_id,
+                expires_at: results[0].expires_at,
                 user: {
                     id: seller_id,
                     name: user.name,
@@ -95,6 +95,7 @@ module.exports = {
         try {
             const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, costco = ?, item_location = ?, expires_at = ? WHERE id = ?'
             const [results] = await db.query(sql, [title, introduction, cost, tag, costco, item_location, expires_at]);
+            console.log(results);
             const item = {
                 id: id,
             };
@@ -106,7 +107,8 @@ module.exports = {
     updateItemPhoto: async ( res, id, url ) => {
         try{
             const sql = 'UPDATE item SET photo = ? WHERE id = ?'
-            const result = await db.query(sql, [url, id]);
+            const [results] = await db.query(sql, [url, id]);
+            console.log(results);
             const path = {
                 photo: url 
             }
@@ -118,7 +120,8 @@ module.exports = {
     addBuyer: async ( res, id, buyer_id ) => {
         try{
             const sql = 'UPDATE item SET buyer_id = ? WHERE id = ?'
-            const result = await db.query(sql, [buyer_id, id]);
+            const [results] = await db.query(sql, [buyer_id, id]);
+            console.log(results);
             const item = {
                 id: id,
                 buyer_id: buyer_id
