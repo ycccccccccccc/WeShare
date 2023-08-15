@@ -12,6 +12,9 @@ app.use('/users',user_route);
 const chat_route = require('./routes/chatRoute');
 app.use('/chats',chat_route);
 
+const item_route = require('./routes/itemRoute');
+app.use('/items',item_route);
+
 const server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
