@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const util = require('../utils/util')
 const { db } = require('../utils/util');
 const { getUser } = require('./userModel');
@@ -106,7 +105,7 @@ module.exports = {
     updateItemPhoto: async ( res, id, url ) => {
         try{
             const sql = 'UPDATE item SET photo = ? WHERE id = ?'
-            const result = await queryPromise(sql, [url, id]);
+            const result = await db.query(sql, [url, id]);
             const path = {
                 photo: url 
             }
@@ -118,7 +117,7 @@ module.exports = {
     addBuyer: async ( res, id, buyer_id ) => {
         try{
             const sql = 'UPDATE item SET buyer_id = ? WHERE id = ?'
-            const result = await queryPromise(sql, [buyer_id, id]);
+            const result = await db.query(sql, [buyer_id, id]);
             const item = {
                 id: id,
                 buyer_id: buyer_id
