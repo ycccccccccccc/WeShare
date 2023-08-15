@@ -59,7 +59,6 @@ module.exports = {
     getItems: async ( res, item_id, limit ) => {
         try {
             limit = limit +1;
-            let sql = ''
             if(!item_id){
                 item_id = '(SELECT MAX(id) FROM item)';
             }
