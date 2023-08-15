@@ -4,10 +4,10 @@ const { getUser } = require('./userModel');
 
 module.exports = {
 
-    addItem: async ( res, seller_id, title, image, introduction, cost, tag, costco, location, expires_at ) => {
+    addItem: async ( res, seller_id, title, image, introduction, cost, tag, costco, item_location, expires_at ) => {
         try {
-            const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, costco, location, expires_at) VALUES (?,?,?,?,?,?,?,?,?)'
-            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, costco, location, expires_at])
+            const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, costco, item_location, expires_at) VALUES (?,?,?,?,?,?,?,?,?)'
+            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, costco, item_location, expires_at])
             const item = {
                 id: results.insertId, 
             };
@@ -29,7 +29,7 @@ module.exports = {
         try {
             const seller_id = this.getSeller(id).id;
             const user = await getUser(res, seller_id);
-            const sql = 'SELECT seller_id, title, image, introduction, cost, tag, location \
+            const sql = 'SELECT seller_id, title, image, introduction, cost, tag, item_location \
             FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id]);
             const item = {
@@ -40,7 +40,7 @@ module.exports = {
                 cost: results.cost, 
                 tag: results.tag, 
                 costco: results.costco,
-                location: results.location,
+                item_location: results.item_location,
                 buyer_id: results.buyer_id,
                 expires_at: results.expires_at,
                 user: {
@@ -57,7 +57,7 @@ module.exports = {
     getItems: async ( res, item_id, limit ) => {
         try {
             limit = limit +1;
-            const sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.location, item.buyer_id, item.seller_id, user.name, user.rating \
+            const sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
             FROM item LEFT JOIN user ON item.seller_id = user.id\
             WHERE item.id <= ? \
             ORDER BY post.id DESC LIMIT ?'
@@ -72,7 +72,7 @@ module.exports = {
                     cost: data.cost, 
                     tag: data.tag, 
                     costco: results.costco,
-                    location: results.location,
+                    item_location: results.item_location,
                     buyer_id: results.buyer_id,
                     expires_at: results.expires_at,
                     user: {
@@ -90,10 +90,10 @@ module.exports = {
             return util.databaseError(err,'getItems',res);
         }
     },
-    updateItem: async ( res, id, title, introduction, cost, tag, costco, location, expires_at) => {
+    updateItem: async ( res, id, title, introduction, cost, tag, costco, item_location, expires_at) => {
         try {
-            const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, costco = ?, location = ?, expires_at = ? WHERE id = ?'
-            const [results] = await db.query(sql, [title, introduction, cost, tag, costco, location, expires_at]);
+            const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, costco = ?, item_location = ?, expires_at = ? WHERE id = ?'
+            const [results] = await db.query(sql, [title, introduction, cost, tag, costco, item_location, expires_at]);
             const item = {
                 id: id,
             };
