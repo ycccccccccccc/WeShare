@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
 
 const db = mysql.createPool({
-    host: 'mysql',
+    host: 'mysql' || 'localhost',
     user: 'root',
     password: 'pwd',
     database: 'weshare'
