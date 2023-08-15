@@ -13,4 +13,4 @@ RUN npm install
 
 # 執行 Node.js 應用程式
 # CMD ["npm", "run", "stress-test"]
-CMD ["node", "app.js"]
+CMD ["node", "server.js"]
