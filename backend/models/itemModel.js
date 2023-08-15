@@ -62,6 +62,7 @@ module.exports = {
             if (!item_id) {
                 item_id = '(SELECT MAX(id) FROM item)';
             }
+            console.log(item_id);
             const sql = `SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
                         FROM item LEFT JOIN user ON item.seller_id = user.id\
                         WHERE item.id <= ${item_id} \
