@@ -28,19 +28,19 @@ module.exports = {
         try {
             const sql = "SELECT * FROM user WHERE email = ?"
 	        const [results] = await db.query(sql, [email])
-            console.log("result check:",bcrypt.hashSync(password, 10),results.password,email)
-            if ( bcrypt.hashSync(password, 10) !== results.password ) {
-                return false
+	    if ( !bcrypt.compare(password, results[0].password) ) {
+		return false
             } else {
                 const user = {
-                    id: results.id,
-                    name: results.name,
-                    email: results.email
+                    id: results[0].id,
+                    name: results[0].name,
+                    email: results[0].email
                 }
                 const data = {
                     access_token: util.generateToken(user),
                     user: user
                 }
+		console.log(data)
                 return data
             }
         } catch (err) {
@@ -51,8 +51,9 @@ module.exports = {
     findUser: async ( res, email ) => {
         try {
             const sql = "SELECT id, name, email FROM user WHERE email = ?"
-            const results = await db.query(sql, [email])
-            const existUser = results.id === undefined ? false : true
+            const [results] = await db.query(sql, [email])
+	    console.log("finduser:",results[0],email,"id")
+	    const existUser = results[0] === undefined ? false : true
             return existUser
         } catch (err) {
             return util.databaseError(err,'findUser',res);
