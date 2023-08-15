@@ -2,3 +2,4 @@ node_modules/
 # mac
 .DS_Store
 .env
+backend/.env
