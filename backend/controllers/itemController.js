@@ -9,12 +9,12 @@ module.exports = {
         if ( !title || !image || !introduction || !cost || !tag || !location ) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const result = await itemModel.addItem(seller_id, title, image, introduction, cost, tag, location);
+        const result = await itemModel.addItem(res, seller_id, title, image, introduction, cost, tag, location);
         return res.status(200).json({ item: result });
     },
     getItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
-        const item = await itemModel.getItem(item_id);
+        const item = await itemModel.getItem(res, item_id);
         return res.status(200).json({ item: item });
     },
     getItems: async (req, res) => {
@@ -27,7 +27,7 @@ module.exports = {
             jsonObject = JSON.parse(decodedString);
         }
         const limit = 10;
-        let result = await itemModel.getItems(jsonObject.item_id, limit);
+        let result = await itemModel.getItems(res, jsonObject.item_id, limit);
         let base64String = '';
         if(result.length == (limit + 1)){
             const last_index = result.length - 1;
@@ -50,12 +50,12 @@ module.exports = {
     },
     updateItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
-        const seller_id = await itemModel.getSeller(item_id);
+        const seller_id = await itemModel.getSeller(res, item_id);
         if( req.user.id !== seller_id.id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
         const { title, introduction, cost, tag, location } = req.body;
-        const result = await itemModel.updateItem(item_id, title, introduction, cost, tag, location);
+        const result = await itemModel.updateItem(res, item_id, title, introduction, cost, tag, location);
         return res.status(200).json({ item: result });
     },
     updateItemPhoto: async (req, res) => {
@@ -70,7 +70,7 @@ module.exports = {
         });
 
         const pic_path = `https://${process.env.id}/images/item_${item_id}.${file_name[file_name.length-1]}`;
-        const result = await updateItemPhoto(item_id, pic_path);
+        const result = await updateItemPhoto(res, item_id, pic_path);
         return res.status(200).json({ item: result });
     }
 
