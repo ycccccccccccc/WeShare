@@ -80,23 +80,23 @@ module.exports = {
             }
             console.log(results);
             let items = [];
-            results.map(data => {
-                console.log(data)
+            results.map(result => {
+                console.log(result)
                 const item = {
-                    id: data.id,
-                    title: data.title, 
-                    image: data.image, 
-                    introduction: data.introduction, 
-                    cost: data.cost, 
-                    tag: data.tag, 
-                    costco: results.costco,
-                    item_location: results.item_location,
-                    buyer_id: results.buyer_id,
-                    expires_at: results.expires_at,
+                    id: result.id,
+                    title: result.title, 
+                    image: result.image, 
+                    introduction: result.introduction, 
+                    cost: result.cost, 
+                    tag: result.tag, 
+                    costco: result.costco,
+                    item_location: result.item_location,
+                    buyer_id: result.buyer_id,
+                    expires_at: result.expires_at,
                     user: {
-                        id: data.seller_id,
-                        name: data.name,
-                        rating: data.rating
+                        id: result.seller_id,
+                        name: result.name,
+                        rating: result.rating
                     }
                 };
                 items.push(item);
