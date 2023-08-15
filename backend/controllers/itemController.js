@@ -4,7 +4,6 @@ require('dotenv').config();
 
 module.exports = {
     addItem: async (req, res) => {
-        util.authorize_bearer(req, res, next);
         const seller_id = req.user.id;
         const { title, image, introduction, cost, tag, location } = req.body;
         if ( !title || !image || !introduction || !cost || !tag || !location ) {    
@@ -14,13 +13,11 @@ module.exports = {
         return res.status(200).json({ item: result });
     },
     getItem: async (req, res) => {
-        util.authorize_bearer(req, res, next);
         const item_id = parseInt(req.params.id);
         const item = await itemModel.getItem(res, item_id);
         return res.status(200).json({ item: item });
     },
     getItems: async (req, res) => {
-        util.authorize_bearer(req, res, next);
         let cursor = req.query.cursor;
         let jsonObject = '';
         if(cursor){
@@ -52,7 +49,6 @@ module.exports = {
         } })
     },
     updateItem: async (req, res) => {
-        util.authorize_bearer(req, res, next);
         const item_id = parseInt(req.params.id);
         const seller_id = await itemModel.getSeller(res, item_id);
         if( req.user.id !== seller_id.id){
@@ -63,7 +59,6 @@ module.exports = {
         return res.status(200).json({ item: result });
     },
     updateItemPhoto: async (req, res) => {
-        const item_id = parseInt(req.params.id);
         const file_name = (req.file.originalname).split('.');
         fs.rename(`public/images/${req.file.originalname}`, `public/images/item_${item_id}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
