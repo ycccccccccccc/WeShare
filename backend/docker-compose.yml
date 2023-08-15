@@ -1,56 +1,61 @@
-version: '3.8'
-
-networks:
-  weshare-network:
-    driver: bridge
-
+version: "3.8"
 services:
-  weshare:
-    container_name: weshare
-    build: .
-    networks:
-      - weshare-network
-    depends_on:
-      - mysql
-    ports:
-      - "3000:3000"
-
   nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
+    image: nginx:alpine3.17
     container_name: nginx
     ports:
-      - "8080:80"
-    networks:
-      - weshare-network
+      - "80:80"
+      - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - weshare
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./private/certificate.crt:/etc/nginx/certificate.crt:ro
+      - ./private/private.key:/etc/nginx/private.key:ro
+    restart: always
+    networks:
+      - my_network
 
   mysql:
-     image: mysql:8.0.34
-     container_name: mysql
-     env_file:
-       - .env
-     ports:
-       - "3307:3306"
-     networks:
-       - weshare-network
-     environment:
-       MYSQL_ROOT_PASSWORD: pwd
-       MYSQL_USER: develop
-       MYSQL_PASSWORD: pwd
-       MYSQL_DATABASE: weshare
-     volumes:
-       - type: bind
-         source: ./scripts/init_user.sql
-         target: /docker-entrypoint-initdb.d/init_user.sql
-       - type: bind
-         source: ./scripts/init_db.sql
-         target: /docker-entrypoint-initdb.d/init_db.sql
-       - mysql:/var/lib/mysql
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "$DB_password"
+      MYSQL_HOST: "$DOCKER_DB_host"
+      MYSQL_DATABASE: weshare
+    command: --init-file /docker-entrypoint-initdb.d/init.sql
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    networks:
+      - my_network
+
+  # redis:
+  #   image: redis:6.0.20-alpine
+  #   container_name: redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: always
+  #   networks:
+  #     - my_network
+
+  server:
+    container_name: server
+    image: node:20.5.0-alpine3.18
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - my_network
+    command: sh -c "while ! nc -z mysql 3306; do sleep 1; done && node app.js"
+    depends_on:
+      - mysql
+      # - redis
+
+networks:
+  my_network:
+    driver: bridge
 
 volumes:
-  mysql:
+  mysql_data:
