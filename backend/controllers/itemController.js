@@ -55,7 +55,7 @@ module.exports = {
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
         const { title, introduction, cost, tag, location } = req.body;
-        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, location);
+        const result = await itemModel.updateItem(res, item_id, title, introduction, cost, tag, location);
         return res.status(200).json({ item: result });
     },
     updateItemPhoto: async (req, res) => {

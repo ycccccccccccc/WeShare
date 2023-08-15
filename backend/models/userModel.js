@@ -4,7 +4,7 @@ const { db } = require('../utils/util');
 
 module.exports = {
 
-    signup: async ( res, name, email, password ) => {
+    signup: async ( name, email, password ) => {
         try {
             const hashPwd = bcrypt.hashSync(password, 10);
             const sql = "INSERT INTO user (name, email, password) VALUES (?,?,?)"
@@ -27,8 +27,8 @@ module.exports = {
     signin: async ( email, password ) => {
         try {
             const sql = "SELECT * FROM user WHERE email = ?"
-            console.log(sql,email,password)
-	    const [results] = await db.query(sql, [email])
+	        const [results] = await db.query(sql, [email])
+            console.log("result check:",bcrypt.hashSync(password, 10),results.password,email)
             if ( bcrypt.hashSync(password, 10) !== results.password ) {
                 return false
             } else {
@@ -51,10 +51,9 @@ module.exports = {
     findUser: async ( email ) => {
         try {
             const sql = "SELECT id, name, email FROM user WHERE email = ?"
-            console.log(sql,email)
-	    const results = await db.query(sql, [email])
-	    console.log("check finduser:",results)
-            const existUser = results.id === undefined ? false : true
+            const [results] = await db.query(sql, [email])
+	    console.log("finduser:",results[0],email)
+            const existUser = results[0].id === undefined ? false : true
             return existUser
         } catch (err) {
             return util.databaseError(err,'findUser',res);

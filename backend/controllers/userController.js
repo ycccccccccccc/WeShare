@@ -8,12 +8,12 @@ module.exports = {
             return res.status(400).json({ error: 'Email and password are required' });
         }
         // 確認信箱存在
-        const existMail = await userModel.findUser(email)
+        const existMail = await userModel.findUser(res, email)
         if ( !existMail ) {
             return res.status(403).json({ error: "No user found with the given email" });
         }
         // 確認密碼跟信箱相符
-        const result = await userModel.signin(email, password);
+        const result = await userModel.signin(res, email, password);
         if ( !result ) {
             return res.status(403).json({ error: "Wrong Password" }); 
         } else {
