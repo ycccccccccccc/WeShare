@@ -1,6 +1,12 @@
+SET NAMES utf8mb4;
+
 -- Create the 'weshare' database if it doesn't exist
 CREATE DATABASE IF NOT EXISTS weshare;
 CREATE DATABASE IF NOT EXISTS weshare_test;
+
+-- 創建資料庫時指定字符集和排序規則
+CREATE DATABASE weshare CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE weshare_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 use weshare;
 
@@ -16,7 +22,7 @@ CREATE TABLE IF NOT EXISTS user (
     rating FLOAT,
     photo VARCHAR(255),
     phone INT
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
 
 -- Create the 'item_tag' ENUM type if it doesn't exist
 CREATE TABLE IF NOT EXISTS item (
@@ -34,4 +40,4 @@ CREATE TABLE IF NOT EXISTS item (
     expires_at DATETIME NOT NULL,
     CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE,
     CONSTRAINT item_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
