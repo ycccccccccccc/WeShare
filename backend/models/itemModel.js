@@ -60,20 +60,19 @@ module.exports = {
         try {
             limit = limit +1;
             let sql = ''
-            let results = []
             if(item_id){
                 sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
                 FROM item LEFT JOIN user ON item.seller_id = user.id\
                 WHERE item.id <= ? \
                 ORDER BY item.id DESC LIMIT ?'
-                results = await db.query(sql, [item_id, limit]);
+                const [results] = await db.query(sql, [item_id, limit]);
             }
             else {
                 sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
                 FROM item LEFT JOIN user ON item.seller_id = user.id\
                 WHERE item.id <= (SELECT MAX(id) FROM item) \
                 ORDER BY item.id DESC LIMIT ?'
-                results = await db.query(sql, [limit]);
+                const [results] = await db.query(sql, [limit]);
             }
             if(results.length === 0){
                 return [];
