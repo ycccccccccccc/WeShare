@@ -75,9 +75,13 @@ module.exports = {
                 ORDER BY item.id DESC LIMIT ?'
                 results = await db.query(sql, [limit]);
             }
+            if(results.length === 0){
+                return [];
+            }
             console.log(results);
             let items = [];
             results.map(data => {
+                console.log(data)
                 const item = {
                     id: data.id,
                     title: data.title, 
