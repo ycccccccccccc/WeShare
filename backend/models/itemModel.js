@@ -59,14 +59,14 @@ module.exports = {
     getItems: async ( res, item_id, limit ) => {
         try {
             limit = limit +1;
-            if(!item_id){
+            if (!item_id) {
                 item_id = '(SELECT MAX(id) FROM item)';
             }
-            const sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
-            FROM item LEFT JOIN user ON item.seller_id = user.id\
-            WHERE item.id <= (SELECT MAX(id) FROM item) \
-            ORDER BY item.id DESC LIMIT ?'
-            const results = await db.query(sql, [item_id, limit]);
+            const sql = `SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
+                        FROM item LEFT JOIN user ON item.seller_id = user.id\
+                        WHERE item.id <= ${item_id} \
+                        ORDER BY item.id DESC LIMIT ?`;
+            const results = await db.query(sql, [limit]);
             if(results.length === 0){
                 return [];
             }
