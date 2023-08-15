@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS item (
     image VARCHAR(255) NOT NULL,
     introduction VARCHAR(255) NOT NULL,
     cost INT NOT NULL,
-    tag ENUM('食品', '日用品', '衣物', '美妝', '家具', '優惠卷', '其他') NOT NULL,
+    tag ENUM('食品', '日用品', '衣物', '美妝', '家具', '優惠卷', '其他') NOT NULL DEFAULT '食品',
     location VARCHAR(255) NOT NULL,
     expired_at DATETIME NOT NULL,
     CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE,
