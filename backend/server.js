@@ -11,8 +11,8 @@ app.use(bodyParser.json());
 
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
 
-const user_route = require('./routes/userRoutes');
-const item_route = require('./routes/itemRoutes');
+const user_route = require('./routes/userRoute');
+const item_route = require('./routes/itemRoute');
 
 app.use('/users',user_route);
 app.use('/items', item_route)
