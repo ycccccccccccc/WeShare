@@ -46,7 +46,6 @@ module.exports = {
             result.pop();
         }
         else{
-            console.log('have not next post')
             base64String = null;
         }
         return res.status(200).json({ 'data':{
