@@ -15,6 +15,7 @@ services:
       - MYSQL_DATABASE=weshare
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./scripts/my.cnf:/etc/my.cnf
       - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     networks:
       - weshare-network
