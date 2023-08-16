@@ -4,8 +4,8 @@ require('dotenv').config();
 module.exports = {
     addItem: async (req, res) => {
         const seller_id = req.user.id;
-        const { title, introduction, cost, tag, costco, location, expires_at } = req.body;
-        if ( !title || !introduction || !cost || !tag || !costco || !location || !expires_at) {    
+        const { buyers_limit, title, introduction, cost, tag, costco, location, expires_at } = req.body;
+        if ( !buyers_limit || !title || !introduction || !cost || !tag || !costco || !location || !expires_at) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
         const result = await itemModel.addItem(res, seller_id, title, introduction, cost, tag, costco, location, expires_at);
