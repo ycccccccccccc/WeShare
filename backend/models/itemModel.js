@@ -22,7 +22,7 @@ module.exports = {
             const sql = 'SELECT seller_id FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id])
             console.log(results);
-            return results[0];
+            return results;
         } catch (err) {
             return util.databaseError(err,'getSeller',res);
         }
