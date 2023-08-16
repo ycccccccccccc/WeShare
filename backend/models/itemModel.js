@@ -6,7 +6,7 @@ module.exports = {
     addItem: async ( res, seller_id, title, image, introduction, cost, tag, location, expired_at ) => {
         try {
             const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, location, expired_at) VALUES (?,?,?,?,?,?,?,?)'
-            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, location, expired_at])
+            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, '食品', location, expired_at])
             const item = {
                 id: results.insertId, 
             };
