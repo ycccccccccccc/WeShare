@@ -9,7 +9,7 @@ module.exports = {
         const seller_id = get_seller.seller_id;
         console.log(item_id, seller_id, buyer_id);
         if(buyer_id === seller_id){
-            res.status(400).json({
+            return res.status(400).json({
                 error: "Can't buy own product!"
             })
         }
@@ -21,13 +21,13 @@ module.exports = {
         const item_id = parseInt(req.params.id);
         const checkSeller = await getSeller( res, item_id );
         if( checkSeller.seller_id !== seller_id){
-            res.status(400).json({
+            return res.status(400).json({
                 error: "Insufficient permissions!"
             })
         }
         const checkOrder = await getNumOfBuyers(res, item_id);
         if( checkOrder.num_of_buyers <= 0 ){
-            res.status(400).json({
+            return res.status(400).json({
                 error: "Order limit exceeded!"
             })
         }
