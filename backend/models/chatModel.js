@@ -69,7 +69,7 @@ module.exports = {
             `
             const [results] = await db.query(sql, [my_ID,my_ID])
             const msgList = results.map((result) => {
-                const { id, contact_id, message, name, photo } = result
+                const { id, contact_id, message, name, image } = result
                 return {
                     id: id,
                     message: message,
