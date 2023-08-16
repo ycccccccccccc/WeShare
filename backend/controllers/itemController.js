@@ -49,9 +49,7 @@ module.exports = {
     updateItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
         const seller_id = await itemModel.getSeller(res, item_id);
-        console.log(seller_id , seller_id.id);
-
-        if( req.user.id !== seller_id.id){
+        if( req.user.id !== seller_id.seller_id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
         const { title, introduction, cost, tag, costco, location, expires_at } = req.body;

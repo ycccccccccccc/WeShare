@@ -18,10 +18,8 @@ module.exports = {
     },
     getSeller: async ( res, id ) => {
         try {
-            console.log("================")
             const sql = 'SELECT seller_id FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id])
-            console.log(results);
             return results[0];
         } catch (err) {
             return util.databaseError(err,'getSeller',res);
