@@ -5,8 +5,10 @@ module.exports = {
     addOrder: async (req, res) => {
         const buyer_id = req.user.id;
         const item_id = parseInt(req.params.id);
+        console.log(item_id, seller_id);
         const get_seller = await getSeller(res, item_id);
         const seller_id = get_seller.seller_id;
+        console.log(item_id, seller_id, buyer_id);
         if(buyer_id === seller_id){
             res.status(400).json({
                 error: "Can't buy own product!"
