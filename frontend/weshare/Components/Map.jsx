@@ -7,13 +7,14 @@
 import { useState, useEffect, useMemo } from "react";
 import { GoogleMap, InfoWindow,useLoadScript, Marker } from "@react-google-maps/api";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
+import mockdata from "../Mockdata/itemmockdata.json";
 
 const mapStyle = {
-  height: '620px',
-  width: '50%',
+  height: '85.5vh',
+  width: '50vw',
 };
 
-export default function Map({ address, onMapClick}) {
+export default function Map({ address, itemLocations, onMapClick}) {
   const [location, setLocation] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const [markerLocations, setMarkerLocations] = useState([]);
@@ -36,7 +37,9 @@ export default function Map({ address, onMapClick}) {
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
+
   }, []);
+
   useEffect(() => {
     async function fetchLatLng() {
       if (address) {
@@ -60,7 +63,6 @@ export default function Map({ address, onMapClick}) {
   };
 
   if (!isLoaded) return <div>Loading...</div>;
-
   return (
     <GoogleMap 
     zoom={zoom} 
@@ -69,7 +71,7 @@ export default function Map({ address, onMapClick}) {
     onClick={handleMapClick}
     options={{
         mapTypeControl: false ,
-        streetViewControl: false,     // 隐藏Street View的小黃人控件
+        streetViewControl: false, 
         zoomControl: false,   
         fullscreenControl: false, 
       }}
@@ -91,9 +93,28 @@ export default function Map({ address, onMapClick}) {
         )}
       </>
     )}
-    {markerLocations.map((loc, index) => (
-      <Marker key={index} position={loc} />
-    ))}
+    {itemLocations.map(loc => (
+        <Marker 
+          icon={{ url: '/mapsicon.png', scaledSize: { width: 40, height: 40 } }}
+          key={loc.id} 
+          position={{ lat: loc.lat, lng: loc.lng }} 
+          onClick={() => {
+            setFocusedLocation(loc);
+            setShowInfo(true);
+          }}
+        />
+      ))}
+      {showInfo && focusedLocation && (
+        <InfoWindow
+          position={focusedLocation}
+          onCloseClick={() => setShowInfo(false)}
+        >
+          <div>
+            <h4>{focusedLocation.title}</h4>
+            <p>價格: {focusedLocation.cost}</p>
+          </div>
+        </InfoWindow>
+      )}
   </GoogleMap>
 );
 }

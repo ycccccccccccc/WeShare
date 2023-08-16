@@ -10,8 +10,11 @@
         height: 13.6875rem;
         flex-shrink: 0;
         border-radius: 1.25rem;
-        fill: lightgray 50% / cover no-repeat;
-
+        fill:cover no-repeat;
+        .Pic{
+            border-radius: 1.25rem;
+            fill:cover no-repeat;
+        }
     }
     .ItemDetail{
         display: flex;
@@ -45,5 +48,6 @@
         position: absolute;  
         bottom: 10px;      
         left:13rem;      
+        cursor: pointer;
     }
 }
