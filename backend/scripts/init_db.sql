@@ -53,3 +53,13 @@ CREATE TABLE IF NOT EXISTS order_table (
     CONSTRAINT order_seller_id_key FOREIGN KEY (seller_id) REFERENCES item(seller_id) ON DELETE CASCADE,
     CONSTRAINT order_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
 );
+
+-- Create the 'chat' table if it doesn't exist
+CREATE TABLE IF NOT EXISTS chat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message VARCHAR(255),
+    CONSTRAINT chat_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT chat_receiver_id_key FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE
+);
