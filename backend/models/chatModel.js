@@ -62,7 +62,7 @@ module.exports = {
                     ) ranked_msgs
                     WHERE rn = 1
                     ORDER BY id DESC
-                ),
+                )
                 SELECT mr.id, mr.contact_id, mr.message, u.name, u.image
                 FROM msg_result AS mr LEFT JOIN user AS u
                 ON mr.contact_id = u.id
@@ -89,7 +89,7 @@ module.exports = {
         }
     },
 
-    sendMessage: async ( res, my_ID, seller_ID ) => {
+    sendMessage: async ( res, my_ID, seller_ID, message ) => {
         try {
             const sql = 'INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)'
             const [results] = await db.query(sql, [my_ID,seller_ID,message])
