@@ -4,7 +4,7 @@ const orderModel = require('../models/orderModel')
 module.exports = {
     addOrder: async (req, res) => {
         const buyer_id = req.user.id;
-        const item_id = parseInt(req.params.id);
+        const item_id = parseInt(req.params.item_id);
         const get_seller = await getSeller(res, item_id);
         const seller_id = get_seller.seller_id;
         console.log(item_id, seller_id, buyer_id);
@@ -18,9 +18,10 @@ module.exports = {
     },
     agreeOrder: async (req, res) => {
         const seller_id = req.user.id;
-        const item_id = parseInt(req.params.id);
-        const checkSeller = await getSeller( res, item_id );
-        if( checkSeller.seller_id !== seller_id){
+        const order_id = parseInt(req.params.order_id);
+        const IDs = await orderModel.getIDs(res, order_id);
+        console.log(IDs)
+        if( seller_id !== IDs.seller_id){
             return res.status(400).json({
                 error: "Insufficient permissions!"
             })
