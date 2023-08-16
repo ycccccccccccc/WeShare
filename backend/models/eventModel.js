@@ -19,7 +19,7 @@ module.exports = {
             const sql = 'SELECT event_table.id, event_table.type, event_table.sender_id, event_table.recipient_id, user.name, user.image, order_table.status \
             FROM event_table \
             LEFT JOIN user ON event_table.sender_id = user.id \
-            LEFT JOIN order_table ON (order_table.seller_id = event_table.sender_id AND order_table.buyer_id = event_table.recipient_id) \
+            LEFT JOIN order_table ON ( order_table.item_id = event_table.item_id AND (order_table.seller_id = event_table.sender_id AND order_table.buyer_id = event_table.recipient_id) OR (order_table.seller_id = event_table.recipient_id AND order_table.buyer_id = event_table.sender_id)) \
             WHERE event_table.recipient_id = ? ORDER BY event_table.id DESC';
             const [results] = await db.query(sql, [id]);
             if (results.length === 0) {
