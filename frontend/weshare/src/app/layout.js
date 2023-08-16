@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+import './globals.css';
+
 export const metadata = {
   title: 'Weshare',
   description: '',
