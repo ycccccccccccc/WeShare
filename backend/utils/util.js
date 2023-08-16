@@ -2,21 +2,11 @@ const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
 
 const db = mysql.createPool({
-    host: 'mysql',
-    user: 'develop',
+    host: 'mysql' || 'localhost',
+    user: 'root',
     password: 'pwd',
     database: 'weshare'
 });
-
-db.getConnection()
-    .then(connection => {
-        console.log('Connected to the database!');
-        connection.release(); // Release the connection back to the pool
-    })
-    .catch(error => {
-        console.error('Error connecting to the database:', error);
-    });
-
 
 module.exports = {
 
@@ -41,6 +31,15 @@ module.exports = {
     authorize_json: (req,res,next) => {
         const type = req.get('content-type')
         if (type !== 'application/json'){
+            return res.status(415).json({ error: 'Invalid content type' })
+        } else { next(); }
+    },
+
+    authorize_multipart: (req,res,next) => {
+        const type = req.get('content-type')
+        console.log("check type：",type.substring(0, 19))
+        if (type.substring(0, 19) !== 'multipart/form-data'){
+            console.log("current type is:",type)
             return res.status(415).json({ error: 'Invalid content type' })
         } else { next(); }
     },
