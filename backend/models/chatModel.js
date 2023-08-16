@@ -36,16 +36,19 @@ module.exports = {
     getMessagePreview: async ( my_ID ) => {
         try {
             const sql = `
-            SELECT 
-                c.id, c.sender_id, c.receiver_id, c.message,
-                u.id AS user_id, u.name, u.image
-            FROM chat AS c
-            LEFT JOIN user AS u ON c.sender_id = u.id
-            WHERE c.sender_id = ? OR c.receiver_id = ?
+                WITH receive_msg AS (
+                    SELECT id, receiver_id, message
+                    FROM chat 
+                    WHERE sender_id = ?
+                ), send_msg AS (
+                    SELECT id, send_id, message
+                    FROM chat 
+                    WHERE receiver_id = ?
+                )
             `
             const [results] = await db.query(sql, [my_ID,my_ID])
             const msgList = results.map((result) => {
-                const { id, message, user_id, name, image } = result
+                const { id, sender_id, receiver_id, message, user_id, name, image } = result
                 return {
                     id: id,
                     message: message,
