@@ -29,7 +29,6 @@ module.exports = {
         try{
             const sql = 'SELECT num_of_buyers FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id]);
-            console.log(results);
             return results[0];
         } catch (err) {
             return util.databaseError(err,'getNumOfBuyers',res);
@@ -43,7 +42,6 @@ module.exports = {
             const sql = 'SELECT seller_id, buyers_limit, title, image, introduction, cost, tag, item_location \
             FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id]);
-            console.log(results);
             const item = {
                 id: id,
                 title: results[0].title, 
@@ -110,7 +108,6 @@ module.exports = {
         try {
             const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, costco = ?, item_location = ?, expires_at = ? WHERE id = ?'
             const [results] = await db.query(sql, [title, introduction, cost, tag, costco, item_location, expires_at, id]);
-            console.log(results);
             const item = {
                 id: id,
             };
@@ -123,7 +120,6 @@ module.exports = {
         try{
             const sql = 'UPDATE item SET image = ? WHERE id = ?'
             const [results] = await db.query(sql, [url, id]);
-            console.log(results);
             const path = {
                 image: url 
             }
