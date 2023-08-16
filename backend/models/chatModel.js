@@ -4,7 +4,7 @@ const { db } = require('../utils/util');
 
 module.exports = {
 
-    getMessage: async ( my_ID, seller_ID ) => {
+    getMessage: async ( res, my_ID, seller_ID ) => {
         try {
             const sql = `
             SELECT c.id, c.message, u.id AS user_id, u.name, u.image
@@ -33,7 +33,7 @@ module.exports = {
         }
     },
 
-    getMessagePreview: async ( my_ID ) => {
+    getMessagePreview: async ( res, my_ID ) => {
         try {
             const sql = `
                 WITH receive_msg AS (
@@ -89,7 +89,7 @@ module.exports = {
         }
     },
 
-    sendMessage: async ( my_ID, seller_ID ) => {
+    sendMessage: async ( res, my_ID, seller_ID ) => {
         try {
             const sql = 'INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)'
             const [results] = await db.query(sql, [my_ID,seller_ID,message])
