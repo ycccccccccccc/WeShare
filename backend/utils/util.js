@@ -22,7 +22,7 @@ module.exports = {
             // 'WeShare' 之後要移去.env
             const decoded = jwt.verify(accessToken, 'WeShare');
             req.user = decoded;
-            next();
+	    next();
         } catch (error) {
             return res.status(403).json({ error: 'Invalid token' });
         }
