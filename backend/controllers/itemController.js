@@ -49,7 +49,7 @@ module.exports = {
     updateItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
         const seller_id = await itemModel.getSeller(res, item_id);
-        console.log(seller_id[0] , seller_id.id);
+        console.log(seller_id , seller_id.id);
 
         if( req.user.id !== seller_id.id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
