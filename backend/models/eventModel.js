@@ -6,10 +6,10 @@ module.exports = {
         try {
             const sql = 'INSERT INTO event_table (item_id, type, sender_id, recipient_id) VALUES (?,?,?,?)'
             const [results] = await db.query(sql, [item_id, type, sender_id, recipient_id])
-            const event_table = {
+            const event = {
                 id: results.insertId, 
             };
-            return ;
+            return event;
         } catch (err) {
             return util.databaseError(err,'addEvent',res);
         }
