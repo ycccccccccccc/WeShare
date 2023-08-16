@@ -1,5 +1,6 @@
 const util = require('../utils/util')
 const { db } = require('../utils/util');
+const { getUser } = require('./userModel')
 
 module.exports = {
 
@@ -40,22 +41,22 @@ module.exports = {
             const user = await getUser(res, seller_id);
             const sql = 'SELECT seller_id, buyers_limit, title, image, introduction, cost, tag, item_location \
             FROM item WHERE id = ?'
-            const [results] = await db.query(sql, [id]);
+            const [[results]] = await db.query(sql, [id]);
             const item = {
                 id: id,
-                title: results[0].title, 
-                buyers_limit: results[0].buyers_limit,
-                image: results[0].image, 
-                introduction: results[0].introduction, 
-                cost: results[0].cost, 
-                tag: results[0].tag, 
-                costco: results[0].costco,
-                item_location: results[0].item_location,
-                expires_at: results[0].expires_at,
+                title: results.title, 
+                buyers_limit: results.buyers_limit,
+                image: results.image, 
+                introduction: results.introduction, 
+                cost: results.cost, 
+                tag: results.tag, 
+                costco: results.costco,
+                item_location: results.item_location,
+                expires_at: results.expires_at,
                 user: {
-                    id: results.seller_id,
-                    name: results.name,
-                    rating: results.rating
+                    id: user.seller_id,
+                    name: user.name,
+                    rating: user.rating
                 }
             };
             return item;
