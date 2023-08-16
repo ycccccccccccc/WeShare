@@ -109,7 +109,7 @@ module.exports = {
     updateItem: async ( res, id, title, introduction, cost, tag, costco, item_location, expires_at) => {
         try {
             const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, costco = ?, item_location = ?, expires_at = ? WHERE id = ?'
-            const [results] = await db.query(sql, [title, introduction, cost, tag, costco, item_location, expires_at]);
+            const [results] = await db.query(sql, [title, introduction, cost, tag, costco, item_location, expires_at, id]);
             console.log(results);
             const item = {
                 id: id,
