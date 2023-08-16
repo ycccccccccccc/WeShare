@@ -1,6 +1,5 @@
 const util = require('../utils/util')
 const { db } = require('../utils/util');
-const { getUser } = require('./userModel');
 
 module.exports = {
 
@@ -54,9 +53,9 @@ module.exports = {
                 item_location: results[0].item_location,
                 expires_at: results[0].expires_at,
                 user: {
-                    id: seller_id,
-                    name: user.name,
-                    rating: user.rating
+                    id: results.seller_id,
+                    name: results.name,
+                    rating: results.rating
                 }
             };
             return item;
@@ -64,6 +63,7 @@ module.exports = {
             return util.databaseError(err,'getItem',res);
         }
     },
+    
     getItems: async ( res, item_id, limit ) => {
         try {
             limit = limit +1;

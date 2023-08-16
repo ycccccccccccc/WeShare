@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS user (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     rating FLOAT,
-    photo VARCHAR(255),
+    image VARCHAR(255),
     phone INT
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
 
