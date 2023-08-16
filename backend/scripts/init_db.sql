@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS item (
     CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
+-- Create the 'order_table' table if it doesn't exist
 CREATE TABLE IF NOT EXISTS order_table (
     id INT AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
@@ -48,6 +49,18 @@ CREATE TABLE IF NOT EXISTS order_table (
     CONSTRAINT order_item_id_key FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE,
     CONSTRAINT order_seller_id_key FOREIGN KEY (seller_id) REFERENCES item(seller_id) ON DELETE CASCADE,
     CONSTRAINT order_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
+-- Create the 'event_table' table if it doesn't exist
+CREATE TABLE IF NOT EXISTS event_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('買家下單通知', '交易成功通知') NOT NULL,
+    item_id INT,
+    sender_id INT NOT NULL,
+    recipient_id INT NOT NULL,
+    CONSTRAINT event_item_id_key FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE,
+    CONSTRAINT event_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT event_recipient_id_key FOREIGN KEY (recipient_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
 -- Create the 'chat' table if it doesn't exist
