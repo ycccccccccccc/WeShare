@@ -32,7 +32,7 @@ module.exports = {
                 error: "Order limit exceeded!"
             })
         }
-        const result = await orderModel.agreeOrder(res, IDs.item_id);
+        const result = await orderModel.agreeOrder(res, order_id);
         return res.status(200).json({ order: result });
     }
 }

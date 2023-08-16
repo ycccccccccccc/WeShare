@@ -29,10 +29,10 @@ module.exports = {
             return util.databaseError(err,'getIDs',res);
         }
     },
-    agreeOrder: async ( res, item_id ) => {
+    agreeOrder: async ( res, order_id ) => {
         try {
             const sql = 'UPDATE order_table SET status = ? WHERE id = ?';
-            const [results] = await db.query(sql, ['agree', item_id]);
+            const [results] = await db.query(sql, ['agree', order_id]);
             const order = {
                 id: item_id
             };
