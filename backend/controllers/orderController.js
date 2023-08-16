@@ -1,5 +1,6 @@
 const { getNumOfBuyers, getSeller } = require('../models/itemModel');
-const orderModel = require('../models/orderModel')
+const orderModel = require('../models/orderModel');
+const eventModel = require('../models/eventModel')
 
 module.exports = {
     addOrder: async (req, res) => {
@@ -13,6 +14,7 @@ module.exports = {
             })
         }
         const result = await orderModel.addOrder(res, item_id, seller_id, buyer_id);
+        const event = await eventModel.addEvent(res, item_id, '買家下單通知', buyer_id, seller_id);
         return res.status(200).json({ order: result });
     },
     agreeOrder: async (req, res) => {
@@ -31,6 +33,7 @@ module.exports = {
             })
         }
         const result = await orderModel.agreeOrder(res, order_id);
+        const event = await eventModel.addEvent(res, IDs.item_id, '交易成功通知', seller_id, IDs.buyer_id);
         return res.status(200).json({ order: result });
     }
 }
