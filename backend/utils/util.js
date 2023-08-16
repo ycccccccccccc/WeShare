@@ -3,20 +3,10 @@ const mysql = require('mysql2/promise');
 
 const db = mysql.createPool({
     host: 'mysql',
-    user: 'develop',
+    user: 'root',
     password: 'pwd',
     database: 'weshare'
 });
-
-db.getConnection()
-    .then(connection => {
-        console.log('Connected to the database!');
-        connection.release(); // Release the connection back to the pool
-    })
-    .catch(error => {
-        console.error('Error connecting to the database:', error);
-    });
-
 
 module.exports = {
 
