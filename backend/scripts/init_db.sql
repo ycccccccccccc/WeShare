@@ -1,13 +1,9 @@
 ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'pwd';
 flush privileges;
 
--- Create the 'weshare' database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS weshare;
-CREATE DATABASE IF NOT EXISTS weshare_test;
-
 -- 創建資料庫時指定字符集和排序規則
-CREATE DATABASE weshare CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE weshare_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS weshare CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS weshare_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 use weshare;
 
