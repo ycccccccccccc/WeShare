@@ -34,7 +34,7 @@ module.exports = {
             const sql = 'UPDATE order_table SET status = ? WHERE id = ?';
             const [results] = await db.query(sql, ['agree', order_id]);
             const order = {
-                id: item_id
+                id: order_id
             };
             return order;
         } catch (err) {
