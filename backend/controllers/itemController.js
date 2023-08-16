@@ -8,7 +8,7 @@ module.exports = {
         if ( !buyers_limit || !title || !introduction || !cost || !tag || !costco || !location || !expires_at) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const result = await itemModel.addItem(res, seller_id, title, introduction, cost, tag, costco, location, expires_at);
+        const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, expires_at);
         return res.status(200).json({ item: result });
     },
     getItem: async (req, res) => {
