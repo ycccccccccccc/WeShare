@@ -16,7 +16,7 @@ module.exports = {
     },
     getEvent: async (res, id) => {
         try {
-            const sql = 'SELECT event_table.id, event_table.type, event_table.sender_id, event_table.recipient_id, user.name, user.image, order_table.status \
+            const sql = 'SELECT event_table.item_id, event_table.id, event_table.type, event_table.sender_id, event_table.recipient_id, user.name, user.image, order_table.status \
             FROM event_table \
             LEFT JOIN user ON event_table.sender_id = user.id \
             LEFT JOIN order_table ON ( order_table.item_id = event_table.item_id AND (order_table.seller_id = event_table.sender_id AND order_table.buyer_id = event_table.recipient_id) OR (order_table.seller_id = event_table.recipient_id AND order_table.buyer_id = event_table.sender_id)) \
@@ -32,6 +32,7 @@ module.exports = {
                     type: result.type,
                     recipient_id: result.recipient_id,
                     order:{
+                        item_id: result.item_id,
                         status: result.status
                     }, 
                     user: {
