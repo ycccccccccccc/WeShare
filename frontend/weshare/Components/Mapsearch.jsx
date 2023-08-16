@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable react/prop-types */
 
