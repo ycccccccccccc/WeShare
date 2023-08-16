@@ -25,7 +25,7 @@ router.post('/', [util.authorize_json, util.authorize_bearer], itemController.ad
 router.get('/:id', [util.authorize_json, util.authorize_bearer], itemController.getItem);
 router.get('/', [util.authorize_json, util.authorize_bearer], itemController.getItems);
 router.put('/:id', [util.authorize_json, util.authorize_bearer], itemController.updateItem);
-router.put('/:id/photo', upload.single('picture'), [util.authorize_multipart, util.authorize_bearer], itemController.updateItemPhoto);
+router.put('/:id/image', upload.single('picture'), [util.authorize_multipart, util.authorize_bearer], itemController.updateItemPhoto);
 
 module.exports = router;
 
