@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Pattaya&display=swap%22");
+
+.border {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: 1px solid #d9d9d9;
+  background-color: white;
+
+  .weshare {
+    margin: 41px 40px 35px 0px;
+    color: #092e18;
+    font-family: Pattaya;
+    font-size: 37px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .search_bar {
+    margin-top: 27px;
+    display: flex;
+    width: 330px;
+    height: 3rem;
+    flex-shrink: 0;
+    border-radius: 30px;
+    border: 1px solid #000;
+    justify-content: flex-start;
+    align-items: center;
+
+    .search_pic {
+      margin-left: 20px;
+      margin-right: 8px;
+      width: 25px;
+      height: 25px;
+      flex-shrink: 0;
+    }
+
+    .searching {
+      color: #000;
+      font-family: Permanent Marker;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 16px;
+      border: none;
+      width: 40%;
+    }
+    .filter {
+      color: #000;
+      font-family: Permanent Marker;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 16px;
+      border-radius: 30px;
+      border: 1px solid #000;
+      background: #fff;
+      text-align: center;
+      cursor: pointer;
+
+    }
+  }
+  .share_post {
+    border-radius: 30px;
+    border: 2px solid #000;
+    background: #2d6047;
+    width: 10%;
+    height: 3rem;
+    margin-top: 27px;
+    display: flex;
+    align-items: center; /* 垂直置中 */
+    justify-content: center; /* 水平置中 */
+    margin-left: 20px;
+    cursor: pointer;
+
+
+    color: #fff;
+    font-family: Pattaya;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; 
+    margin-left: 20%;
+  }
+  .message_box {
+    align-self: center;
+    margin: 0px 0px 0px 20px;
+  }
+  .notification {
+    align-self: center;
+    margin: 0px 20px 0px 20px;
+  }
+  .profile_pic {
+    width: 60px;
+    height: 60px;
+    align-self: center;
+    margin-left: auto;
+    margin-right: 10%;
+  }
+}
