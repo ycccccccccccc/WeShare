@@ -26,7 +26,7 @@ module.exports = {
                 error: "Insufficient permissions!"
             })
         }
-        const checkOrder = await getNumOfBuyers(res, item_id);
+        const checkOrder = await getNumOfBuyers(res, IDs.item_id);
         if( checkOrder.num_of_buyers <= 0 ){
             return res.status(400).json({
                 error: "Order limit exceeded!"
