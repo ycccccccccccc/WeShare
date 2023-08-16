@@ -128,10 +128,5 @@ module.exports = {
             return util.databaseError(err,'updateItemImage',res);
         }
     }
-<<<<<<< HEAD
-}
-
-=======
     
 }
->>>>>>> 13323467e0a53e16e1b6e69b9e4c66bdfe25210c
