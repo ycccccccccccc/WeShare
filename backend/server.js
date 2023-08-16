@@ -16,7 +16,10 @@ const item_route = require('./routes/itemRoute');
 app.use('/items',item_route);
 
 const order_route = require('./routes/orderRoute');
-app.use('/order', order_route);
+app.use('/orders', order_route);
+
+const event_route = require('./routes/eventRoute');
+app.use('/events', event_route);
 
 const server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
