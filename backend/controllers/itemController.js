@@ -1,5 +1,4 @@
 const itemModel = require('../models/itemModel')
-const util = require('../utils/util')
 require('dotenv').config();
 
 module.exports = {
@@ -10,12 +9,6 @@ module.exports = {
             return res.status(400).json({ error: 'Missing required fields' });
         }
         const result = await itemModel.addItem(res, seller_id, title, introduction, cost, tag, costco, location, expires_at);
-        return res.status(200).json({ item: result });
-    },
-    addBuyer: async (req, res) => {
-        const buyer_id = req.user.id;
-        const item_id = parseInt(req.params.id);
-        const result = await itemModel.addBuyer(res, item_id, buyer_id);
         return res.status(200).json({ item: result });
     },
     getItem: async (req, res) => {
@@ -77,5 +70,4 @@ module.exports = {
         const result = await updateItemPhoto(res, item_id, pic_path);
         return res.status(200).json({ item: result });
     }
-
 }

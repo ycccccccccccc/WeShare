@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE IF NOT EXISTS item (
     id INT AUTO_INCREMENT PRIMARY KEY,
     seller_id INT NOT NULL,
-    buyer_id INT,
+    buyers_limit INT NOT NULL,
+    num_of_buyers INT,
     title VARCHAR(255) NOT NULL,
     image VARCHAR(255),
     introduction VARCHAR(255) NOT NULL,
@@ -39,10 +40,16 @@ CREATE TABLE IF NOT EXISTS item (
     item_location VARCHAR(255) NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     expires_at DATETIME NOT NULL,
-    CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE,
-    CONSTRAINT item_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
+    CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
-
-
-
+CREATE TABLE IF NOT EXISTS order_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    seller_id INT NOT NULL,
+    buyer_id INT NOT NULL,
+    status ENUM('request', 'agree') NOT NULL,
+    CONSTRAINT order_item_id_key FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE,
+    CONSTRAINT order_seller_id_key FOREIGN KEY (seller_id) REFERENCES item(seller_id) ON DELETE CASCADE,
+    CONSTRAINT order_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
+);

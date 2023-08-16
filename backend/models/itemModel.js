@@ -4,10 +4,10 @@ const { getUser } = require('./userModel');
 
 module.exports = {
 
-    addItem: async ( res, seller_id, title, introduction, cost, tag, costco, item_location, expires_at ) => {
+    addItem: async ( res, seller_id, buyers_limit, title, introduction, cost, tag, costco, item_location, expires_at ) => {
         try {
-            const sql = 'INSERT INTO item (seller_id, title, introduction, cost, tag, costco, item_location, expires_at) VALUES (?,?,?,?,?,?,?,?)'
-            const [results] = await db.query(sql, [seller_id, title, introduction, cost, tag, costco, item_location, expires_at])
+            const sql = 'INSERT INTO item (seller_id, buyers_limit, num_of_buyers, title, introduction, cost, tag, costco, item_location, expires_at) VALUES (?,?,?,?,?,?,?,?,?,?)'
+            const [results] = await db.query(sql, [seller_id, buyers_limit, buyers_limit, title, introduction, cost, tag, costco, item_location, expires_at])
             const item = {
                 id: results.insertId, 
             };
@@ -25,18 +25,29 @@ module.exports = {
             return util.databaseError(err,'getSeller',res);
         }
     },
+    getNumOfBuyers: async ( res, id ) => {
+        try{
+            const sql = 'SELECT num_of_buyers FROM item WHERE id = ?'
+            const [results] = await db.query(sql, [id]);
+            console.log(results);
+            return results[0];
+        } catch (err) {
+            return util.databaseError(err,'getNumOfBuyers',res);
+        }
+    },
     getItem: async ( res, id ) => {
         try {
             const [user_id] = await db.query('SELECT seller_id FROM item WHERE id = ?', [id])
             const seller_id = user_id[0].seller_id;
             const user = await getUser(res, seller_id);
-            const sql = 'SELECT seller_id, title, image, introduction, cost, tag, item_location \
+            const sql = 'SELECT seller_id, buyers_limit, title, image, introduction, cost, tag, item_location \
             FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id]);
             console.log(results);
             const item = {
                 id: id,
                 title: results[0].title, 
+                buyers_limit: results[0].buyers_limit,
                 image: results[0].image, 
                 introduction: results[0].introduction, 
                 cost: results[0].cost, 
@@ -62,7 +73,7 @@ module.exports = {
             if (!item_id) {
                 item_id = '(SELECT MAX(id) FROM item)';
             }
-            const sql = `SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
+            const sql = `SELECT item.id, item.buyers_limit, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
             FROM item LEFT JOIN user ON item.seller_id = user.id\
             WHERE item.id <= ${item_id}\
             ORDER BY item.id DESC LIMIT ?`;
@@ -74,6 +85,7 @@ module.exports = {
             results.map(result => {
                 const item = {
                     id: result.id,
+                    buyers_limit: result.buyers_limit,
                     title: result.title, 
                     image: result.image, 
                     introduction: result.introduction, 
@@ -121,21 +133,6 @@ module.exports = {
         } catch (err) {
             return util.databaseError(err,'updateItemPhoto',res);
         }
-    },
-    addBuyer: async ( res, id, buyer_id ) => {
-        try{
-            const sql = 'UPDATE item SET buyer_id = ? WHERE id = ?'
-            const [results] = await db.query(sql, [buyer_id, id]);
-            console.log(results);
-            const item = {
-                id: id,
-                buyer_id: buyer_id
-            }
-            return item;
-        } catch (err) {
-            return util.databaseError(err,'addBuyer',res);
-        }
     }
-    
 }
 
