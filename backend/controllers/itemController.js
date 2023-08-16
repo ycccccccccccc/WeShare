@@ -59,6 +59,7 @@ module.exports = {
     },
     updateItemPhoto: async (req, res) => {
         const image = req.file;
+        const item_id = parseInt(req.params.id);
         if(!image){
             return res.status(400).json({
                 message: 'No image provided.'
