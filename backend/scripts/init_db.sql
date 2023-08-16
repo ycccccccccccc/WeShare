@@ -1,13 +1,9 @@
 ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'pwd';
 flush privileges;
 
--- Create the 'weshare' database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS weshare;
-CREATE DATABASE IF NOT EXISTS weshare_test;
-
 -- 創建資料庫時指定字符集和排序規則
-CREATE DATABASE weshare CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE DATABASE weshare_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS weshare CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS weshare_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 use weshare;
 
@@ -54,6 +50,7 @@ CREATE TABLE IF NOT EXISTS order_table (
     CONSTRAINT order_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
+-- Create the 'event' table if it doesn't exist
 CREATE TABLE IF NOT EXIST event (
     id INT AUTO_INCREMENT PRIMARY KEY,
     type ENUM('購買要求通知', '交易成功通知') NOT NULL,
@@ -62,3 +59,13 @@ CREATE TABLE IF NOT EXIST event (
     CONSTRAINT order_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
     CONSTRAINT order_recipient_id_key FOREIGN KEY (recipient_id) REFERENCES user(id) ON DELETE CASCADE
 )
+
+-- Create the 'chat' table if it doesn't exist
+CREATE TABLE IF NOT EXISTS chat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message VARCHAR(255),
+    CONSTRAINT chat_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT chat_receiver_id_key FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE
+);

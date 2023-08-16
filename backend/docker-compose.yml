@@ -1,4 +1,9 @@
 version: "3.8"
+
+networks:
+  weshare-network:
+    driver: bridge
+
 services:
   
   mysql:
@@ -33,14 +38,14 @@ services:
     container_name: nginx
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./private/certificate.crt:/etc/nginx/certificate.crt:ro
-      - ./private/private.key:/etc/nginx/private.key:ro
     restart: always
     networks:
-      - my_network
+      - weshare-network
+    depends_on:
+      - weshare
+
 
 volumes:
   mysql_data:
