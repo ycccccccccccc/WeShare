@@ -54,7 +54,6 @@ module.exports = {
                 tag: results[0].tag, 
                 costco: results[0].costco,
                 item_location: results[0].item_location,
-                buyer_id: results[0].buyer_id,
                 expires_at: results[0].expires_at,
                 user: {
                     id: seller_id,
@@ -73,7 +72,7 @@ module.exports = {
             if (!item_id) {
                 item_id = '(SELECT MAX(id) FROM item)';
             }
-            const sql = `SELECT item.id, item.buyers_limit, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.buyer_id, item.seller_id, user.name, user.rating \
+            const sql = `SELECT item.id, item.buyers_limit, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.seller_id, user.name, user.rating \
             FROM item LEFT JOIN user ON item.seller_id = user.id\
             WHERE item.id <= ${item_id}\
             ORDER BY item.id DESC LIMIT ?`;
@@ -93,7 +92,6 @@ module.exports = {
                     tag: result.tag, 
                     costco: result.costco,
                     item_location: result.item_location,
-                    buyer_id: result.buyer_id,
                     expires_at: result.expires_at,
                     user: {
                         id: result.seller_id,
