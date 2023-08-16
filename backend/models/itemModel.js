@@ -119,17 +119,17 @@ module.exports = {
             return util.databaseError(err,'updateItem',res);
         }
     },
-    updateItemPhoto: async ( res, id, url ) => {
+    updateItemImage: async ( res, id, url ) => {
         try{
-            const sql = 'UPDATE item SET photo = ? WHERE id = ?'
+            const sql = 'UPDATE item SET image = ? WHERE id = ?'
             const [results] = await db.query(sql, [url, id]);
             console.log(results);
             const path = {
-                photo: url 
+                image: url 
             }
             return path;
         } catch (err) {
-            return util.databaseError(err,'updateItemPhoto',res);
+            return util.databaseError(err,'updateItemImage',res);
         }
     }
 }

@@ -57,7 +57,7 @@ module.exports = {
         const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, costco, location, expires_at);
         return res.status(200).json({ item: result });
     },
-    updateItemPhoto: async (req, res) => {
+    updateItemImage: async (req, res) => {
         const image = req.file;
         const item_id = parseInt(req.params.id);
         if(!image){
@@ -74,7 +74,7 @@ module.exports = {
             }
         });
         const pic_path = `https://${process.env.ip}/images/item_${item_id}.${file_name[file_name.length-1]}`;
-        const result = await itemModel.updateItemPhoto(res, item_id, pic_path);
+        const result = await itemModel.updateItemImage(res, item_id, pic_path);
         return res.status(200).json({ item: result });
     }
 }
