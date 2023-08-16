@@ -55,7 +55,10 @@ module.exports = {
     },
     updateItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
-        await this.checkAuth(req, res, item_id);
+        const seller_id = await itemModel.getSeller(res, item_id);
+        if( req.user.id !== seller_id.seller_id){
+            return res.status(400).json({ error: 'Insufficient permissions!' });
+        }
         const { title, introduction, cost, tag, costco, location, expires_at } = req.body;
         const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, costco, location, expires_at);
         return res.status(200).json({ item: result });
@@ -63,7 +66,10 @@ module.exports = {
     updateItemImage: async (req, res) => {
         const image = req.file;
         const item_id = parseInt(req.params.id);
-        await this.checkAuth(req, res, item_id);
+        const seller_id = await itemModel.getSeller(res, item_id);
+        if( req.user.id !== seller_id.seller_id){
+            return res.status(400).json({ error: 'Insufficient permissions!' });
+        }
         if(!image){
             return res.status(400).json({
                 message: 'No image provided.'
