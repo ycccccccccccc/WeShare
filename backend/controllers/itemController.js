@@ -1,4 +1,5 @@
-const itemModel = require('../models/itemModel')
+const itemModel = require('../models/itemModel');
+const fs = require('fs');
 require('dotenv').config();
 
 module.exports = {
@@ -57,6 +58,12 @@ module.exports = {
         return res.status(200).json({ item: result });
     },
     updateItemPhoto: async (req, res) => {
+        const image = req.file;
+        if(!image){
+            return res.status(400).json({
+                message: 'No image provided.'
+            })
+        }
         const file_name = (req.file.originalname).split('.');
         fs.rename(`public/images/${req.file.originalname}`, `public/images/item_${item_id}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
@@ -65,7 +72,6 @@ module.exports = {
               console.log('文件重命名成功！');
             }
         });
-
         const pic_path = `https://${process.env.ip}/images/item_${item_id}.${file_name[file_name.length-1]}`;
         const result = await updateItemPhoto(res, item_id, pic_path);
         return res.status(200).json({ item: result });
