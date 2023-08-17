@@ -9,7 +9,7 @@ router.get('/:id', [util.authorize_bearer], chatController.getMessage);
 
 router.get('/', [util.authorize_bearer], chatController.getMessagePreview);
 
-router.post('/addTest', chatController.addTest)
+router.get('/addTest', chatController.addTest)
 
 module.exports = router;
 
