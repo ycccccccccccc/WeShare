@@ -144,10 +144,12 @@ module.exports = {
         try {
             const sql = `INSERT INTO rating (sender_id, receiver_id, rating) VALUES (?,?,?)`
             const [results] = await db.query(sql, [sender_id,receiver_id,rating]);
-            const result = {
-                id: results.insertId
+            const data = {
+                rating: {
+		    id: results.insertId
+		}
             }
-            return result;
+            return data;
         } catch (err) {
             return util.databaseError(err,'getUserItem',res);
         }
@@ -166,7 +168,7 @@ module.exports = {
             console.log(receive_count, rating_sum, parseFloat((rating_sum/receive_count).toFixed(2)))
             const sql_update = "UPDATE user SET rating = ? WHERE id = ?"
             await db.query(sql_update, [parseFloat((rating_sum/receive_count).toFixed(2)), receiver_id])
-            return { id: receiver_id }
+            return true
         } catch (err) {
             return util.databaseError(err,'getUserItem',res);
         }
