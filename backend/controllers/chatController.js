@@ -5,8 +5,8 @@ module.exports = {
         const my_ID = req.user.id
         const seller_ID = req.params.id;
         const cursor = req.query.cursor;
-        console.log("decode_cursor: ",decode_cursor)
         const decode_cursor = cursor === undefined ? 0 : Number(Buffer.from(cursor, 'base64').toString('ascii'))
+        console.log("decode_cursor: ",decode_cursor)
         const result = await chatModel.getMessage(res,my_ID, seller_ID,decode_cursor);
         return res.status(200).json({ data: result }); 
     },
