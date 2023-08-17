@@ -123,4 +123,20 @@ module.exports = {
             return util.databaseError(err,'getUserItem',res);
         }
     },
+
+    addTest:  async ( res ) => {
+        try {
+            for ( var i = 1 ; i <= 11 ; i++ ){
+                const sql = `INSERT INTO user (name, email, password) VALUES (?,?,?)`
+                await db.query(sql, [
+                    "user" + i.toString(),
+                    "user" + i.toString() + "@gmail.com",
+                    "pwd"
+                ]);
+            }
+            return "user added."
+        } catch (err) {
+            return util.databaseError(err,'getUserItem',res);
+        }
+    }
 }
