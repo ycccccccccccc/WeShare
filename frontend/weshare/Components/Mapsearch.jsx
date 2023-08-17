@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-sync-scripts */
 /* eslint-disable react/prop-types */
 
@@ -24,7 +23,10 @@ export default function Mapsearch() {
       : undefined,
     strictBounds: false,
   };
+
   useEffect(() => {
+    if (!showSearchBox) return;
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         setLocation({
@@ -35,14 +37,11 @@ export default function Mapsearch() {
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
-  }, []);
-
-  useEffect(() => {
     autoCompleteRef.current = new window.google.maps.places.Autocomplete(
       inputRef.current,
       options
     );
-  }, []);
+  }, [showSearchBox]);
   return (
     <div>
       <script

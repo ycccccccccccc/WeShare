@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 networks:
   weshare-network:
@@ -15,6 +15,7 @@ services:
       - MYSQL_DATABASE=weshare
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./scripts/my.cnf:/etc/my.cnf
       - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     networks:
       - weshare-network
@@ -34,18 +35,18 @@ services:
       - "3000:3000"
 
   nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
+    image: nginx:alpine3.17
     container_name: nginx
     ports:
-      - "8080:80"
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: always
     networks:
       - weshare-network
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - weshare
+
 
 volumes:
   mysql_data:
