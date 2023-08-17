@@ -7,7 +7,7 @@ module.exports = {
             const sql = 'INSERT INTO order_table (item_id, seller_id, buyer_id, status) VALUES (?,?,?,?)';
             const [results] = await db.query(sql, [item_id, seller_id, buyer_id, 'request']);
             const order = {
-                id: results.insertId, 
+                id: results.insertId
             };
             return order;
         } catch (err) {

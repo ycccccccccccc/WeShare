@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
+require('dotenv').config();
 
 const db = mysql.createPool({
-    host: 'mysql' || 'localhost',
+    host: 'localhost',
     user: 'root',
-    password: 'pwd',
-    database: 'weshare'
+    password: 'Ycsql0330_',
+    database: process.env.NODE_ENV === 'test' ? 'weshare_test' : 'weshare'
 });
 
 module.exports = {
