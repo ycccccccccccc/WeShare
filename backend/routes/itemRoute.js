@@ -21,11 +21,11 @@ const upload = multer({
     }
   });
 
-router.post('/', [util.authorize_json,util.authorize_bearer], itemController.addItem);
+router.post('/', [util.authorize_json, util.authorize_bearer], itemController.addItem);
+router.get('/:id', [util.authorize_bearer], itemController.getItem);
 router.get('/', [util.authorize_bearer], itemController.getItems);
-router.get('/:id', [util.authorize_bearer], itemController.getItems);
-router.put('/:id', [util.authorize_json,util.authorize_bearer], itemController.updateItem);
-router.put('/:id/photo', upload.single('picture'), [util.authorize_json], itemController.updateItemPhoto);
+router.put('/:id', [util.authorize_json, util.authorize_bearer], itemController.updateItem);
+router.put('/:id/image', upload.single('picture'), [util.authorize_multipart, util.authorize_bearer], itemController.updateItemImage);
 
 module.exports = router;
 

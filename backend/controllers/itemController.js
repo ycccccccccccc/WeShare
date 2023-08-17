@@ -1,15 +1,15 @@
-const itemModel = require('../models/itemModel')
-const util = require('../utils/util')
+const itemModel = require('../models/itemModel');
+const fs = require('fs');
 require('dotenv').config();
 
 module.exports = {
     addItem: async (req, res) => {
         const seller_id = req.user.id;
-        const { title, image, introduction, cost, tag, location, expired_at } = req.body;
-        if ( !title || !image || !introduction || !cost || !tag || !location || !expired_at ) {    
+        const { buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
+        if ( !buyers_limit || !title || !introduction || !cost || !tag || !location || !latitude || !longitude || !expires_at) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const result = await itemModel.addItem(res, seller_id, title, image, introduction, cost, tag, location, expired_at);
+        const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
         return res.status(200).json({ item: result });
     },
 
@@ -20,16 +20,20 @@ module.exports = {
     },
     
     getItems: async (req, res) => {
+        const keyword = req.query.keyword;
+        const tag = req.query.tag;
+        const latitude = req.body.latitude;
+        const longitude = req.body.longitude;
         let cursor = req.query.cursor;
         let jsonObject = '';
         if(cursor){
-            // 将 Base64 字符串解码为 Buffer
+            // 將 Base64 字符串解碼為 Buffer
             const buffer = Buffer.from(cursor, 'base64');
             const decodedString = buffer.toString('utf-8');
             jsonObject = JSON.parse(decodedString);
         }
         const limit = 10;
-        let result = await itemModel.getItems(res, jsonObject.item_id, limit);
+        let result = await itemModel.getItems(res, jsonObject.item_id, limit, latitude, longitude, keyword, tag);
         let base64String = '';
         if(result.length == (limit + 1)){
             const last_index = result.length - 1;
@@ -42,26 +46,41 @@ module.exports = {
             result.pop();
         }
         else{
-            console.log('have not next post')
             base64String = null;
         }
         return res.status(200).json({ 'data':{
-            'posts': result,
+            'items': result,
             'next_cursor': base64String
         }})
+    },
+    checkAuth: async (req, res, item_id) => {
+        const seller_id = await itemModel.getSeller(res, item_id);
+        if( req.user.id !== seller_id.seller_id){
+            return res.status(400).json({ error: 'Insufficient permissions!' });
+        }
     },
     updateItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
         const seller_id = await itemModel.getSeller(res, item_id);
-        if( req.user.id !== seller_id.id){
+        if( req.user.id !== seller_id.seller_id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
-        const { title, introduction, cost, tag, location } = req.body;
-        const result = await itemModel.updateItem(res, item_id, title, introduction, cost, tag, location);
+        const { title, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
+        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
         return res.status(200).json({ item: result });
     },
-    updateItemPhoto: async (req, res) => {
+    updateItemImage: async (req, res) => {
+        const image = req.file;
         const item_id = parseInt(req.params.id);
+        const seller_id = await itemModel.getSeller(res, item_id);
+        if( req.user.id !== seller_id.seller_id){
+            return res.status(400).json({ error: 'Insufficient permissions!' });
+        }
+        if(!image){
+            return res.status(400).json({
+                message: 'No image provided.'
+            })
+        }
         const file_name = (req.file.originalname).split('.');
         fs.rename(`public/images/${req.file.originalname}`, `public/images/item_${item_id}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
@@ -70,10 +89,8 @@ module.exports = {
               console.log('文件重命名成功！');
             }
         });
-
-        const pic_path = `https://${process.env.id}/images/item_${item_id}.${file_name[file_name.length-1]}`;
-        const result = await updateItemPhoto(res, item_id, pic_path);
+        const pic_path = `https://${process.env.ip}/images/item_${item_id}.${file_name[file_name.length-1]}`;
+        const result = await itemModel.updateItemImage(res, item_id, pic_path);
         return res.status(200).json({ item: result });
     }
-
 }

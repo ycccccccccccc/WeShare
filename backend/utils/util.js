@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
+require('dotenv').config();
 
 const db = mysql.createPool({
-    host: 'mysql',
+    host: 'localhost',
     user: 'root',
-    password: 'pwd',
-    database: 'weshare'
+    password: 'Ycsql0330_',
+    database: process.env.NODE_ENV === 'test' ? 'weshare_test' : 'weshare'
 });
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
             // 'WeShare' 之後要移去.env
             const decoded = jwt.verify(accessToken, 'WeShare');
             req.user = decoded;
-            next();
+	    next();
         } catch (error) {
             return res.status(403).json({ error: 'Invalid token' });
         }
@@ -31,6 +32,15 @@ module.exports = {
     authorize_json: (req,res,next) => {
         const type = req.get('content-type')
         if (type !== 'application/json'){
+            return res.status(415).json({ error: 'Invalid content type' })
+        } else { next(); }
+    },
+
+    authorize_multipart: (req,res,next) => {
+        const type = req.get('content-type')
+        console.log("check type：",type.substring(0, 19))
+        if (type.substring(0, 19) !== 'multipart/form-data'){
+            console.log("current type is:",type)
             return res.status(415).json({ error: 'Invalid content type' })
         } else { next(); }
     },
