@@ -74,3 +74,13 @@ CREATE TABLE IF NOT EXISTS chat (
     CONSTRAINT chat_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
     CONSTRAINT chat_receiver_id_key FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS rating (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    rating FLOAT,
+    image VARCHAR(255),
+    CONSTRAINT rate_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT rate_receiver_id_key FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE
+);
