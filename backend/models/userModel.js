@@ -4,15 +4,15 @@ const { db } = require('../utils/util');
 
 module.exports = {
 
-    signup: async ( res, name, email, password ) => {
+    signup: async ( res, name, phone, password ) => {
         try {
             const hashPwd = bcrypt.hashSync(password, 10);
-            const sql = "INSERT INTO user (name, email, password) VALUES (?,?,?)"
-            const [results] = await db.query(sql, [name,email,hashPwd])
+            const sql = "INSERT INTO user (name, phone, password) VALUES (?,?,?)"
+            const [results] = await db.query(sql, [name,phone,hashPwd])
             const user = {
                 id: results.insertId, 
                 name: name, 
-                email: email, 
+                phone: phone, 
             };
             const data = {
                 access_token: util.generateToken(user),
@@ -24,19 +24,19 @@ module.exports = {
         }
     },
 
-    signin: async ( res, email, password ) => {
+    signin: async ( res, phone, password ) => {
         try {
-            const sql = "SELECT * FROM user WHERE email = ?"
-	        const [[results]] = await db.query(sql, [email])
+            const sql = "SELECT * FROM user WHERE phone = ?"
+	        const [[results]] = await db.query(sql, [phone])
             if( results === undefined ) {
-                return "No user were found with given email."
+                return "No user were found with given phone."
             } else if ( !bcrypt.compare(password, results.password) ) {
                 return "Wrong password."
             } else {
                 const user = {
                     id: results.id,
                     name: results.name,
-                    email: results.email
+                    phone: results.phone
                 }
                 const data = {
                     access_token: util.generateToken(user),
@@ -49,11 +49,11 @@ module.exports = {
         }
     },
 
-    findUser: async ( res, email ) => {
+    findUser: async ( res, phone ) => {
         try {
-            const sql = "SELECT id, name, email FROM user WHERE email = ?"
-            const [results] = await db.query(sql, [email])
-            console.log("finduser:",results[0],email,"id")
+            const sql = "SELECT id, name, phone FROM user WHERE phone = ?"
+            const [results] = await db.query(sql, [phone])
+            console.log("finduser:",results[0],phone,"id")
             const existUser = results[0] === undefined ? false : true
             return existUser
         } catch (err) {
@@ -127,10 +127,10 @@ module.exports = {
     addTest:  async ( res ) => {
         try {
             for ( var i = 1 ; i <= 11 ; i++ ){
-                const sql = `INSERT INTO user (name, email, password) VALUES (?,?,?)`
+                const sql = `INSERT INTO user (name, phone, password) VALUES (?,?,?)`
                 await db.query(sql, [
                     "user" + i.toString(),
-                    "user" + i.toString() + "@gmail.com",
+                    util.generateRandomNum(10),
                     "pwd"
                 ]);
             }
