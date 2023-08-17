@@ -4,14 +4,17 @@ const { db } = require('../utils/util');
 
 module.exports = {
 
-    getMessage: async ( res, my_ID, seller_ID ) => {
+    getMessage: async ( res, my_ID, seller_ID, cursor ) => {
         try {
             const sql = `
             SELECT c.id, c.message, u.id AS user_id, u.name, u.image
             FROM chat AS c LEFT JOIN user AS u ON c.sender_id = u.id
             WHERE ( c.sender_id = ? AND c.receiver_id = ? ) OR ( c.sender_id = ? AND c.receiver_id = ? )
+            ORDER BY c.id
+            LIMIT 10 OFFSET ?;
             `
-            const [results] = await db.query(sql, [my_ID,seller_ID,seller_ID,my_ID])
+            const [results] = await db.query(sql, [my_ID,seller_ID,seller_ID,my_ID,cursor])
+            const next_cursor = (results.length - parseInt(cursor) > 10) ? Buffer.from((cursor+10).toString(), 'ascii').toString('base64') : null
             const msgList = results.map((result) => {
                 const { id, message, user_id, name, image } = result
                 return {
@@ -25,7 +28,8 @@ module.exports = {
                 };
             })
             const data = {
-                chats: msgList
+                chats: msgList,
+                next_cursor: next_cursor
             }
             return data
         } catch (err) {
@@ -33,7 +37,7 @@ module.exports = {
         }
     },
 
-    getMessagePreview: async ( res, my_ID ) => {
+    getMessagePreview: async ( res, my_ID, cursor ) => {
         try {
             const sql = `
                 WITH receive_msg AS (
@@ -53,21 +57,25 @@ module.exports = {
                     SELECT id, sender_id AS contact_id, message
                     FROM send_msg
                 ),
-                msg_result AS (
-                    SELECT contact_id, id, message
-                    FROM (
-                        SELECT contact_id, id, message,
-                            ROW_NUMBER() OVER (PARTITION BY contact_id ORDER BY id DESC) AS rn
-                        FROM combined_msgs
-                    ) ranked_msgs
-                    WHERE rn = 1
-                    ORDER BY id DESC
+                total_rows AS (
+                    SELECT COUNT(*) AS total_count
+                    FROM combined_msgs
+                ),
+                ranked_msgs AS (
+                    SELECT contact_id, id, message,
+                        ROW_NUMBER() OVER (PARTITION BY contact_id ORDER BY id DESC) AS rn
+                    FROM combined_msgs
                 )
                 SELECT mr.id, mr.contact_id, mr.message, u.name, u.image
-                FROM msg_result AS mr LEFT JOIN user AS u
-                ON mr.contact_id = u.id
+                FROM ranked_msgs AS mr 
+                LEFT JOIN user AS u ON mr.contact_id = u.id
+                CROSS JOIN total_rows
+                WHERE mr.rn BETWEEN ? AND ? 
+                AND mr.rn <= total_rows.total_count
+                ORDER BY mr.id DESC;
             `
-            const [results] = await db.query(sql, [my_ID,my_ID])
+            const [results] = await db.query(sql, [my_ID,my_ID,cursor+1,cursor+11])
+            const next_cursor = (results.length - parseInt(cursor) > 10) ? Buffer.from((cursor+10).toString(), 'ascii').toString('base64') : null
             const msgList = results.map((result) => {
                 const { id, contact_id, message, name, image } = result
                 return {
@@ -81,7 +89,8 @@ module.exports = {
                 };
             })
             const data = {
-                chats: msgList
+                chats: msgList,
+                next_cursor: next_cursor
             }
             return data
         } catch (err) {
