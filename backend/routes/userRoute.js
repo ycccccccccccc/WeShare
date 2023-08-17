@@ -11,7 +11,7 @@ router.put('/', [util.authorize_json,util.authorize_bearer], userController.upda
 
 router.get('/:id', [util.authorize_bearer], userController.getProfile);
 
-router.get('/addTest', userController.addTest)
+router.post('/addTest', userController.addTest)
 
 module.exports = router;
 
