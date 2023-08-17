@@ -1,0 +1,120 @@
+const util = require('../utils/util')
+const { db } = require('../utils/util');
+
+module.exports = {
+
+    addItem: async ( res, seller_id, title, image, introduction, cost, tag, location, expired_at ) => {
+        try {
+            const sql = 'INSERT INTO item (seller_id, title, image, introduction, cost, tag, location, expired_at) VALUES (?,?,?,?,?,?,?,?)'
+            const [results] = await db.query(sql, [seller_id, title, image, introduction, cost, tag, location, expired_at])
+            const item = {
+                id: results.insertId, 
+            };
+            return item;
+        } catch (err) {
+            return util.databaseError(err,'addItem',res);
+        }
+    },
+
+    getItem: async ( res, id ) => {
+        try {
+            const sql = `
+            SELECT i.seller_id, i.title, i.image, i.introduction, i.cost, i.tag, i.location, i.buyer_id, i.expired_at, u.name, u.rating
+            FROM item AS i LEFT JOIN user AS u 
+            ON i.seller_id = u.id
+            WHERE i.seller_id = ?`
+            const [[results]] = await db.query(sql, [id]);
+            const item = {
+                id: id,
+                title: results.title, 
+                image: results.image, 
+                introduction: results.introduction, 
+                cost: results.cost, 
+                tag: results.tag, 
+                location: results.location,
+                buyer_id: results.buyer_id,
+                user: {
+                    id: results.seller_id,
+                    name: results.name,
+                    rating: results.rating
+                }
+            };
+            return item;
+        } catch (err) {
+            return util.databaseError(err,'getItem',res);
+        }
+    },
+    
+    getItems: async ( res, item_id, limit ) => {
+        try {
+            limit = limit + 1;
+            const sql = 'SELECT item.id, item.title, item.image, item.introduction, item.cost, item.tag, item.location, item.buyer_id, item.seller_id, user.name, user.rating \
+            FROM item LEFT JOIN user ON item.seller_id = user.id\
+            WHERE item.id <= ? \
+            ORDER BY post.id DESC LIMIT ?'
+            const [results] = await db.query(sql, [item_id, limit]);
+            let items = [];
+            results.map(data => {
+                const item = {
+                    id: data.id,
+                    title: data.title, 
+                    image: data.image, 
+                    introduction: data.introduction, 
+                    cost: data.cost, 
+                    tag: data.tag, 
+                    location: data.location,
+                    buyer_id: data.buyer_id,
+                    user: {
+                        id: data.seller_id,
+                        name: data.name,
+                        rating: data.rating
+                    }
+                };
+                items.push(item);
+            })
+            return items;
+
+            
+        } catch (err) {
+            return util.databaseError(err,'getItems',res);
+        }
+    },
+    updateItem: async ( res, id, title, introduction, cost, tag, location) => {
+        try {
+            const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, location = ? WHERE id = ?'
+            await db.query(sql, [title, introduction, cost, tag, location, id]);
+            const item = {
+                id: id,
+            };
+            return item;
+        } catch (err) {
+            return util.databaseError(err,'updateItem',res);
+        }
+    },
+    updateItemPhoto: async ( res, id, url ) => {
+        try{
+            const sql = 'UPDATE item SET photo = ? WHERE id = ?'
+            await queryPromise(sql, [url, id]);
+            const path = {
+                photo: url 
+            }
+            return path;
+        } catch (err) {
+            return util.databaseError(err,'updateItemPhoto',res);
+        }
+    },
+    addBuyer: async ( res, id, buyer_id ) => {
+        try{
+            const sql = 'UPDATE item SET buyer_id = ? WHERE id = ?'
+            await queryPromise(sql, [buyer_id, id]);
+            const item = {
+                id: id,
+                buyer_id: buyer_id
+            }
+            return item;
+        } catch (err) {
+            return util.databaseError(err,'addBuyer',res);
+        }
+    }
+    
+}

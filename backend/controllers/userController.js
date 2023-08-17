@@ -8,16 +8,16 @@ module.exports = {
             return res.status(400).json({ error: 'Email and password are required' });
         }
         // 確認信箱存在
-        const existMail = await userModel.findUser(email)
+        const existMail = await userModel.findUser(res, email)
         if ( !existMail ) {
             return res.status(403).json({ error: "No user found with the given email" });
         }
         // 確認密碼跟信箱相符
-        const result = await userModel.signin(email, password);
+        const result = await userModel.signin(res, email, password);
         if ( !result ) {
             return res.status(403).json({ error: "Wrong Password" }); 
         } else {
-            return res.status(200).json({ data: user_info.data }); 
+            return res.status(200).json({ data: result }); 
         }
     },
     signup: async (req, res) => {
@@ -31,7 +31,7 @@ module.exports = {
             return res.status(400).json({ error: 'Email format is incorrect' });
         }
         // 確認信箱存在
-        const existUser = await userModel.findUser(email);
+        const existUser = await userModel.findUser(res,email);
         if ( existUser ) {
             return res.status(403).json({ error: 'Email already exists' });
         }

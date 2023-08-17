@@ -5,9 +5,27 @@ networks:
     driver: bridge
 
 services:
+  
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=pwd
+      - MYSQL_DATABASE=weshare
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - weshare-network
+
   weshare:
     container_name: weshare
     build: .
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=pwd
+      - DB_HOST=mysql
     networks:
       - weshare-network
     depends_on:
@@ -29,28 +47,5 @@ services:
     depends_on:
       - weshare
 
-  mysql:
-     image: mysql:8.0.34
-     container_name: mysql
-     env_file:
-       - .env
-     ports:
-       - "3307:3306"
-     networks:
-       - weshare-network
-     environment:
-       MYSQL_ROOT_PASSWORD: pwd
-       MYSQL_USER: develop
-       MYSQL_PASSWORD: pwd
-       MYSQL_DATABASE: weshare
-     volumes:
-       - type: bind
-         source: ./scripts/init_user.sql
-         target: /docker-entrypoint-initdb.d/init_user.sql
-       - type: bind
-         source: ./scripts/init_db.sql
-         target: /docker-entrypoint-initdb.d/init_db.sql
-       - mysql:/var/lib/mysql
-
 volumes:
-  mysql:
+  mysql_data:
