@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('./app'); // 引入你的Express應用程式
+const server = require('./server'); // 引入你的Express應用程式
 require('dotenv').config();
 
 //測試時要修改seed
