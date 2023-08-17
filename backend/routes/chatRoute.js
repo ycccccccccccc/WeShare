@@ -8,7 +8,8 @@ router.post('/:id', [util.authorize_json,util.authorize_bearer], chatController.
 router.get('/:id', [util.authorize_bearer], chatController.getMessage);
 
 router.get('/', [util.authorize_bearer], chatController.getMessagePreview);
-router.get('/addTest', chatController.addTest)
+
+router.post('/addTest', chatController.addTest)
 
 module.exports = router;
 

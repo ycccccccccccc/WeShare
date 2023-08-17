@@ -10,7 +10,8 @@ router.post('/signup', [util.authorize_json], userController.signup);
 router.put('/', [util.authorize_json,util.authorize_bearer], userController.updateProfile);
 
 router.get('/:id', [util.authorize_bearer], userController.getProfile);
-router.get('/addTest', userController.addTest)
+
+router.post('/addTest', userController.addTest)
 
 module.exports = router;
 
