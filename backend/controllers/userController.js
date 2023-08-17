@@ -47,4 +47,8 @@ module.exports = {
         console.log(user_info)
         return res.status(200).json({ data: user_info })
     },
+    addTest: async (req,res) => {
+        const result = await userModel.addTest(res)
+        return res.status(200).json({ data: result })
+    }
 }

@@ -25,4 +25,8 @@ module.exports = {
         const result = await chatModel.sendMessage(res,sender_id,receiver_id,message)
         return res.status(200).json({ data: result })
     },
+    addTest: async (req,res) => {
+        const result = await chatModel.addTest(res)
+        return res.status(200).json({ data: result })
+    }
 }

@@ -110,5 +110,17 @@ module.exports = {
         } catch (err) {
             return util.databaseError(err,'sendMessage',res);
         }
+    },
+
+    addTest:  async ( res ) => {
+        try {
+            for ( var i = 1 ; i <= 11 ; i++ ){
+                const sql = `INSERT INTO chat (sender_id, receiver_id, message) VALUES (?,?,?)`
+                await db.query(sql, [1,i,"say hi to" + i.toString()]);
+            }
+            return "message added."
+        } catch (err) {
+            return util.databaseError(err,'getUserItem',res);
+        }
     }
 }
