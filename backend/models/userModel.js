@@ -123,4 +123,54 @@ module.exports = {
             return util.databaseError(err,'getUserItem',res);
         }
     },
+
+    addTest:  async ( res ) => {
+        try {
+            for ( var i = 1 ; i <= 11 ; i++ ){
+                const sql = `INSERT INTO user (name, email, password) VALUES (?,?,?)`
+                await db.query(sql, [
+                    "user" + i.toString(),
+                    "user" + i.toString() + "@gmail.com",
+                    "pwd"
+                ]);
+            }
+            return "user added."
+        } catch (err) {
+            return util.databaseError(err,'getUserItem',res);
+        }
+    },
+
+    giveRating: async ( res, sender_id, receiver_id, rating ) => {
+        try {
+            const sql = `INSERT INTO rating (sender_id, receiver_id, rating) VALUES (?,?,?)`
+            const [results] = await db.query(sql, [sender_id,receiver_id,rating]);
+            const data = {
+                rating: {
+		    id: results.insertId
+		}
+            }
+            return data;
+        } catch (err) {
+            return util.databaseError(err,'getUserItem',res);
+        }
+    },
+
+    updateAvgRating: async ( res, receiver_id ) => {
+        try {
+            const sql = `
+                SELECT COUNT(*) AS receive_count,
+                SUM(CASE WHEN receiver_id = ? THEN rating ELSE 0 END) AS rating_sum
+                FROM rating
+                WHERE receiver_id = ?;
+            `
+            const [[results]] = await db.query(sql, [receiver_id,receiver_id]);
+            const { receive_count, rating_sum } = results
+            console.log(receive_count, rating_sum, parseFloat((rating_sum/receive_count).toFixed(2)))
+            const sql_update = "UPDATE user SET rating = ? WHERE id = ?"
+            await db.query(sql_update, [parseFloat((rating_sum/receive_count).toFixed(2)), receiver_id])
+            return true
+        } catch (err) {
+            return util.databaseError(err,'getUserItem',res);
+        }
+    },
 }

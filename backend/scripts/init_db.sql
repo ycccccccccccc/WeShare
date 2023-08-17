@@ -75,6 +75,16 @@ CREATE TABLE IF NOT EXISTS chat (
     CONSTRAINT chat_receiver_id_key FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS rating (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    rating FLOAT,
+    image VARCHAR(255),
+    CONSTRAINT rate_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT rate_receiver_id_key FOREIGN KEY (receiver_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
 use weshare_test;
 
 CREATE TABLE weshare_test.user LIKE weshare.user;
@@ -82,3 +92,4 @@ CREATE TABLE weshare_test.item LIKE weshare.item;
 CREATE TABLE weshare_test.order_table LIKE weshare.order_table;
 CREATE TABLE weshare_test.event_table LIKE weshare.event_table;
 CREATE TABLE weshare_test.chat LIKE weshare.chat;
+CREATE TABLE weshare_test.rating LIKE weshare.rating;

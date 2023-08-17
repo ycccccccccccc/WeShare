@@ -47,4 +47,16 @@ module.exports = {
         console.log(user_info)
         return res.status(200).json({ data: user_info })
     },
+    addTest: async (req,res) => {
+        const result = await userModel.addTest(res)
+        return res.status(200).json({ data: result })
+    },
+    giveRating: async (req,res) => {
+        const sender_id = req.user.id
+        const receiver_id = req.params.id
+        const { rating } = req.body
+        const result = await userModel.giveRating(res,sender_id,receiver_id,rating)
+        await userModel.updateAvgRating(res,receiver_id,)
+        return res.status(200).json({ data: result })
+    },
 }
