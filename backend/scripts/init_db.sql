@@ -34,8 +34,10 @@ CREATE TABLE IF NOT EXISTS item (
     tag ENUM('食品', '日用品', '衣物', '美妝', '家具', '優惠卷', '其他') NOT NULL,
     costco ENUM('內湖店', '北投店', '中和店', '新莊店', '汐止店', '中壢店', '桃園店', '新竹店', '北台中店', '台中店', '嘉義店', '台南店', '高雄店', '高雄大順店'),
     item_location VARCHAR(255) NOT NULL,
+    latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expires_at DATETIME NOT NULL,
+    expires_at DATETIME,
     CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE
 );
 

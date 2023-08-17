@@ -5,11 +5,11 @@ require('dotenv').config();
 module.exports = {
     addItem: async (req, res) => {
         const seller_id = req.user.id;
-        const { buyers_limit, title, introduction, cost, tag, costco, location, expires_at } = req.body;
-        if ( !buyers_limit || !title || !introduction || !cost || !tag || !location || !expires_at) {    
+        const { buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
+        if ( !buyers_limit || !title || !introduction || !cost || !tag || !location || !latitude || !longitude || !expires_at) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, expires_at);
+        const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
         return res.status(200).json({ item: result });
     },
 
@@ -20,6 +20,10 @@ module.exports = {
     },
     
     getItems: async (req, res) => {
+        const keyword = req.query.keyword;
+        const tag = req.query.tag;
+        const latitude = req.body.latitude;
+        const longitude = req.body.longitude;
         let cursor = req.query.cursor;
         let jsonObject = '';
         if(cursor){
@@ -29,7 +33,7 @@ module.exports = {
             jsonObject = JSON.parse(decodedString);
         }
         const limit = 10;
-        let result = await itemModel.getItems(res, jsonObject.item_id, limit);
+        let result = await itemModel.getItems(res, jsonObject.item_id, limit, latitude, longitude, keyword, tag);
         let base64String = '';
         if(result.length == (limit + 1)){
             const last_index = result.length - 1;
@@ -61,8 +65,8 @@ module.exports = {
         if( req.user.id !== seller_id.seller_id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
-        const { title, introduction, cost, tag, costco, location, expires_at } = req.body;
-        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, costco, location, expires_at);
+        const { title, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
+        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
         return res.status(200).json({ item: result });
     },
     updateItemImage: async (req, res) => {
