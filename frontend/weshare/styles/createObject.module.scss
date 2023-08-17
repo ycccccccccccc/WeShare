@@ -8,7 +8,7 @@
   height: 50vh;
   .titleAndType {
     display: flex;
-    align-items: center; /* 垂直置中 */
+    align-items: center; 
     margin-bottom: 3rem;
 
     .fontType {
@@ -25,7 +25,17 @@
       border: 2px solid #000;
       background: #fff;
       height: 2rem;
-      width: 30%;
+      width: 60%;
+    }
+    .fontType_right {
+      color: #000;
+      font-family: Permanent Marker;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px;
+      margin-right: 20px;
+      margin-left: auto;
     }
     .filter {
       color: #000;
@@ -38,12 +48,13 @@
       border: 2px solid #000;
       background: #fff;
       text-align: center;
+      width: 15%;
       cursor: pointer;
     }
   }
   .contentAndPic {
     display: flex;
-    align-items: center; /* 垂直置中 */
+    align-items: center; 
     margin-bottom: 3rem;
 
     .fontType {
@@ -69,11 +80,11 @@
       justify-content: center;
 
       border-radius: 25px;
-      border: 4px solid #000;
+      border: 2px solid #000;
       background: #fff;
       width: 20%;
       height: 20vh;
-      margin-left: 5%;
+      margin-left: auto;
 
       color: #000;
       font-family: Permanent Marker;
@@ -81,12 +92,11 @@
       font-style: normal;
       font-weight: 400;
       line-height: 24px;
-      margin-right: 20px;
     }
   }
   .loactionAndPrice {
     display: flex;
-    align-items: center; /* 垂直置中 */
+    align-items: center; 
     margin-bottom: 3rem;
 
     .fontType {
@@ -105,11 +115,25 @@
       height: 2rem;
       width: 60%;
     }
+    .fontType_right {
+      color: #000;
+      font-family: Permanent Marker;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px;
+      margin-right: 20px;
+      margin-left: 3%;
+      margin-left: auto;
+
+    }
+
     .inputFramePrice {
       border-radius: 25px;
       border: 2px solid #000;
       background: #fff;
       height: 2rem;
+      width: 15%;
     }
   }
   .confirmCreate {
@@ -128,7 +152,6 @@
     font-style: normal;
     font-weight: 400;
     line-height: 24px;
-    margin-right: 5%;
     margin-left: auto;
 
     height: 3rem;
