@@ -14,11 +14,11 @@ SET time_zone = '+8:00';
 CREATE TABLE IF NOT EXISTS user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE,
+    email VARCHAR(255),
     password VARCHAR(255) NOT NULL,
     rating FLOAT,
     image VARCHAR(255),
-    phone VARCHAR(255)NOT NULL UNIQUE,
+    phone VARCHAR(255) NOT NULL UNIQUE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
 
 -- Create the 'item_tag' ENUM type if it doesn't exist

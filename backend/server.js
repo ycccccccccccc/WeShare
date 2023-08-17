@@ -2,9 +2,12 @@ const port = 3000
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 app.use(bodyParser.json());
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
+
+app.use(cors());
 
 const user_route = require('./routes/userRoute');
 app.use('/users',user_route);
