@@ -11,6 +11,14 @@
         flex-shrink: 0;
         border-radius: 1.25rem;
         fill:cover no-repeat;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* 加入動畫過渡效果 */
+        padding:0;
+        border: none;
+        &:hover {
+            transform: scale(1.02); /* 放大效果 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 陰影效果 */
+        }
         .Pic{
             border-radius: 1.25rem;
             fill:cover no-repeat;
