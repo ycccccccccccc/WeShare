@@ -6,6 +6,7 @@
 
 "use client";
 
+
 import { useState, useEffect } from "react";
 import Navbar from "../../Components/navbar";
 import Map from "../../Components/Map";
