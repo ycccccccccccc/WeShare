@@ -16,7 +16,7 @@ describe('API Sign Up Test', () => {
       password: `${test_index}_user_1`
     };
 
-    const response = await request(app)
+    const response = await request(server)
       .post('/users/signup')
       .send(newUser);
 
@@ -35,7 +35,7 @@ describe('API Sign Up Test', () => {
       password: `${test_index}_user_1`
     };
 
-    const response = await request(app)
+    const response = await request(server)
       .post('/users/signup')
       .send(newUser);
     console.log('case 2', response.status);
@@ -53,7 +53,7 @@ describe('API Sign Up Test', () => {
       email: `${test_index}_user_1@example.com`
     };
 
-    const response = await request(app)
+    const response = await request(server)
       .post('/users/signup')
       .send(newUser);
     console.log('case 3', response.status);
@@ -72,7 +72,7 @@ describe('API Sign Up Test', () => {
       password: `${test_index}_user_1`
     };
 
-    const response = await request(app)
+    const response = await request(server)
       .post('/users/signup')
       .send(newUser);
 
@@ -94,7 +94,7 @@ describe('API Sign Up Test', () => {
     password: `${test_index}_user_1`
     };
 
-    const response = await request(app)
+    const response = await request(server)
     .post('/users/signup')
     .send(newUser);
     console.log('case 5', response.status);
@@ -111,7 +111,7 @@ describe('API Sign Up Test', () => {
 //       password: `${test_index}_user_1`
 //     };
 
-//     const response = await request(app)
+//     const response = await request(server)
 //       .post('/api/1.0/users/signin')
 //       .send(newUser);
 //     console.log('case 6', response.status);
@@ -126,7 +126,7 @@ describe('API Sign Up Test', () => {
 //       password: `${test_index}_user_1`
 //     };
 
-//     const response = await request(app)
+//     const response = await request(server)
 //       .post('/api/1.0/users/signin')
 //       .send(newUser);
 //     console.log(user_1)
