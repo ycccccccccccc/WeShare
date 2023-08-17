@@ -55,7 +55,7 @@ module.exports = {
         const sender_id = req.user.id
         const receiver_id = req.params.id
         const { rating } = req.body
-        const result = await userModel.giveRating(sender_id,receiver_id,rating)
+        const result = await userModel.giveRating(res,sender_id,receiver_id,rating)
         await userModel.updateAvgRating(res,receiver_id,)
         return res.status(200).json({ data: result })
     },
