@@ -6,6 +6,7 @@ const util = require('../utils/util')
 
 router.post('/signin', [util.authorize_json], userController.signin);
 router.post('/signup', [util.authorize_json], userController.signup);
+router.post('/:id/rating', [util.authorize_json], userController.giveRating);
 
 router.put('/', [util.authorize_json,util.authorize_bearer], userController.updateProfile);
 
