@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS item (
     latitude FLOAT NOT NULL,
     longitude FLOAT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    expires_at DATETIME NOT NULL,
+    expires_at DATETIME,
     CONSTRAINT item_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
