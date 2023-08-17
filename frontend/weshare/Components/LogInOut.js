@@ -1,20 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import '../src/app/globals.css';
+import  { useState } from 'react';
 import Image from "next/image";
 import styles from "../styles/logInOut.module.scss";
-import '../src/app/globals.css';
-
-
 
 export default function LogInOut() {
   // const router = useRouter();
-  // const isRegisterPage = true;
   const [isRegisterPage, setIsRegisterPage] = useState(true)
   const handleTogglePage = () => {
     // 切換註冊/登入頁面
     setIsRegisterPage((prev) => !prev);
   };
+  
   return (
     <div id={styles.wholePage}>
       <div id={styles.border}>
