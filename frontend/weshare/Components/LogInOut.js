@@ -9,7 +9,9 @@ import useSignUp from "../hooks/useSingUp";
 
 export default function LogInOut() {
   // const router = useRouter();
-  const [isRegisterPage, setIsRegisterPage] = useState(true);
+  // const { data: userData, error: userError } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+
+  const [isRegisterPage, setIsRegisterPage] = useState(false);
   const handleTogglePage = () => {
     // 切換註冊/登入頁面
     setIsRegisterPage((prev) => !prev);
