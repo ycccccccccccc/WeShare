@@ -10,6 +10,8 @@ app.use(bodyParser.json());
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
 
 app.use(cors());
+const { rateLimiter } = require('./utils/redis');
+app.use(rateLimiter);
 
 const user_route = require('./routes/userRoute');
 app.use('/users',user_route);
