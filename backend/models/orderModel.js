@@ -27,7 +27,7 @@ module.exports = {
             };
             return order;
         } catch (err) {
-            return util.databaseError(err,'getIDs',res);
+            return util.databaseError(err,'getOrder',res);
         }
     },
     agreeOrder: async ( res, order_id ) => {
