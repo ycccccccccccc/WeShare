@@ -1,9 +1,10 @@
 const request = require('supertest');
 const server = require('../server'); // 引入你的Express應用程式
+const util = require('../utils/util')
 require('dotenv').config();
 
 //測試時要修改seed
-const test_index = '0025';
+const test_index = util.generateRandomString(5);
 
 let user_1 = {};
 

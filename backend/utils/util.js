@@ -3,15 +3,38 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const db = mysql.createPool({
-    host: 'localhost',
+    host: process.env.NODE_ENV === 'test' ? 'localhost' : 'mysql',
     user: 'root',
-    password: 'Ycsql0330_',
+    password: 'pwd',
     database: process.env.NODE_ENV === 'test' ? 'weshare_test' : 'weshare'
 });
 
 module.exports = {
 
     db: db,
+
+    generateRandomString(length) {
+        const characters = 'abcdefghijklmnopqrstuvwxyz1234567890';
+        let result = 'u-';
+      
+        for (let i = 0; i < length; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          result += characters.charAt(randomIndex);
+        }
+      
+        return result;
+    },
+
+    generateRandomNum(length) {
+        const characters = '1234567890';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          result += characters.charAt(randomIndex);
+        }
+      
+        return parseInt(result);
+    },
 
     authorize_bearer: (req, res, next) => {
         const token = req.headers.authorization;
