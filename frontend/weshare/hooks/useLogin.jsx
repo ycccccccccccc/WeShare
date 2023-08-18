@@ -4,11 +4,11 @@ import { useState } from "react";
 
 const useLogIn = () => {
   const [error, setError] = useState(null);
-  const logIn = async (email, password) => {
+  const logIn = async (phone, password) => {
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/signin`, {
         provider: "native",
-        email,
+        phone,
         password
       });
       // eslint-disable-next-line camelcase
