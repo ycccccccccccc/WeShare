@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import style from "../styles/navbar.module.scss";
 
 export default function Navbar() {
@@ -35,7 +36,9 @@ export default function Navbar() {
           </select>
         </div>
       </div>
-      <div className={style.share_post}>Share</div>
+      <Link href="/Share" className={style.share_post}>
+        Share
+      </Link>
       <Image
         className={style.message_box}
         src="/message_box.png"
