@@ -6,14 +6,14 @@ const useSignUp = () => {
   const [error, setError] = useState(null);
   // const { logIn } = useLogIn();
 
-  const signUp = async (name, email, password) => {
+  const signUp = async (name, phone, password) => {
     // console.log('sign')
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/users/signup`,
         {
           name,
-          email,
+          phone,
           password
         }
       );
@@ -27,7 +27,7 @@ const useSignUp = () => {
       // 清除錯誤訊息
       setError(null);
     } catch (err) {
-      setError(err.response.data.message || "註冊失敗");
+    //   setError(err.response.data.message || "註冊失敗");
     }
   };
 

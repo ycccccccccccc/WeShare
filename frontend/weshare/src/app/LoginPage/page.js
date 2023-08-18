@@ -1,10 +1,10 @@
-import CreateObject from "../../../Components/createObject";
+import LogInOut from "../../../Components/logInOut";
 
-export default function Home() {
+export default function SignInUp() {
 
   return (
     <div>
-      <CreateObject/>
+      <LogInOut/>
     </div>
   );
 }
