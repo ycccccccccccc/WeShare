@@ -4,6 +4,7 @@ const app = express()
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const WebSocket = require('ws');
+const http = require('http');
 
 app.use(bodyParser.json());
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
@@ -39,7 +40,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-server = app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
