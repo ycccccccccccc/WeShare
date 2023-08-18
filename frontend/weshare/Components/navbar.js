@@ -7,8 +7,10 @@ export default function Navbar() {
 
   return (
     <header className={style.border}>
-      <Image src="/logo.png" width={100} height={100} alt="" />
-      <div className={style.weshare}>We Share</div>
+      <Link href="/">
+        <Image className={style.logo}src="/logo.png" width={100} height={100} alt="" />
+      </Link>
+        <div className={style.weshare}>We Share</div>
       <div>
         <div className={style.search_bar}>
           <Image
@@ -36,7 +38,7 @@ export default function Navbar() {
           </select>
         </div>
       </div>
-      <Link href="/Share" className={style.share_post}>
+      <Link href="/share" className={style.share_post}>
         Share
       </Link>
       <Image

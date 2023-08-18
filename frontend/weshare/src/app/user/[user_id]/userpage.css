@@ -1,0 +1,4 @@
+.mainblock{
+    display:flex;
+    flex-direction: row;
+}

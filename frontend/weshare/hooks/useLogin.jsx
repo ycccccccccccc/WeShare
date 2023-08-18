@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import axios from "axios";
 import { setCookie } from "nookies";
 import { useState } from "react";
