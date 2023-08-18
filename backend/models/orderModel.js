@@ -41,5 +41,17 @@ module.exports = {
         } catch (err) {
             return util.databaseError(err,'agreeOrder',res);
         }
+    },
+    delOrder: async ( res, order_id ) => {
+        try {
+            const sql = 'DELETE FROM order_table WHERE id = ?';
+            const [results] = await db.query(sql, [order_id]);
+            const order = {
+                id: order_id
+            };
+            return order;
+        } catch (err) {
+            return util.databaseError(err,'delOrder',res);
+        }
     }
 }
