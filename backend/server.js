@@ -1,8 +1,11 @@
+import { WebSocketServer } from 'ws';
 const port = 3000
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
+const wss = new WebSocketServer({ port: port });
 
 app.use(bodyParser.json());
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
@@ -28,4 +31,4 @@ const server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-module.exports = server;
+module.exports = { server, wss };

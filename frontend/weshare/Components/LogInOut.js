@@ -154,12 +154,12 @@ export default function LogInOut() {
                   className={styles.swichmode}
                   onClick={handleTogglePage}
                 >
-                  會員登入sadasdda
+                  會員登入
                 </button>
               </div>
             ) : (
               <div className={styles.blackBlueWords}>
-                <div>尚未成為會員？ </div>
+                <div>尚未成為會員？</div>
                 <button
                   type="button"
                   className={styles.swichmode}
