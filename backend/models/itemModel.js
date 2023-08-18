@@ -145,6 +145,18 @@ module.exports = {
         } catch (err) {
             return util.databaseError(err,'updateItemImage',res);
         }
+    },
+    updateNumOfBuyers: async ( res, quantity, id ) => {
+        try{
+            const sql = 'UPDATE item SET num_of_buyers = ? WHERE id = ?'
+            const [results] = await db.query(sql, [quantity, id]);
+            const item = {
+                id: id,
+                quantity: quantity 
+            }
+            return item;
+        } catch (err) {
+            return util.databaseError(err,'updateItemImage',res);
+        }
     }
-    
 }
