@@ -25,6 +25,17 @@ module.exports = {
         return result;
     },
 
+    generateRandomNum(length) {
+        const characters = '1234567890';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          result += characters.charAt(randomIndex);
+        }
+      
+        return parseInt(result);
+    },
+
     authorize_bearer: (req, res, next) => {
         const token = req.headers.authorization;
         if (!token || !token.startsWith('Bearer ')) {

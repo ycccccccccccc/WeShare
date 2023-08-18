@@ -43,17 +43,6 @@
         "costco": "桃園店",
         "location": "政大附中",
         "expires_at": "2023-09-20 16:00:00"
-      },
-      {
-        "id": 5,
-        "image": "image5.jpg",
-        "title": "化妝水",
-        "introduction": "保濕型的化妝水，適合各種膚質。",
-        "cost": 150,
-        "tag": "美妝",
-        "costco": "台中店",
-        "location": "建國中學",
-        "expires_at": "2023-10-05 19:00:00"
       }
     ]
   }
