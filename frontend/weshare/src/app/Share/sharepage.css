@@ -1,0 +1,10 @@
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;;
+}
+body{
+    background: #2d6047;
+}

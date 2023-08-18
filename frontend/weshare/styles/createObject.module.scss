@@ -1,160 +1,94 @@
+// 定義共用的顏色和字體等變數
+$primary-border: 2px solid #000;
+$primary-color: #000;
+$background-color: #fff;
+$primary-font: Permanent Marker;
+$primary-font-size: 24px;
+
 .wholePage {
   border-radius: 25px;
-  border: 2px solid #000;
-  background: #eefcee;
+  border: $primary-border;
+  background: $background-color;
   padding: 5%;
-
   width: 70%;
   height: 50vh;
-  .titleAndType {
-    display: flex;
-    align-items: center; 
-    margin-bottom: 3rem;
 
-    .fontType {
-      color: #000;
-      font-family: Permanent Marker;
-      font-size: 24px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px;
-      margin-right: 20px;
-    }
-    .inputFrame {
-      border-radius: 25px;
-      border: 2px solid #000;
-      background: #fff;
-      height: 2rem;
-      width: 60%;
-    }
-    .fontType_right {
-      color: #000;
-      font-family: Permanent Marker;
-      font-size: 24px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px;
-      margin-right: 20px;
-      margin-left: auto;
-    }
-    .filter {
-      color: #000;
-      font-family: Permanent Marker;
-      font-size: 20px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 16px;
-      border-radius: 30px;
-      border: 2px solid #000;
-      background: #fff;
-      text-align: center;
-      width: 15%;
-      cursor: pointer;
-    }
+  // 抽取共同的文字樣式
+  .fontType {
+    color: $primary-color;
+    font-family: $primary-font;
+    font-size: $primary-font-size;
+    font-style: normal;
+    font-weight: 400;
+    line-height: $primary-font-size;
+    margin-right: 20px;
   }
-  .contentAndPic {
-    display: flex;
-    align-items: center; 
-    margin-bottom: 3rem;
 
-    .fontType {
-      color: #000;
-      font-family: Permanent Marker;
-      font-size: 24px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px;
-      margin-right: 20px;
-    }
-    .inputFrame {
-      border-radius: 25px;
-      border: 2px solid #000;
-      background: #fff;
-      height: 2rem;
-      width: 60%;
-      height: 20vh;
-    }
-    .uploadPic {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      border-radius: 25px;
-      border: 2px solid #000;
-      background: #fff;
-      width: 20%;
-      height: 20vh;
-      margin-left: auto;
-
-      color: #000;
-      font-family: Permanent Marker;
-      font-size: 24px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px;
-    }
+  .fontType_right {
+    @extend .fontType;
+    margin-left: auto;
   }
-  .loactionAndPrice {
-    display: flex;
-    align-items: center; 
-    margin-bottom: 3rem;
 
-    .fontType {
-      color: #000;
-      font-family: Permanent Marker;
-      font-size: 24px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px;
-      margin-right: 20px;
-    }
-    .inputFrameLocation {
-      border-radius: 25px;
-      border: 2px solid #000;
-      background: #fff;
-      height: 2rem;
-      width: 60%;
-    }
-    .fontType_right {
-      color: #000;
-      font-family: Permanent Marker;
-      font-size: 24px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px;
-      margin-right: 20px;
-      margin-left: 3%;
-      margin-left: auto;
-
-    }
-
-    .inputFramePrice {
-      border-radius: 25px;
-      border: 2px solid #000;
-      background: #fff;
-      height: 2rem;
-      width: 15%;
-    }
+  // 抽取共同的輸入框樣式
+  .inputFrame, .inputFrameLocation, .inputFramePrice {
+    border-radius: 25px;
+    border: $primary-border;
+    background: $background-color;
+    height: 2rem;
   }
+
+  .inputFrame, .inputFrameLocation {
+    width: 60%;
+  }
+
+  .inputFramePrice, .filter, .confirmCreate {
+    width: 15%;
+  }
+
+  .filter, .confirmCreate {
+    font-family: $primary-font;
+    font-size: 20px;
+    line-height: 16px;
+    border-radius: 30px;
+    border: $primary-border;
+    background: $background-color;
+    cursor: pointer;
+  }
+
   .confirmCreate {
     display: flex;
     justify-content: center;
-    align-items: center; /* 垂直置中 */
-    align-self: center;
-
-    border-radius: 25px;
-    border: 2px solid #000;
+    align-items: center;
     background: #2d6047;
-
-    color: #fff;
-    font-family: Permanent Marker;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 24px;
+    color: $background-color;
     margin-left: auto;
-
     height: 3rem;
-    width: 15%;
+  }
+
+  // 定義區塊間距
+  .titleAndType, .contentAndPic, .loactionAndPrice {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+
+  .contentAndPic .inputFrame {
+    height: 20vh;
+  }
+
+  .uploadPic {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+    border: $primary-border;
+    background: $background-color;
+    width: 20%;
+    height: 20vh;
+    margin-left: auto;
+    color: $primary-color;
+    font-family: $primary-font;
+    font-size: $primary-font-size;
+    line-height: $primary-font-size;
   }
 }

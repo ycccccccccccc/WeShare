@@ -9,7 +9,9 @@ import useSignUp from "../hooks/useSingUp";
 
 export default function LogInOut() {
   // const router = useRouter();
-  const [isRegisterPage, setIsRegisterPage] = useState(true);
+  // const { data: userData, error: userError } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+
+  const [isRegisterPage, setIsRegisterPage] = useState(false);
   const handleTogglePage = () => {
     // 切換註冊/登入頁面
     setIsRegisterPage((prev) => !prev);
@@ -27,7 +29,7 @@ export default function LogInOut() {
     e.preventDefault();
     if (password !== passwordAgain) {
       alert("兩次密碼不一致，請檢查！");
-    } else signUp(name, phone, password);
+    } else signUp(name, phone, password, setIsRegisterPage);
   };
 
   const handleLogIn = (e) => {
@@ -70,7 +72,7 @@ export default function LogInOut() {
             <div className={styles.textAndInput}>
               <div className={styles.iconAndInput}>
                 <Image
-                  src="/tel_icon.png"
+                  src="/phone_icon.png"
                   width={30}
                   height={30}
                   alt="Example"
@@ -89,7 +91,7 @@ export default function LogInOut() {
             <div className={styles.textAndInput}>
               <div className={styles.iconAndInput}>
                 <Image
-                  src="/lock_icon.png"
+                  src="/lock.png"
                   width={30}
                   height={30}
                   alt="Example"
@@ -148,6 +150,17 @@ export default function LogInOut() {
 
             {isRegisterPage ? (
               <div className={styles.blackBlueWords}>
+                <div>已經是會員了？ </div>
+                <button
+                  type="button"
+                  className={styles.swichmode}
+                  onClick={handleTogglePage}
+                >
+                  會員登入
+                </button>
+              </div>
+            ) : (
+              <div className={styles.blackBlueWords}>
                 <div>尚未成為會員？</div>
                 <button
                   type="button"
@@ -157,24 +170,10 @@ export default function LogInOut() {
                   會員註冊
                 </button>
               </div>
-            ) : (
-              <div className={styles.blackBlueWords}>
-                <div>已經是會員了？</div>
-                <button
-                  type="button"
-                  className={styles.swichmode}
-                  onClick={handleTogglePage}
-                >
-                  會員登入
-                </button>
-              </div>
             )}
           </div>
         </div>
       </div>
-      <footer className={styles.copyRight}>
-        關於我們 · 隱私權條款 · Cookie 條款 · © 2023 CanChu, Inc.
-      </footer>
     </div>
   );
 }

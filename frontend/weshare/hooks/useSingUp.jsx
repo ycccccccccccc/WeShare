@@ -6,7 +6,7 @@ const useSignUp = () => {
   const [error, setError] = useState(null);
   // const { logIn } = useLogIn();
 
-  const signUp = async (name, phone, password) => {
+  const signUp = async (name, phone, password, setIsRegisterPage) => {
     // console.log('sign')
     try {
       const response = await axios.post(
@@ -21,6 +21,7 @@ const useSignUp = () => {
       //   console.log("註冊成功", response.data);
       if (response.status === 200) {
         // logIn(email, password); // cancel this feature
+        setIsRegisterPage(false);
         await alert("註冊成功");
       }
 
