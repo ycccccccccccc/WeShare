@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS item (
 CREATE TABLE IF NOT EXISTS order_table (
     id INT AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
+    quantity INT NOT NULL,    
     seller_id INT NOT NULL,
     buyer_id INT NOT NULL,
     status ENUM('request', 'agree') NOT NULL,
