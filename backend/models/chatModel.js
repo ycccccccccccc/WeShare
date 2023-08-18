@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const util = require('../utils/util')
 const { db } = require('../utils/util');
-const { wss } = require('../server')
 
 module.exports = {
 
@@ -104,15 +103,6 @@ module.exports = {
         try {
             const sql = 'INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)'
             const [results] = await db.query(sql, [my_ID,seller_ID,message])
-            wss.on('connection', function connection(ws) {
-                ws.on('error', console.error);
-              
-                ws.on('message', function message(data) {
-                  console.log('received: %s', data);
-                });
-              
-                ws.send('something');
-            });
             const data = {
                 id: results.insertId, 
             };
