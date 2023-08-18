@@ -1,11 +1,9 @@
-import { WebSocketServer } from 'ws';
 const port = 3000
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
-const wss = new WebSocketServer({ port: port });
+const WebSocket = require('ws');
 
 app.use(bodyParser.json());
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
@@ -27,8 +25,22 @@ app.use('/orders', order_route);
 const event_route = require('./routes/eventRoute');
 app.use('/events', event_route);
 
-const server = app.listen(port, () => {
+const server = http.createServer(app); // Create an HTTP server
+
+const wss = new WebSocket.Server({ server });
+
+wss.on('connection', (ws) => {
+  // This function is called whenever a new WebSocket connection is established
+  console.log('New WebSocket connection established');
+
+  // Listen for messages from clients
+  ws.on('message', (message) => {
+    console.log(`Received message: ${message}`);
+  });
+});
+
+server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-module.exports = { server, wss };
+module.exports = server;
