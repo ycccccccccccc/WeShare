@@ -6,11 +6,20 @@ require('dotenv').config();
 module.exports = {
     addItem: async (req, res) => {
         const seller_id = req.user.id;
+        const image = req.file;
         const { buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
-        if ( !buyers_limit || !title || !introduction || !cost || !tag || !location || !latitude || !longitude ) {    
+        if ( !buyers_limit || !title || !image || !introduction || !cost || !tag || !location || !latitude || !longitude ) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
         const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
+        const file_name = (req.file.originalname).split('.');
+        const pic_path = `https://${process.env.ip}/images/item_${result['id']}.${file_name[file_name.length-1]}`;
+        fs.rename(`public/images/${req.file.originalname}`, `public/images/item_${result['id']}.${file_name[file_name.length-1]}`, (err) => {
+            if (err) {
+              console.error('重命名文件失敗:', err);
+            }
+        });
+        const updateItemImage = await itemModel.updateItemImage(res, result['id'], pic_path);
         return res.status(200).json({ item: result });
     },
 
