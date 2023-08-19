@@ -7,7 +7,7 @@ module.exports = {
     addItem: async (req, res) => {
         const seller_id = req.user.id;
         const { buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
-        if ( !buyers_limit || !title || !introduction || !cost || !tag || !location || !latitude || !longitude || !expires_at) {    
+        if ( !buyers_limit || !title || !introduction || !cost || !tag || !location || !latitude || !longitude ) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
         const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
@@ -96,7 +96,6 @@ module.exports = {
             item_cache['location'] = titlocationle;
             item_cache['latitude'] = latitude;
             item_cache['longitude'] = longitude;
-            item_cache['expires_at'] = expires_at;
             await redis.set_cache(cacheKey, item_cache);
             if(!set_cache){
                 return res.status(400).json({ error: 'Set cache errror!' });
