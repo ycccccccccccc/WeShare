@@ -4,6 +4,8 @@ $primary-color: #000;
 $background-color: #fff;
 $primary-font: Permanent Marker;
 $primary-font-size: 24px;
+$hover-border: 2px solid #2d6047;
+$hover-background: #f4f4f4;
 
 .wholePage {
   border-radius: 25px;
@@ -12,6 +14,18 @@ $primary-font-size: 24px;
   padding: 5%;
   width: 70%;
   height: 50vh;
+  input, select, textarea {
+    padding-left: 15px; // 給予左側padding
+    font-size: 20px;
+    &:hover, &:focus {
+      background: $hover-background;
+      border: $hover-border;
+    }
+
+}
+textarea {
+  padding-top: 15px;
+}
 
   // 抽取共同的文字樣式
   .fontType {
@@ -74,7 +88,9 @@ $primary-font-size: 24px;
 
   .contentAndPic .inputFrame {
     height: 20vh;
+
   }
+  
 
   .uploadPic {
     display: flex;
@@ -90,5 +106,13 @@ $primary-font-size: 24px;
     font-family: $primary-font;
     font-size: $primary-font-size;
     line-height: $primary-font-size;
+    &:hover {
+      background: $hover-background;
+      transform: scale(1.05); // 稍微放大元素
+    }
+
+    &:active {
+      transform: scale(0.95); // 當按下時，稍微縮小元素
+    }
   }
 }
