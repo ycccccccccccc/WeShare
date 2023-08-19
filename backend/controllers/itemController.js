@@ -94,14 +94,13 @@ module.exports = {
         if( req.user.id !== seller_id.seller_id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
-        const { title, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
+        const { title, introduction, cost, tag, location, latitude, longitude } = req.body;
         const cacheKey = `item_${item_id}`;
         const item_cache = await redis.get_cache(cacheKey);
         if(item_cache){
             item_cache['title'] = title;
             item_cache['introduction'] = introduction;
             item_cache['cost'] = cost;
-            item_cache['costco'] = costco;
             item_cache['location'] = titlocationle;
             item_cache['latitude'] = latitude;
             item_cache['longitude'] = longitude;
@@ -113,7 +112,7 @@ module.exports = {
         else{
             return res.status(400).json({ error: 'Get cache errror!' });
         }
-        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
+        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, location, latitude, longitude);
         return res.status(200).json({ item: result });
     },
 

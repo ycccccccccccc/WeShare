@@ -104,8 +104,7 @@ module.exports = {
                     image: result.image, 
                     introduction: result.introduction, 
                     cost: result.cost, 
-                    tag: result.tag, 
-                    costco: result.costco,
+                    tag: result.tag,
                     location: result.item_location,
                     latitude: result.latitude, 
                     longitude: result.longitude,
@@ -124,10 +123,10 @@ module.exports = {
             return util.databaseError(err,'getItems',res);
         }
     },
-    updateItem: async ( res, id, title, introduction, cost, tag, costco, item_location, latitude, longitude, expires_at) => {
+    updateItem: async ( res, id, title, introduction, cost, tag, item_location, latitude, longitude) => {
         try {
-            const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, costco = ?, item_location = ?, latitude = ?, longitude = ?, expires_at = ? WHERE id = ?'
-            const [results] = await db.query(sql, [title, introduction, cost, tag, costco, item_location, latitude, longitude, expires_at, id]);
+            const sql = 'UPDATE item SET title = ?, introduction = ?, cost = ?, tag = ?, item_location = ?, latitude = ?, longitude = ? WHERE id = ?'
+            const [results] = await db.query(sql, [title, introduction, cost, tag, item_location, latitude, longitude, id]);
             const item = {
                 id: id,
             };
