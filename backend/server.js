@@ -38,6 +38,9 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     console.log(`Received message: ${message}`);
   });
+
+  ws.send('後端收到訊息，回傳給前端');
+
 });
 
 server.listen(port, () => {

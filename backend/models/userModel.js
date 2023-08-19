@@ -86,13 +86,14 @@ module.exports = {
 
     getUserInfo: async ( res, user_ID ) => {
         try {
-            const sql = `SELECT name, image, rating FROM user WHERE id = ?`
+            const sql = `SELECT name, image, phone, rating FROM user WHERE id = ?`
             const [[results]] = await db.query(sql, [user_ID]);
             const data = {
                 user: {
                     id: user_ID,
                     name: results.name,
                     image: results.image,
+		    phone: results.phone,
                     rating: results.rating,
                     item: []
                 }
@@ -105,17 +106,16 @@ module.exports = {
 
     getUserItem: async ( res, user_ID ) => {
         try {
-            const sql = `SELECT id, title, image, cost, tag, expires_at FROM item WHERE seller_id = ?`
+            const sql = `SELECT id, title, image, cost, tag FROM item WHERE seller_id = ?`
             const [results] = await db.query(sql, [user_ID]);
             const itemList = results.map((result) => {
-                const { id, title, image, cost, tag, expires_at } = result
+                const { id, title, image, cost, tag } = result
                 return {
                     id: id,
                     title : title,
                     image: image,
                     cost: cost,
-                    tag: tag,
-                    expires_at: expires_at
+                    tag: tag
                 };
             })
             return itemList
