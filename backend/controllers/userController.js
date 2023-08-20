@@ -1,5 +1,7 @@
 const userModel = require('../models/userModel')
 const util = require('../utils/util')
+const fs = require('fs');
+require('dotenv').config();
 
 module.exports = {
     signin: async (req, res) => {
@@ -20,12 +22,6 @@ module.exports = {
         if ( !name || !phone || !password ) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        // 確認信箱格式正確
-        // const isValidMail = util.emailValidate(email)
-        // if ( !isValidMail ) {
-        //     return res.status(400).json({ error: 'Email format is incorrect' });
-        // }
-        // 確認信箱存在
         const existUser = await userModel.findUser(res,phone);
         if ( existUser ) {
             return res.status(403).json({ error: 'Phone already exists' });
@@ -33,10 +29,24 @@ module.exports = {
         const result = await userModel.signup(res,name,phone,password)
         return res.status(200).json({ data: result })
     },
-    updateProfile: async (req, res) => {
+    updateProfileName: async (req, res) => {
         const my_ID = req.user.id;
-        const { name, image } = req.body;
-        const result = await userModel.updateProfile(res,my_ID,name,image)
+        const { name } = req.body;
+        const result = await userModel.updateProfileName(res,my_ID,name)
+        return res.status(200).json({ data: result })
+    },
+    updateProfilePic: async (req, res) => {
+        const my_ID = req.user.id;
+        const image = req.file;
+	const file_name = (req.file.originalname).split('.');
+        console.log(file_name)
+        const pic_path = `http://${process.env.ip}/images/user_${my_ID}`;
+        fs.rename(`public/images/${req.file.originalname}`, `public/images/user_${my_ID}`, (err) => {
+            if (err) {
+              console.error('重命名文件失敗:', err);
+            }
+        });
+        const result = await userModel.updateProfilePic(res,my_ID,pic_path)
         return res.status(200).json({ data: result })
     },
     getProfile: async (req, res) => {
