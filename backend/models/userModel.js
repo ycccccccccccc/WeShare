@@ -71,10 +71,23 @@ module.exports = {
         }
     },
 
-    updateProfile: async ( res, id, name, image ) => {
+    updateProfileName: async ( res, id, name ) => {
         try {
-            const sql = "UPDATE user SET name = ?, image = ? WHERE id = ?"
-            await db.query(sql, [name,image,id]);
+            const sql = "UPDATE user SET name = ? WHERE id = ?"
+            await db.query(sql, [name,id]);
+            const data = {
+                user: { id: id }
+            }
+            return data
+        } catch (err) {
+            return util.databaseError(err,'getUser',res);
+        }
+    },
+
+    updateProfilePic:  async ( res, id, image ) => {
+        try {
+            const sql = "UPDATE user SET image = ? WHERE id = ?"
+            await db.query(sql, [image,id]);
             const data = {
                 user: { id: id }
             }
@@ -106,7 +119,12 @@ module.exports = {
 
     getUserItem: async ( res, user_ID ) => {
         try {
-            const sql = `SELECT id, title, image, cost, tag FROM item WHERE seller_id = ?`
+            const sql = `
+		SELECT id, title, image, cost, tag 
+		FROM item 
+		WHERE seller_id = ?
+		ORDER BY id DESC
+		`
             const [results] = await db.query(sql, [user_ID]);
             const itemList = results.map((result) => {
                 const { id, title, image, cost, tag } = result
