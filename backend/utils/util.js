@@ -62,10 +62,11 @@ module.exports = {
     authorize_multipart: (req,res,next) => {
         const type = req.get('content-type')
         console.log("check type：",type.substring(0, 19))
-        if (type.substring(0, 19) !== 'multipart/form-data'){
-            console.log("current type is:",type)
-            return res.status(415).json({ error: 'Invalid content type' })
-        } else { next(); }
+        //if (type.substring(0, 19) !== 'multipart/form-data'){
+        //    console.log("current type is:",type)
+        //    return res.status(415).json({ error: 'Invalid content type' })
+        //} else { next(); }
+	next();
     },
 
     generateToken: (payload) => {
