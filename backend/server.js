@@ -60,19 +60,27 @@ io.use((socket, next) => {
 
 io.on("connection", (socket) => {
   socket.on("message", async (msg) => {
+
     console.log("connection success,message is",msg,msg.id,msg.message,req.user,req.user.id,socket.handshake.headers.authorization)
+    const big = req.user.id > msg.id ? req.user.id : msg.id
+    const low = req.user.id > msg.id ? msg.id : req.user.id
+    socket.join(`chat${low}${big}`)
+
     try {
+
     	const sql = "INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)"
     	const [results] = await db.query(sql, [req.user.id,msg.id,msg.message])
     	const data = {
-    		id: results.insertId
+    		id: results.insertId,
+        message: message
     	}
-    	io.emit("response",data)
+    	io.to(`chat${low}${big}`).emit("response",data)
+
     } catch (err) {
-	return { 
-		msg: "Socket io error",
-		err: err 
-	};
+      return { 
+        msg: "Socket io error",
+        err: err 
+      };
     }
   })
 });
