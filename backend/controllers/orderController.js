@@ -28,6 +28,11 @@ module.exports = {
                 error: "Insufficient permissions!"
             })
         }
+        if( order.status !== 'request' ){
+            return res.status(400).json({
+                error: "Order status error!"
+            })
+        }
         const checkOrder = await getNumOfBuyers(res, order.item_id);
         if( (checkOrder.num_of_buyers - order.quantity) < 0 ){
             return res.status(400).json({
