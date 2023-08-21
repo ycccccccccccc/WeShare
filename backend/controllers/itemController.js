@@ -34,21 +34,23 @@ module.exports = {
 
     getItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
+        if(!item_id){
+            res.status(400).json({ error: 'Lost Item ID!!!' })
+        }
         const cacheKey = `item_${item_id}`;
         const cache_item = await redis.get_cache(cacheKey);
         if(cache_item){
             return res.status(200).json({
-                message: "Get cache item!",
-                item: cache_item
+                data: {
+                    message: "Get cache item!",
+                    item: cache_item
+                }
             });
         }
         else{
             const item = await itemModel.getItem(res, item_id);
             const set_cache = await redis.set_cache(cacheKey, item);
             console.log(set_cache);
-            // if(!set_cache){
-            //     return res.status(400).json({ error: 'Set cache error!' });
-            // }
             return res.status(200).json({ data: { item: item }});
         }
     },
