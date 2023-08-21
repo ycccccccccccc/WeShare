@@ -4,17 +4,16 @@ const redis = new Redis({
     port: 6379
 })
 
-console.log("======================")
-console.log(redis.status);
-
 module.exports = {
     rateLimiter: async (req, res, next) => {
         const period = 1;
         const times = 30;
         const block = 60;
         var ip = req.headers['x-forwarded-for'];
+        console.log(ip);
         try {
             const requestCount = await redis.get(ip);
+            console.log(requestCount);
             if(requestCount == null){
                 await redis.set(ip, 1, 'EX', period);
             }
