@@ -35,11 +35,7 @@ module.exports = {
     getItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
         const cacheKey = `item_${item_id}`;
-        try{
-            const cache_item = await redis.get_cache(cacheKey);
-        } catch (err) {
-            return res.status(400).json({ error: 'Get cache error!' });
-        }
+        const cache_item = await redis.get_cache(cacheKey);
         if(cache_item){
             return res.status(200).json({
                 message: "Get cache item!",
