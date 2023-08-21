@@ -29,7 +29,7 @@ module.exports = {
                 message: 'No image provided.'
             })
         }
-        return res.status(200).json({ image: req.file.originalname });
+        return res.status(200).json({ item: {image: req.file.originalname} });
     },    
 
     getItem: async (req, res) => {
@@ -37,7 +37,7 @@ module.exports = {
         const cacheKey = `item_${item_id}`;
         const cache_item = await redis.get_cache(cacheKey);
         if(!cache_item){
-            return res.status(400).json({ error: 'Get cache errror!' });
+            return res.status(400).json({ error: 'Get cache error!' });
         }
         if(cache_item){
             return res.status(200).json({
@@ -49,7 +49,7 @@ module.exports = {
             const item = await itemModel.getItem(res, item_id);
             const set_cache = await redis.set_cache(cacheKey, item);
             if(!set_cache){
-                return res.status(400).json({ error: 'Set cache errror!' });
+                return res.status(400).json({ error: 'Set cache error!' });
             }
             return res.status(200).json({ item: item });
         }
@@ -115,11 +115,11 @@ module.exports = {
             item_cache['longitude'] = longitude;
             await redis.set_cache(cacheKey, item_cache);
             if(!set_cache){
-                return res.status(400).json({ error: 'Set cache errror!' });
+                return res.status(400).json({ error: 'Set cache error!' });
             }
         }
         else{
-            return res.status(400).json({ error: 'Get cache errror!' });
+            return res.status(400).json({ error: 'Get cache error!' });
         }
         const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, location, latitude, longitude);
         return res.status(200).json({ item: result });
@@ -150,11 +150,11 @@ module.exports = {
             item_cache['image'] = pic_path;
             await redis.set_cache(cacheKey, item_cache);
             if(!set_cache){
-                return res.status(400).json({ error: 'Set cache errror!' });
+                return res.status(400).json({ error: 'Set cache error!' });
             }
         }
         else{
-            return res.status(400).json({ error: 'Get cache errror!' });
+            return res.status(400).json({ error: 'Get cache error!' });
         }
         const result = await itemModel.updateItemImage(res, item_id, pic_path);
         return res.status(200).json({ item: result });
