@@ -5,9 +5,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const WebSocket = require('ws');
 const http = require('http');
+const path = require('path');
 
 app.use(bodyParser.json());
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
+
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 app.use(cors());
 const { rateLimiter } = require('./utils/redis');
