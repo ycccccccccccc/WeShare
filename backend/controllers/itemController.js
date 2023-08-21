@@ -49,7 +49,7 @@ module.exports = {
             // if(!set_cache){
             //     return res.status(400).json({ error: 'Set cache error!' });
             // }
-            return res.status(200).json({ item: item });
+            return res.status(200).json({ data: { item: item }});
         }
     },
     
