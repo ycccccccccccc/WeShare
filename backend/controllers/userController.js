@@ -53,9 +53,14 @@ module.exports = {
         const user_ID = req.params.id
         const user_info = await userModel.getUserInfo(res,user_ID)
         const user_item = await userModel.getUserItem(res,user_ID)
-        user_info.user.item.push(...user_item)
-        console.log(user_info)
-        return res.status(200).json({ data: user_info })
+	try {
+        	user_info.user.item.push(...user_item)
+		console.log(user_info)
+        	return res.status(200).json({ data: user_info })
+	} catch (err) {
+                console.log("GetProfile報錯：ID為",user_ID)
+		return res.status(403).json({ error: "ID為${user_ID}的使用者不存在" })
+	}
     },
     addTest: async (req,res) => {
         const result = await userModel.addTest(res)
