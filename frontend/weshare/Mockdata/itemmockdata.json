@@ -3,57 +3,46 @@
       {
         "id": 1,
         "image": "image1.jpg",
-        "title": "洗髮精",
+        "title": "夏威夷甜豆",
         "introduction": "這是一瓶天然成分的洗髮精。",
-        "cost": 200,
-        "tag": "日用品",
+        "cost": 310,
+        "tag": "食品",
         "costco": "內湖店",
-        "location": "台北市內湖區",
+        "location": "台北市南港區東新街170巷47號1樓",
         "expires_at": "2023-09-15 21:30:00"
       },
       {
         "id": 2,
         "image": "image2.jpg",
-        "title": "風扇",
+        "title": "特大濃郁腰果",
         "introduction": "夏天必備的電風扇，風力強勁。",
-        "cost": 500,
-        "tag": "家具",
+        "cost": 340,
+        "tag": "食品",
         "costco": "中和店",
-        "location": "新北市中和區",
+        "location": "忠孝復興一號出口",
         "expires_at": "2023-10-10 18:00:00"
       },
       {
         "id": 3,
         "image": "image3.jpg",
-        "title": "果汁",
+        "title": "鹽烤帶皮腰果",
         "introduction": "新鮮橙子製成的果汁，不加糖。",
-        "cost": 50,
+        "cost": 220,
         "tag": "食品",
         "costco": "新莊店",
-        "location": "新北市新莊區",
+        "location": "敦化國中",
         "expires_at": "2023-08-25 15:00:00"
       },
       {
         "id": 4,
         "image": "image4.jpg",
-        "title": "牛仔褲",
+        "title": "鳳梨酥",
         "introduction": "舒適的牛仔褲，適合日常穿著。",
-        "cost": 300,
+        "cost": 1000,
         "tag": "衣物",
         "costco": "桃園店",
-        "location": "桃園市中壢區",
+        "location": "政大附中",
         "expires_at": "2023-09-20 16:00:00"
-      },
-      {
-        "id": 5,
-        "image": "image5.jpg",
-        "title": "化妝水",
-        "introduction": "保濕型的化妝水，適合各種膚質。",
-        "cost": 150,
-        "tag": "美妝",
-        "costco": "台中店",
-        "location": "台中市西屯區",
-        "expires_at": "2023-10-05 19:00:00"
       }
     ]
   }

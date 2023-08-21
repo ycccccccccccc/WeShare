@@ -4,14 +4,18 @@ const { db } = require('../utils/util');
 
 module.exports = {
 
-    getMessage: async ( res, my_ID, seller_ID ) => {
+    getMessage: async ( res, my_ID, seller_ID, cursor ) => {
         try {
             const sql = `
             SELECT c.id, c.message, u.id AS user_id, u.name, u.image
             FROM chat AS c LEFT JOIN user AS u ON c.sender_id = u.id
             WHERE ( c.sender_id = ? AND c.receiver_id = ? ) OR ( c.sender_id = ? AND c.receiver_id = ? )
+            ORDER BY c.id DESC
+            LIMIT 11 OFFSET ?;
             `
-            const [results] = await db.query(sql, [my_ID,seller_ID,seller_ID,my_ID])
+            const [results] = await db.query(sql, [my_ID,seller_ID,seller_ID,my_ID,cursor])
+            const next_cursor = (results.length > 10) ? Buffer.from((cursor+10).toString(), 'ascii').toString('base64') : null
+            if ( results.length > 10 ) { results.pop() }
             const msgList = results.map((result) => {
                 const { id, message, user_id, name, image } = result
                 return {
@@ -25,7 +29,8 @@ module.exports = {
                 };
             })
             const data = {
-                chats: msgList
+                chats: msgList,
+                next_cursor: next_cursor
             }
             return data
         } catch (err) {
@@ -33,7 +38,7 @@ module.exports = {
         }
     },
 
-    getMessagePreview: async ( res, my_ID ) => {
+    getMessagePreview: async ( res, my_ID, cursor ) => {
         try {
             const sql = `
                 WITH receive_msg AS (
@@ -62,12 +67,16 @@ module.exports = {
                     ) ranked_msgs
                     WHERE rn = 1
                     ORDER BY id DESC
-                ),
+                )
                 SELECT mr.id, mr.contact_id, mr.message, u.name, u.image
                 FROM msg_result AS mr LEFT JOIN user AS u
                 ON mr.contact_id = u.id
+                ORDER BY mr.id DESC
+                LIMIT 11 OFFSET ?
             `
-            const [results] = await db.query(sql, [my_ID,my_ID])
+            const [results] = await db.query(sql, [my_ID,my_ID,cursor])
+            const next_cursor = (results.length > 10) ? Buffer.from((cursor+10).toString(), 'ascii').toString('base64') : null
+            if ( results.length > 10 ) { results.pop() }
             const msgList = results.map((result) => {
                 const { id, contact_id, message, name, image } = result
                 return {
@@ -81,7 +90,8 @@ module.exports = {
                 };
             })
             const data = {
-                chats: msgList
+                chats: msgList,
+                next_cursor: next_cursor
             }
             return data
         } catch (err) {
@@ -89,7 +99,7 @@ module.exports = {
         }
     },
 
-    sendMessage: async ( res, my_ID, seller_ID ) => {
+    sendMessage: async ( res, my_ID, seller_ID, message ) => {
         try {
             const sql = 'INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)'
             const [results] = await db.query(sql, [my_ID,seller_ID,message])
@@ -99,6 +109,18 @@ module.exports = {
             return data
         } catch (err) {
             return util.databaseError(err,'sendMessage',res);
+        }
+    },
+
+    addTest:  async ( res ) => {
+        try {
+            for ( var i = 1 ; i <= 11 ; i++ ){
+                const sql = `INSERT INTO chat (sender_id, receiver_id, message) VALUES (?,?,?)`
+                await db.query(sql, [1,i,"say hi to" + i.toString()]);
+            }
+            return "message added."
+        } catch (err) {
+            return util.databaseError(err,'getUserItem',res);
         }
     }
 }
