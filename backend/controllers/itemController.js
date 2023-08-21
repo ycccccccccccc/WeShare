@@ -35,8 +35,9 @@ module.exports = {
     getItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
         const cacheKey = `item_${item_id}`;
-        const cache_item = await redis.get_cache(cacheKey);
-        if(!cache_item){
+        try{
+            const cache_item = await redis.get_cache(cacheKey);
+        } catch (err) {
             return res.status(400).json({ error: 'Get cache error!' });
         }
         if(cache_item){
@@ -48,9 +49,10 @@ module.exports = {
         else{
             const item = await itemModel.getItem(res, item_id);
             const set_cache = await redis.set_cache(cacheKey, item);
-            if(!set_cache){
-                return res.status(400).json({ error: 'Set cache error!' });
-            }
+            console.log(set_cache);
+            // if(!set_cache){
+            //     return res.status(400).json({ error: 'Set cache error!' });
+            // }
             return res.status(200).json({ item: item });
         }
     },
@@ -110,16 +112,15 @@ module.exports = {
             item_cache['title'] = title;
             item_cache['introduction'] = introduction;
             item_cache['cost'] = cost;
-            item_cache['location'] = titlocationle;
+            item_cache['tag'] = tag;
+            item_cache['location'] = location;
             item_cache['latitude'] = latitude;
             item_cache['longitude'] = longitude;
-            await redis.set_cache(cacheKey, item_cache);
-            if(!set_cache){
+            try {
+                await redis.set_cache(cacheKey, item_cache);
+            } catch (err) {
                 return res.status(400).json({ error: 'Set cache error!' });
             }
-        }
-        else{
-            return res.status(400).json({ error: 'Get cache error!' });
         }
         const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, location, latitude, longitude);
         return res.status(200).json({ item: result });
@@ -148,13 +149,11 @@ module.exports = {
         const item_cache = await redis.get_cache(cacheKey);
         if(item_cache){
             item_cache['image'] = pic_path;
-            await redis.set_cache(cacheKey, item_cache);
-            if(!set_cache){
+            try {
+                await redis.set_cache(cacheKey, item_cache);
+            } catch (err) {
                 return res.status(400).json({ error: 'Set cache error!' });
             }
-        }
-        else{
-            return res.status(400).json({ error: 'Get cache error!' });
         }
         const result = await itemModel.updateItemImage(res, item_id, pic_path);
         return res.status(200).json({ item: result });
