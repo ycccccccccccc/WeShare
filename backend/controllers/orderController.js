@@ -16,7 +16,7 @@ module.exports = {
             })
         }
         const result = await orderModel.addOrder(res, item_id, quantity, seller_id, buyer_id);
-        const event = await eventModel.addEvent(res, item_id, '買家下單通知', buyer_id, seller_id);
+        const event = await eventModel.addEvent(res, item_id, '買家下單通知', result.id, buyer_id, seller_id);
         return res.status(200).json({ order: result });
     },
     agreeOrder: async (req, res) => {
@@ -28,6 +28,11 @@ module.exports = {
                 error: "Insufficient permissions!"
             })
         }
+        if( order.status !== 'request' ){
+            return res.status(400).json({
+                error: "Order status error!"
+            })
+        }
         const checkOrder = await getNumOfBuyers(res, order.item_id);
         if( (checkOrder.num_of_buyers - order.quantity) < 0 ){
             return res.status(400).json({
@@ -36,7 +41,7 @@ module.exports = {
         }
         const result = await orderModel.agreeOrder(res, order_id);
         const item_update_result = await itemModel.updateNumOfBuyers((checkOrder.num_of_buyers - order.quantity), order.item_id);
-        const event = await eventModel.addEvent(res, order.item_id, '交易成功通知', seller_id, order.buyer_id);
+        const event = await eventModel.addEvent(res, order.item_id, '交易成功通知', order_id, seller_id, order.buyer_id);
         return res.status(200).json({ order: result });
     },
     delOrder: async (req, res) => {

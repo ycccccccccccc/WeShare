@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS order_table (
     buyer_id INT NOT NULL,
     status ENUM('request', 'agree') NOT NULL,
     CONSTRAINT order_item_id_key FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE,
-    CONSTRAINT order_seller_id_key FOREIGN KEY (seller_id) REFERENCES item(seller_id) ON DELETE CASCADE,
+    CONSTRAINT order_seller_id_key FOREIGN KEY (seller_id) REFERENCES user(id) ON DELETE CASCADE,
     CONSTRAINT order_buyer_id_key FOREIGN KEY (buyer_id) REFERENCES user(id) ON DELETE CASCADE
 );
 
@@ -58,9 +58,12 @@ CREATE TABLE IF NOT EXISTS order_table (
 CREATE TABLE IF NOT EXISTS event_table (
     id INT AUTO_INCREMENT PRIMARY KEY,
     type ENUM('買家下單通知', '交易成功通知') NOT NULL,
+    order_id INT NOT NULL,
     item_id INT,
     sender_id INT NOT NULL,
     recipient_id INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT event_order_id_key FOREIGN KEY (order_id) REFERENCES order_table(id) ON DELETE CASCADE,
     CONSTRAINT event_item_id_key FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE,
     CONSTRAINT event_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
     CONSTRAINT event_recipient_id_key FOREIGN KEY (recipient_id) REFERENCES user(id) ON DELETE CASCADE
