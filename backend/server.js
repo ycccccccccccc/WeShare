@@ -5,9 +5,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const WebSocket = require('ws');
 const http = require('http');
+const path = require('path');
 
 app.use(bodyParser.json());
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
+
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 app.use(cors());
 const { rateLimiter } = require('./utils/redis');
@@ -40,6 +43,9 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     console.log(`Received message: ${message}`);
   });
+
+  ws.send('後端收到訊息，回傳給前端');
+
 });
 
 server.listen(port, () => {

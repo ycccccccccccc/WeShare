@@ -15,15 +15,12 @@ export default function Itemcard({
 }) {
   return (
     <div>
-      <div
-        className={styles.ItemBoard}
-
-      >
+      <div className={styles.ItemBoard}>
         <button
           className={styles.ItemPic}
-          onClick={() => onPicClick(id)}
-          onMouseOver={() => onMouseOver(id)}
-          onMouseOut={() => onMouseOut()}
+          onClick={onPicClick ? () => onPicClick(id) : undefined}
+          onMouseOver={onMouseOver ? () => onMouseOver(id) : undefined}
+          onMouseOut={onMouseOut || undefined}
           type="button"
         >
           <Image

@@ -20,7 +20,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import mapStylecolor from "../styles/mapStyles.json";
 
 const mapStyle = {
-  height: "85.5vh",
+  height: "85.4vh",
   width: "50vw",
 };
 
