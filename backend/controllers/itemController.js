@@ -6,13 +6,31 @@ require('dotenv').config();
 module.exports = {
     addItem: async (req, res) => {
         const seller_id = req.user.id;
-        const { buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
-        if ( !buyers_limit || !title || !introduction || !cost || !tag || !location || !latitude || !longitude ) {    
+        const { buyers_limit, title, image, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
+        if ( !buyers_limit || !title || !image || !introduction || !cost || !tag || !location || !latitude || !longitude ) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
         const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
+        const file_name = image.split('.');
+        fs.rename(`static/${image}`, `static/item_${result.id}.${file_name[file_name.length-1]}`, (err) => {
+            if (err) {
+              console.error('重命名文件失敗:', err);
+            }
+        });
+        const pic_path = `http://${process.env.ip}/static/item_${result.id}.${file_name[file_name.length-1]}`;
+        const update_url = await itemModel.updateItemImage(res, result.id, pic_path);
         return res.status(200).json({ item: result });
     },
+
+    addItemImage: async (req, res) => {
+        const image = req.file;
+        if(!image){
+            return res.status(400).json({
+                message: 'No image provided.'
+            })
+        }
+        return res.status(200).json({ image: req.file.originalname });
+    },    
 
     getItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
