@@ -45,15 +45,17 @@ io.use((socket, next) => {
       const token = socket.handshake.headers.authorization
       console.log("socket test token:",token)
       if (!token || !token.startsWith('Bearer ')) {
+        console.log("No token provided")
       	return { error: 'No token provided' };
       }
-      const accessToken = token.split(' ')[1];
       try {
+	  const accessToken = token.split(' ')[1];
           // 'WeShare' 之後要移去.env
           const decoded = jwt.verify(accessToken, 'WeShare');
-          req.user = decoded;
+	  console.log("Decoded:",decoded)
           next();
       } catch (error) {
+          console.log("error:",error)
           return { error: 'Invalid token' };
       }
 })
@@ -61,22 +63,28 @@ io.use((socket, next) => {
 io.on("connection", (socket) => {
   socket.on("message", async (msg) => {
 
-    console.log("connection success,message is",msg,msg.id,msg.message,req.user,req.user.id,socket.handshake.headers.authorization)
-    const big = req.user.id > msg.id ? req.user.id : msg.id
-    const low = req.user.id > msg.id ? msg.id : req.user.id
+    console.log("connection success,message is",msg,msg.id,msg.message,socket.handshake.headers.authorization)
+    const accessToken = socket.handshake.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(accessToken, 'WeShare');
+    const big = decoded.id > msg.id ? decoded.id : msg.id
+    const low = decoded.id > msg.id ? msg.id : decoded.id
     socket.join(`chat${low}${big}`)
-
+    console.log(`chat${low}${big}`)
     try {
 
     	const sql = "INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)"
-    	const [results] = await db.query(sql, [req.user.id,msg.id,msg.message])
+    	const [results] = await db.query(sql, [decoded.id,msg.id,msg.message])
     	const data = {
     		id: results.insertId,
-        	message: msg.message
+        	message: msg.message,
+		user: {
+			id:decoded.id
+		}
     	}
     	io.to(`chat${low}${big}`).emit("response",data)
-
+        console.log("Send success")
     } catch (err) {
+	console.log("send err:",err)
       return { 
         msg: "Socket io error",
         err: err 
