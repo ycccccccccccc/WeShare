@@ -45,7 +45,7 @@ io.use((socket, next) => {
       const token = socket.handshake.headers.authorization
       console.log("socket test token:",token)
       if (!token || !token.startsWith('Bearer ')) {
-      	return res.status(401).json({ error: 'No token provided' });
+      	return { error: 'No token provided' };
       }
       const accessToken = token.split(' ')[1];
       try {
@@ -54,7 +54,7 @@ io.use((socket, next) => {
           req.user = decoded;
           next();
       } catch (error) {
-          return res.status(403).json({ error: 'Invalid token' });
+          return { error: 'Invalid token' };
       }
 })
 
@@ -72,7 +72,7 @@ io.on("connection", (socket) => {
     	const [results] = await db.query(sql, [req.user.id,msg.id,msg.message])
     	const data = {
     		id: results.insertId,
-        message: message
+        	message: msg.message
     	}
     	io.to(`chat${low}${big}`).emit("response",data)
 
