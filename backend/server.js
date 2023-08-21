@@ -3,9 +3,11 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const WebSocket = require('ws');
 const http = require('http');
 const path = require('path');
+const jwt = require('jsonwebtoken')
+const util = require('./utils/util')
+const { db } = require('./utils/util');
 
 app.use(bodyParser.json());
 app.get('/',(req, res) => {res.send('WeShare is listening!')})
@@ -33,19 +35,46 @@ app.use('/events', event_route);
 
 const server = http.createServer(app); // Create an HTTP server
 
-const wss = new WebSocket.Server({ server });
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
 
-wss.on('connection', (ws) => {
-  // This function is called whenever a new WebSocket connection is established
-  console.log('New WebSocket connection established');
+io.use((socket, next) => {
+      const token = socket.handshake.headers.authorization
+      console.log("socket test token:",token)
+      if (!token || !token.startsWith('Bearer ')) {
+      	return res.status(401).json({ error: 'No token provided' });
+      }
+      const accessToken = token.split(' ')[1];
+      try {
+          // 'WeShare' 之後要移去.env
+          const decoded = jwt.verify(accessToken, 'WeShare');
+          req.user = decoded;
+          next();
+      } catch (error) {
+          return res.status(403).json({ error: 'Invalid token' });
+      }
+})
 
-  // Listen for messages from clients
-  ws.on('message', (message) => {
-    console.log(`Received message: ${message}`);
-  });
-
-  ws.send('後端收到訊息，回傳給前端');
-
+io.on("connection", (socket) => {
+  socket.on("message", async (msg) => {
+    console.log("connection success,message is",msg,msg.id,msg.message,req.user,req.user.id,socket.handshake.headers.authorization)
+    try {
+    	const sql = "INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)"
+    	const [results] = await db.query(sql, [req.user.id,msg.id,msg.message])
+    	const data = {
+    		id: results.insertId
+    	}
+    	io.emit("response",data)
+    } catch (err) {
+	return { 
+		msg: "Socket io error",
+		err: err 
+	};
+    }
+  })
 });
 
 server.listen(port, () => {
