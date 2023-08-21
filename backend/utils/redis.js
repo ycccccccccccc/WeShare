@@ -4,8 +4,6 @@ const redis = new Redis({
     port: 6379
 })
 
-redis.connect();
-
 redis.on('error', (error) => {
     console.error('Redis connection error:', error);
 });
