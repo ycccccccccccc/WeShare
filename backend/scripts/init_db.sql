@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS event_table (
     item_id INT,
     sender_id INT NOT NULL,
     recipient_id INT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT event_order_id_key FOREIGN KEY (order_id) REFERENCES order_table(id) ON DELETE CASCADE,
     CONSTRAINT event_item_id_key FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE,
