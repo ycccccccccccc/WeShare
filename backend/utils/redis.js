@@ -10,10 +10,8 @@ module.exports = {
         const times = 30;
         const block = 60;
         var ip = req.headers['x-forwarded-for'];
-        console.log(ip);
         try {
             const requestCount = await redis.get(ip);
-            console.log(requestCount);
             if(requestCount == null){
                 await redis.set(ip, 1, 'EX', period);
             }
