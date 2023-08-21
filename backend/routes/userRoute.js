@@ -4,11 +4,12 @@ const app = express()
 const router = express.Router();
 const userController = require('../controllers/userController');
 const util = require('../utils/util')
-
+const path = require('path');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/images')
+        const uploadDir = path.join(__dirname, '..', 'static');
+	cb(null, uploadDir)
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname )
@@ -27,7 +28,7 @@ router.post('/signup', [util.authorize_json], userController.signup);
 router.post('/:id/rating', [util.authorize_json,util.authorize_bearer], userController.giveRating);
 
 router.put('/', [util.authorize_json,util.authorize_bearer], userController.updateProfileName);
-router.put('/image', upload.single('picture'), [util.authorize_bearer], userController.updateProfilePic);
+router.put('/image', upload.single('picture'), [util.authorize_multipart,util.authorize_bearer], userController.updateProfilePic);
 
 router.get('/:id', [util.authorize_bearer], userController.getProfile);
 
