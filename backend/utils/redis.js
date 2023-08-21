@@ -4,15 +4,8 @@ const redis = new Redis({
     port: 6379
 })
 
-redis.connect();
-
-redis.on('error', (error) => {
-    console.error('Redis connection error:', error);
-});
-
-redis.on('connect', () => {
-    console.log('Connected to Redis');
-});
+console.log("======================")
+console.log(redis.status);
 
 module.exports = {
     rateLimiter: async (req, res, next) => {
