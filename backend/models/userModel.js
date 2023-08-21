@@ -146,9 +146,11 @@ module.exports = {
         try {
             for ( var i = 1 ; i <= 11 ; i++ ){
                 const sql = `INSERT INTO user (name, phone, password) VALUES (?,?,?)`
-                await db.query(sql, [
+                const phoneNum = util.generateRandomNum(10)
+		console.log("新增用戶：","user" + i.toString(),phoneNum)
+		await db.query(sql, [
                     "user" + i.toString(),
-                    util.generateRandomNum(10),
+                    phoneNum,
                     "pwd"
                 ]);
             }
