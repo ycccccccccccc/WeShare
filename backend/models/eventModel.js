@@ -51,5 +51,29 @@ module.exports = {
         } catch (err) {
             return util.databaseError(err, 'getEvent', res);
         }
+    },
+    readEvent: async (res, id) => {
+        try {
+            const sql = 'UPDATE event_table SET is_read = TRUE WHERE id = ?';
+            const [results] = await db.query(sql, [id]);
+            const event = {
+                id: id, 
+            };
+            return event;
+        } catch (err) {
+            return util.databaseError(err, 'readEvent', res);
+        }
+    },
+    getNumOfEvent: async (res, id) => {
+        try {
+            const sql = "SELECT COUNT(*) AS Num_Of_Event FROM event_table WHERE status = 'FALSE' AND recipient_id = ?";
+            const [result] = await db.query(sql, [id]);
+            const event = {
+                quantity: result.Num_Of_Event
+            };
+            return event;
+        } catch (err) {
+            return util.databaseError(err, 'getNumOfEvent', res);
+        }
     }    
 }
