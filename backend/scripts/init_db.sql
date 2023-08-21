@@ -57,12 +57,13 @@ CREATE TABLE IF NOT EXISTS order_table (
 -- Create the 'event_table' table if it doesn't exist
 CREATE TABLE IF NOT EXISTS event_table (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type ENUM('買家下單通知', ':Q
-    ') NOT NULL,
+    type ENUM('買家下單通知', '交易成功通知') NOT NULL,
+    order_id INT NOT NULL,
     item_id INT,
     sender_id INT NOT NULL,
     recipient_id INT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT event_order_id_key FOREIGN KEY (order_id) REFERENCES order(id) ON DELETE CASCADE,
     CONSTRAINT event_item_id_key FOREIGN KEY (item_id) REFERENCES item(id) ON DELETE CASCADE,
     CONSTRAINT event_sender_id_key FOREIGN KEY (sender_id) REFERENCES user(id) ON DELETE CASCADE,
     CONSTRAINT event_recipient_id_key FOREIGN KEY (recipient_id) REFERENCES user(id) ON DELETE CASCADE
