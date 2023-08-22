@@ -4,7 +4,7 @@ const { db } = require('../utils/util');
 module.exports = {
     addOrder: async ( res, item_id, quantity, seller_id, buyer_id ) => {
         try {
-            const sql = 'INSERT INTO order_table (item_id, quantity, seller_id, buyer_id, status) VALUES (?,?,?,?)';
+            const sql = 'INSERT INTO order_table (item_id, quantity, seller_id, buyer_id, status) VALUES (?,?,?,?,?)';
             const [results] = await db.query(sql, [item_id, quantity, seller_id, buyer_id, 'request']);
             const order = {
                 id: results.insertId
