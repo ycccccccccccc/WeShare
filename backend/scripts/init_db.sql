@@ -8,7 +8,7 @@ CREATE DATABASE IF NOT EXISTS weshare_test CHARACTER SET utf8mb4 COLLATE utf8mb4
 use weshare;
 
 -- Set the timezone
-SET time_zone = '+8:00';
+SET GLOBAL time_zone = '+8:00';
 
 -- Create the 'user' table if it doesn't exist
 CREATE TABLE IF NOT EXISTS user (

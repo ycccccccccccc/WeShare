@@ -87,9 +87,9 @@ io.on("connection", (socket) => {
   })
 });
 
-// server.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`)
-// })
-io.listen(server); // 让 Socket.IO 监听现有的 HTTP 服务器
+server.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+// io.listen(server); // 让 Socket.IO 监听现有的 HTTP 服务器
 
 module.exports = server;
