@@ -38,7 +38,7 @@ module.exports = {
 	    const file_name = (req.file.originalname).split('.');
         console.log(file_name)
         const pic_path = `http://${process.env.ip}/static/user_${my_ID}`;
-        fs.rename(`static/${req.file.originalname}`, `static/user_${my_ID}`, (err) => {
+        fs.rename(`static/${req.file.originalname}`, `static/user_${my_ID}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
               console.error('重命名文件失敗:', err);
             }
