@@ -80,7 +80,7 @@ describe('API Sign Up Test', () => {
     console.log('case 4', response.status);
     expect(response.status).toBe(200);
     expect(response.body.data.user.name).toBe(`${test_index}_user_1`);
-    expect(response.body.data.user.email).toBe(`${test_index}_user_1@example.com`);
+    expect(response.body.data.user.phone).toBe(`09${test_index}123`);
     user_1['access_token'] = response._body.data.access_token;
   });
 });
