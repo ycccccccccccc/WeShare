@@ -20,8 +20,7 @@ jobs:
     - name: Run test file
       run: |
         docker ps
-        cd backend
-        docker exec weshare jest --detectOpenHandles --watch=false --force-exit --maxWorkers=1
+        docker exec weshare npm test-in-docker --detectOpenHandles --watch=false --force-exit --maxWorkers=1
 
   deploy_canchu:
     needs: test_weshare
