@@ -36,8 +36,8 @@ module.exports = {
     updateProfilePic: async (req, res) => {
         const my_ID = req.user.id;
 	    const file_name = (req.file.originalname).split('.');
-        console.log(file_name)
-        const pic_path = `http://${process.env.ip}/static/user_${my_ID}`;
+        console.log(file_name,req.file.originalname)
+        const pic_path = `http://${process.env.ip}/static/user_${my_ID}.${file_name[file_name.length-1]}`;
         fs.rename(`static/${req.file.originalname}`, `static/user_${my_ID}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
               console.error('重命名文件失敗:', err);
