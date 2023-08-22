@@ -99,19 +99,6 @@ module.exports = {
         }
     },
 
-    sendMessage: async ( res, my_ID, seller_ID, message ) => {
-        try {
-            const sql = 'INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)'
-            const [results] = await db.query(sql, [my_ID,seller_ID,message])
-            const data = {
-                id: results.insertId, 
-            };
-            return data
-        } catch (err) {
-            return util.databaseError(err,'sendMessage',res);
-        }
-    },
-
     addTest:  async ( res ) => {
         try {
             for ( var i = 1 ; i <= 11 ; i++ ){
