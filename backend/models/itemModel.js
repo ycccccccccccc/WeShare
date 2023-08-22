@@ -89,7 +89,7 @@ module.exports = {
             if (latitude && longitude){
                 locationCondition = `AND item.latitude < ${latitude+0.01} AND item.latitude > ${latitude-0.01} AND item.longitude < ${longitude+0.01} AND item.longitude > ${longitude-0.01}`;
             }
-            const sql = `SELECT item.id, item.buyers_limit, item.num_of_buyers, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, item.expires_at, item.seller_id, user.name, user.rating, user.image, user.phone \
+            const sql = `SELECT item.id, item.buyers_limit, item.num_of_buyers, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, item.expires_at, item.seller_id, user.name, user.rating, user.image AS user_image, user.phone \
                 FROM item LEFT JOIN user ON item.seller_id = user.id\
                 WHERE item.id <= ${item_id} ${keywordCondition} ${tagCondition} ${locationCondition}\
                 ORDER BY item.id DESC LIMIT ?`;
@@ -117,7 +117,7 @@ module.exports = {
                         id: result.seller_id,
                         name: result.name,
                         phone: result.phone,
-                        image: result.image,
+                        image: result.user_image,
                         rating: result.rating
                     }
                 };
