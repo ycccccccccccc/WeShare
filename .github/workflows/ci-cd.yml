@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  test_canchu:
+  test_weshare:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -23,7 +23,7 @@ jobs:
         docker exec weshare npm test -- --watch=false --force-exit --maxWorkers=1
 
   deploy_canchu:
-    needs: test_canchu
+    needs: test_weshare
     runs-on: ubuntu-latest
     steps:
     - name: Deploy to ec2
