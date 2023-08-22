@@ -59,10 +59,10 @@ module.exports = {
                 expires_at: results.expires_at,
                 user: {
                     id: seller_id,
-                    name: user.name,
-                    phone: user.phone,
-                    image: user.image,
-                    rating: user.rating
+                    name: user["user"].name,
+                    phone: user["user"].phone,
+                    image: user["user"].image,
+                    rating: user["user"].rating
                 }
             };
             return item;
