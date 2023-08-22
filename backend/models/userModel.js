@@ -13,7 +13,7 @@ module.exports = {
                 id: results.insertId, 
                 name: name, 
                 phone: phone, 
-		image: imageURL
+		        image: imageURL
             };
             const data = {
                 access_token: util.generateToken(user),
@@ -91,9 +91,9 @@ module.exports = {
             await db.query(sql, [image,id]);
             const data = {
                 user: { 
-			id: id,
-			image: image
-		 }
+                    id: id,
+                    image: image
+                }
             }
             return data
         } catch (err) {
@@ -183,8 +183,8 @@ module.exports = {
             for ( var i = 1 ; i <= 11 ; i++ ){
                 const sql = `INSERT INTO user (name, phone, password) VALUES (?,?,?)`
                 const phoneNum = util.generateRandomNum(10)
-		console.log("新增用戶：","user" + i.toString(),phoneNum)
-		await db.query(sql, [
+                console.log("新增用戶：","user" + i.toString(),phoneNum)
+                await db.query(sql, [
                     "user" + i.toString(),
                     phoneNum,
                     "pwd"
