@@ -42,10 +42,6 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      DATABASE_HOST: mysql
-      DATABASE_USER: root
-      DATABASE_PASSWORD: pwd
-      DATABASE_NAME: weshare 
     ports:
       - "6380:6379"
     networks:
