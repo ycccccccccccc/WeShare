@@ -3,20 +3,11 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const db = mysql.createPool({
-    host: process.env.NODE_ENV === 'test' ? 'localhost' : 'mysql',
+    host: 'mysql',
     user: 'root',
     password: 'pwd',
     database: process.env.NODE_ENV === 'test' ? 'weshare_test' : 'weshare'
 });
-
-// db.getConnection((err, connection) => {
-//     if (err) {
-//         console.error('Database connection failed:', err);
-//     } else {
-//         console.log('Database connection successful!');
-//         connection.release(); // Release the connection back to the pool
-//     }
-// });
 
 module.exports = {
 
