@@ -6,13 +6,13 @@
 
 "use client";
 
-
 import { useState, useEffect } from "react";
 import Navbar from "../../Components/navbar";
 import Map from "../../Components/Map";
 import Mapsearch from "../../Components/Mapsearch";
 import Itemcard from "../../Components/Itemcard";
-import mockdata from "../../Mockdata/itemmockdata.json";
+import useGetAllItems from "../../hooks/Item/useGetAllItem"; // 請確定這個路徑是正確的
+
 
 const GEOCODING_ENDPOINT = "https://maps.googleapis.com/maps/api/geocode/json";
 function getLatLngFromAddress(address, apiKey) {
@@ -37,6 +37,25 @@ export default function Home() {
   const [focusedLocation, setFocusedLocation] = useState(null); // 新增此行
   const [zoom, setZoom] = useState(12); // 初始化為12或您的初始放大值
   const [hoveredItemId, setHoveredItemId] = useState(null);
+
+  const { items, isLoading, error } = useGetAllItems();
+
+  useEffect(() => {
+    if (items) {
+      const newLocations = items.map((item) => ({
+        lat: item.latitude,
+        lng: item.longitude,
+        id: item.id,
+        title: item.title,
+        cost: item.cost,
+        image: item.image,
+      }));
+      
+      setItemLocations(newLocations);
+      
+    }
+    
+  }, [items]);
   const focusOnItem = (itemId) => {
     const focusedItem = itemLocations.find((item) => item.id === itemId);
     if (focusedItem) {
@@ -44,36 +63,6 @@ export default function Home() {
       setZoom(16); // 或任何您希望放大的值
     }
   };
-
-  useEffect(() => {
-    async function fetchAllLocations() {
-      const newLocations = [];
-
-      for (const item of mockdata.items) {
-        try {
-          const location = await getLatLngFromAddress(
-            item.location,
-            process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
-          );
-          newLocations.push({
-            ...location,
-            id: item.id,
-            title: item.title,
-            image: item.image,
-            cost: item.cost,
-          });
-        } catch (error) {
-          console.error(
-            "Error getting the latitude and longitude for:",
-            item.location
-          );
-        }
-      }
-      setItemLocations(newLocations);
-    }
-
-    fetchAllLocations();
-  }, []);
 
   const clearAddress = () => {
     setItemAddress(null);
@@ -97,19 +86,23 @@ export default function Home() {
         />
 
         <div className="itemplace">
-          {mockdata.items.map((item) => (
-            <Itemcard
-              key={item.id}
-              image={item.image}
-              title={item.title}
-              cost={item.cost}
-              onPicClick={focusOnItem}
-              onMouseOver={() => {
-                setHoveredItemId(item.id);
-              }}
-              onMouseOut={() => setHoveredItemId(null)}
-            />
-          ))}
+          {isLoading && <p>Loading items...</p>}
+          {error && <p>Error fetching items: {error.message}</p>}
+          {items &&
+            items.map((item) => (
+              <Itemcard
+                key={item.id}
+                image={item.image || '/1.png'}
+                title={item.title}
+                cost={item.cost}
+                id={item.id}
+                onPicClick={focusOnItem}
+                onMouseOver={() => {
+                  setHoveredItemId(item.id);
+                }}
+                onMouseOut={() => setHoveredItemId(null)}
+              />
+            ))}
         </div>
       </div>
     </div>

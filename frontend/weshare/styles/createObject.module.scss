@@ -1,8 +1,8 @@
 // 定義共用的顏色和字體等變數
-$primary-border: 2px solid #000;
+$primary-border:  2px solid black;
 $primary-color: #000;
-$background-color: #fff;
-$primary-font: Permanent Marker;
+$background-color: #f5f8f6;
+$primary-font: 'Noto Serif TC', serif;
 $primary-font-size: 24px;
 $hover-border: 2px solid #2d6047;
 $hover-background: #f4f4f4;
@@ -13,7 +13,7 @@ $hover-background: #f4f4f4;
   background: $background-color;
   padding: 5%;
   width: 70%;
-  height: 50vh;
+  height: 55vh;
   input, select, textarea {
     padding-left: 15px; // 給予左側padding
     font-size: 20px;
@@ -25,6 +25,7 @@ $hover-background: #f4f4f4;
 }
 textarea {
   padding-top: 15px;
+  resize: none;
 }
 
   // 抽取共同的文字樣式
@@ -44,7 +45,7 @@ textarea {
   }
 
   // 抽取共同的輸入框樣式
-  .inputFrame, .inputFrameLocation, .inputFramePrice {
+  .inputFrame, .inputFrameLocation, .inputFramePrice,.inputFrameNumber {
     border-radius: 25px;
     border: $primary-border;
     background: $background-color;
@@ -54,11 +55,15 @@ textarea {
   .inputFrame, .inputFrameLocation {
     width: 60%;
   }
-
-  .inputFramePrice, .filter, .confirmCreate {
-    width: 15%;
+  .inputFrameLocation {
+    width: 50%;
   }
-
+  .inputFramePrice, .filter, .confirmCreate,.inputFrameNumber {
+    width: 12%;
+  }
+  .inputFramePrice,.inputFrameNumber{
+    width: 10%;
+  }
   .filter, .confirmCreate {
     font-family: $primary-font;
     font-size: 20px;
@@ -68,7 +73,9 @@ textarea {
     background: $background-color;
     cursor: pointer;
   }
-
+  .filter{
+    height:2rem;
+  }
   .confirmCreate {
     display: flex;
     justify-content: center;
@@ -76,14 +83,14 @@ textarea {
     background: #2d6047;
     color: $background-color;
     margin-left: auto;
-    height: 3rem;
+    height: 2.5rem;
   }
 
   // 定義區塊間距
   .titleAndType, .contentAndPic, .loactionAndPrice {
     display: flex;
     align-items: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2.8rem;
   }
 
   .contentAndPic .inputFrame {
@@ -100,12 +107,13 @@ textarea {
     border: $primary-border;
     background: $background-color;
     width: 20%;
-    height: 20vh;
+    height: 28vh;
     margin-left: auto;
     color: $primary-color;
     font-family: $primary-font;
     font-size: $primary-font-size;
     line-height: $primary-font-size;
+    cursor: pointer;
     &:hover {
       background: $hover-background;
       transform: scale(1.05); // 稍微放大元素

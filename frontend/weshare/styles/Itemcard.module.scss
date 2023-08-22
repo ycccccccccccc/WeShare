@@ -10,7 +10,7 @@
         height: 13.6875rem;
         flex-shrink: 0;
         border-radius: 1.25rem;
-        fill:cover no-repeat;
+        fill: cover no-repeat;
         cursor: pointer;
         transition: transform 0.3s ease, box-shadow 0.3s ease; /* 加入動畫過渡效果 */
         padding:0;
@@ -32,14 +32,14 @@
         bottom: 10px;       
         .ItemDetailName{
             color: #000;
-            font-family: Pattaya;
+            font-family:'Noto Serif TC', serif;
             font-size: 1.125rem;
             font-style: normal;
             line-height: 1.5rem; /* 133.333% */
         }
         .ItemDetailPrice{
             color: rgba(0, 0, 0, 0.50);
-            font-family: Pattaya;
+            font-family:'Noto Serif TC', serif;
             font-size: 1.125rem;
             font-style: normal;
             line-height: 1.5rem; /* 133.333% */
@@ -48,7 +48,7 @@
     .more{
         width: 3.5rem;
         color: #000;
-        font-family: Pattaya;
+        font-family:'Noto Serif TC', serif;
         font-size: 0.9375rem;
         font-style: normal;
         font-weight: 400;
