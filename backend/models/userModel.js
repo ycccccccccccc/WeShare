@@ -99,7 +99,11 @@ module.exports = {
 
     getUserInfo: async ( res, user_ID ) => {
         try {
-            const sql = `SELECT name, image, phone, rating FROM user WHERE id = ?`
+            const sql = `
+                SELECT name, image, phone, rating 
+                FROM user 
+                WHERE id = ?
+            `
             const [[results]] = await db.query(sql, [user_ID]);
             const data = {
                 user: {
@@ -108,7 +112,8 @@ module.exports = {
                     image: results.image,
 		            phone: results.phone,
                     rating: results.rating,
-                    item: []
+                    item: [],
+                    fans: []
                 }
             }
             return data
@@ -120,11 +125,11 @@ module.exports = {
     getUserItem: async ( res, user_ID ) => {
         try {
             const sql = `
-		SELECT id, title, image, cost, tag 
-		FROM item 
-		WHERE seller_id = ?
-		ORDER BY id DESC
-		`
+                SELECT id, title, image, cost, tag 
+                FROM item 
+                WHERE seller_id = ?
+                ORDER BY id DESC
+            `
             const [results] = await db.query(sql, [user_ID]);
             const itemList = results.map((result) => {
                 const { id, title, image, cost, tag } = result
@@ -142,13 +147,42 @@ module.exports = {
         }
     },
 
+    getUserFan: async ( res, user_ID ) => {
+        try {
+            const sql = `
+                SELECT f.id, u.id AS user_id, u.name, u.image
+                FROM fan AS f LEFT JOIN user AS u
+                ON f.befollow_id = u.id
+                WHERE f.follow_id = ?
+                ORDER BY f.id DESC
+            `
+            const [results] = await db.query(sql, [user_ID]);
+            const fanList = results.map((result) => {
+                const { id, user_id, name, image } = result
+                return {
+                    id: id,
+                    user: {
+                        id: user_id,
+                        name: name,
+                        image: image
+                    }
+                };
+            })
+            return fanList
+        } catch (err) {
+            return util.databaseError(err,'getUserFan',res);
+        }
+    },
+
     addTest:  async ( res ) => {
         try {
             for ( var i = 1 ; i <= 11 ; i++ ){
                 const sql = `INSERT INTO user (name, phone, password) VALUES (?,?,?)`
-                await db.query(sql, [
+                const phoneNum = util.generateRandomNum(10)
+		console.log("新增用戶：","user" + i.toString(),phoneNum)
+		await db.query(sql, [
                     "user" + i.toString(),
-                    util.generateRandomNum(10),
+                    phoneNum,
                     "pwd"
                 ]);
             }
@@ -164,8 +198,8 @@ module.exports = {
             const [results] = await db.query(sql, [sender_id,receiver_id,rating]);
             const data = {
                 rating: {
-		    id: results.insertId
-		}
+                    id: results.insertId
+                }
             }
             return data;
         } catch (err) {

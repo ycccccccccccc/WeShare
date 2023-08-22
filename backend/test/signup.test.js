@@ -13,7 +13,7 @@ describe('API Sign Up Test', () => {
   //註冊缺少資料測試 - name(400)
   it('註冊缺少資料測試 - name', async () => {
     const newUser = {
-      email: `${test_index}_user_1@example.com`,
+      phone: `09${test_index}123`,
       password: `${test_index}_user_1`
     };
 
@@ -30,7 +30,7 @@ describe('API Sign Up Test', () => {
 describe('API Sign Up Test', () => {
 
   //註冊缺少資料測試 - email(400)
-  it('註冊缺少資料測試 - email', async () => {
+  it('註冊缺少資料測試 - phone', async () => {
     const newUser = {
       name: `${test_index}_user_1`,
       password: `${test_index}_user_1`
@@ -51,7 +51,7 @@ describe('API Sign Up Test', () => {
   it('註冊缺少資料測試 - password', async () => {
     const newUser = {
       name: `${test_index}_user_1`,
-      email: `${test_index}_user_1@example.com`
+      phone: `09${test_index}123`
     };
 
     const response = await request(server)
@@ -69,7 +69,7 @@ describe('API Sign Up Test', () => {
   it('註冊成功', async () => {
     const newUser = {
       name: `${test_index}_user_1`,
-      email: `${test_index}_user_1@example.com`,
+      phone: `09${test_index}123`,
       password: `${test_index}_user_1`
     };
 
@@ -87,12 +87,12 @@ describe('API Sign Up Test', () => {
 
 describe('API Sign Up Test', () => {
 
-  //註冊帳戶(email)已存在(403)
-  it('註冊帳戶(email)已存在', async () => {
+  //註冊帳戶(phone)已存在(403)
+  it('註冊帳戶(phone)已存在', async () => {
     const newUser = {
-    name: `${test_index}_user_1`,
-    email: `${test_index}_user_1@example.com`,
-    password: `${test_index}_user_1`
+      name: `${test_index}_user_1`,
+      phone: `09${test_index}123`,
+      password: `${test_index}_user_1`
     };
 
     const response = await request(server)

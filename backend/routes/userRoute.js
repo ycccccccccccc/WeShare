@@ -19,7 +19,7 @@ var storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     limits: {
-      fileSize: 1 * 1024 * 1024 // 1MB
+      fileSize: 5 * 1024 * 1024 // 1MB
     }
   });
 
@@ -33,6 +33,7 @@ router.put('/image', upload.single('picture'), [util.authorize_multipart,util.au
 router.get('/:id', [util.authorize_bearer], userController.getProfile);
 
 router.post('/addTest', userController.addTest)
+
 
 module.exports = router;
 
