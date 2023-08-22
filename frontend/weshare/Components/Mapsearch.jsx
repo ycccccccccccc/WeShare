@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 
 import Image from "next/image";
-import { useRef, useEffect, useState } from "react";
+import { useState, useEffect, useRef} from "react";
 import styles from "../styles/mapsearch.module.scss";
 
 export default function Mapsearch() {
@@ -42,6 +42,7 @@ export default function Mapsearch() {
       options
     );
   }, [showSearchBox]);
+  
   return (
     <div>
       <script
