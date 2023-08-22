@@ -60,8 +60,8 @@ module.exports = {
     getItems: async (req, res) => {
         const keyword = req.query.keyword;
         const tag = req.query.tag;
-        const latitude = req.body.latitude;
-        const longitude = req.body.longitude;
+        const latitude = req.query.latitude;
+        const longitude = req.query.longitude;
         let cursor = req.query.cursor;
         let jsonObject = '';
         if(cursor){
@@ -71,6 +71,7 @@ module.exports = {
             jsonObject = JSON.parse(decodedString);
         }
         const limit = 10;
+        console.log(jsonObject.item_id, limit, latitude, longitude, keyword, tag);
         let result = await itemModel.getItems(res, jsonObject.item_id, limit, latitude, longitude, keyword, tag);
         let base64String = '';
         if(result.length == (limit + 1)){
