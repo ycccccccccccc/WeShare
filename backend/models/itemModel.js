@@ -1,6 +1,6 @@
 const util = require('../utils/util')
 const { db } = require('../utils/util');
-const { getUser } = require('./userModel')
+const { getUser, getUserInfo } = require('./userModel')
 
 module.exports = {
 
@@ -38,14 +38,15 @@ module.exports = {
         try {
             const [[user_id]] = await db.query('SELECT seller_id FROM item WHERE id = ?', [id])
             const seller_id = user_id.seller_id;
-            const user = await getUser(res, seller_id);
-            const sql = 'SELECT title, buyers_limit, image, introduction, cost, tag, item_location, latitude, longitude, DATE_FORMAT(created_at, "%Y-%m-%d %H:%i:%s") AS created_at, expires_at \
+            const user = await getUserInfo(res, seller_id);
+            const sql = 'SELECT title, buyers_limit, num_of_buyers, image, introduction, cost, tag, item_location, latitude, longitude, DATE_FORMAT(created_at, "%Y-%m-%d %H:%i:%s") AS created_at, expires_at \
             FROM item WHERE id = ?'
             const [[results]] = await db.query(sql, [id]);
             const item = {
                 id: id,
                 title: results.title, 
                 buyers_limit: results.buyers_limit,
+                num_of_buyers: results.num_of_buyers,
                 image: results.image, 
                 introduction: results.introduction, 
                 cost: results.cost, 
@@ -58,8 +59,10 @@ module.exports = {
                 expires_at: results.expires_at,
                 user: {
                     id: seller_id,
-                    name: user.name,
-                    rating: user.rating
+                    name: user["user"].name,
+                    phone: user["user"].phone,
+                    image: user["user"].image,
+                    rating: user["user"].rating
                 }
             };
             return item;
@@ -86,7 +89,7 @@ module.exports = {
             if (latitude && longitude){
                 locationCondition = `AND item.latitude < ${latitude+0.01} AND item.latitude > ${latitude-0.01} AND item.longitude < ${longitude+0.01} AND item.longitude > ${longitude-0.01}`;
             }
-            const sql = `SELECT item.id, item.buyers_limit, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, item.expires_at, item.seller_id, user.name, user.rating \
+            const sql = `SELECT item.id, item.buyers_limit, item.num_of_buyers, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, item.expires_at, item.seller_id, user.name, user.rating, user.image AS user_image, user.phone \
                 FROM item LEFT JOIN user ON item.seller_id = user.id\
                 WHERE item.id <= ${item_id} ${keywordCondition} ${tagCondition} ${locationCondition}\
                 ORDER BY item.id DESC LIMIT ?`;
@@ -99,6 +102,7 @@ module.exports = {
                 const item = {
                     id: result.id,
                     buyers_limit: result.buyers_limit,
+                    num_of_buyers: result.num_of_buyers,
                     title: result.title, 
                     image: result.image, 
                     introduction: result.introduction, 
@@ -112,6 +116,8 @@ module.exports = {
                     user: {
                         id: result.seller_id,
                         name: result.name,
+                        phone: result.phone,
+                        image: result.user_image,
                         rating: result.rating
                     }
                 };
