@@ -7,6 +7,11 @@ module.exports = {
     addOrder: async (req, res) => {
         const buyer_id = req.user.id;
         const item_id = parseInt(req.params.item_id);
+        if(!item_id){
+            return res.status(400).json({
+                error: "Item ID is necessary!"
+            })
+        }
         const get_seller = await getSeller(res, item_id);
         const seller_id = get_seller.seller_id;
         const quantity = req.body.quantity;
