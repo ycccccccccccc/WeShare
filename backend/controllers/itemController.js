@@ -1,6 +1,7 @@
 const itemModel = require('../models/itemModel');
 const fs = require('fs');
 const redis = require('../utils/redis');
+const util = require('../utils/util')
 require('dotenv').config();
 
 module.exports = {
@@ -12,12 +13,13 @@ module.exports = {
         }
         const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
         const file_name = image.split('.');
-        fs.rename(`static/${image}`, `static/item_${result.id}.${file_name[file_name.length-1]}`, (err) => {
+        const randomNum = util.generateRandomString(5);
+        fs.rename(`static/${image}`, `static/item_${result.id}_${randomNum}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
               console.error('重命名文件失敗:', err);
             }
         });
-        const pic_path = `http://${process.env.ip}/static/item_${result.id}.${file_name[file_name.length-1]}`;
+        const pic_path = `http://${process.env.ip}/static/item_${result.id}_${randomNum}.${file_name[file_name.length-1]}`;
         const update_url = await itemModel.updateItemImage(res, result.id, pic_path);
         return res.status(200).json({ item: result });
     },
@@ -137,12 +139,13 @@ module.exports = {
             })
         }
         const file_name = (req.file.originalname).split('.');
-        fs.rename(`static/${req.file.originalname}`, `static/item_${item_id}.${file_name[file_name.length-1]}`, (err) => {
+        const randomNum = util.generateRandomString(5);
+        fs.rename(`static/${req.file.originalname}`, `static/item_${item_id}_${randomNum}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
               console.error('重命名文件失敗:', err);
             }
         });
-        const pic_path = `http://${process.env.ip}/static/item_${item_id}.${file_name[file_name.length-1]}`;
+        const pic_path = `http://${process.env.ip}/static/item_${item_id}_${randomNum}.${file_name[file_name.length-1]}`;
         const cacheKey = `item_${item_id}`;
         const item_cache = await redis.get_cache(cacheKey);
         if(item_cache){

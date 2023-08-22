@@ -198,8 +198,8 @@ module.exports = {
             const [results] = await db.query(sql, [sender_id,receiver_id,rating]);
             const data = {
                 rating: {
-		    id: results.insertId
-		}
+                    id: results.insertId
+                }
             }
             return data;
         } catch (err) {
