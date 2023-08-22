@@ -9,7 +9,8 @@ module.exports = {
         if ( !phone || !password ) {
             return res.status(400).json({ error: 'Phone and password are required' });
         }
-        const result = await userModel.signin(res, phone, password);
+        const pic_path = `http://${process.env.ip}/static/default.png`;
+        const result = await userModel.signin(res, phone, password, pic_path);
         if ( !result.user ) {
             return res.status(403).json({ error: result }); 
         } else {
@@ -36,8 +37,8 @@ module.exports = {
     },
     updateProfilePic: async (req, res) => {
         const my_ID = req.user.id;
-	console.log("FILE:",req.file)
-	const file_name = (req.file.originalname).split('.');
+        console.log("FILE:",req.file)
+        const file_name = (req.file.originalname).split('.');
         console.log(file_name)
         const randomStr = util.generateRandomString(5)
         const pic_path = `http://${process.env.ip}/static/user_${my_ID}_${randomStr}.${file_name[file_name.length-1]}`;
