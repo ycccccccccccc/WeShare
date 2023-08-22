@@ -21,6 +21,15 @@ CREATE TABLE IF NOT EXISTS user (
     phone VARCHAR(255) NOT NULL UNIQUE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
 
+-- Create the 'follow' table if it doesn't exist
+CREATE TABLE IF NOT EXISTS fan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    follow_id INT NOT NULL,
+    befollow_id INT NOT NULL,
+    CONSTRAINT follow_id_key FOREIGN KEY (follow_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT befollow_id_key FOREIGN KEY (befollow_id) REFERENCES user(id) ON DELETE CASCADE
+); 
+
 -- Create the 'item_tag' ENUM type if it doesn't exist
 CREATE TABLE IF NOT EXISTS item (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -92,6 +101,7 @@ CREATE TABLE IF NOT EXISTS rating (
 use weshare_test;
 
 CREATE TABLE weshare_test.user LIKE weshare.user;
+CREATE TABLE weshare_test.fan LIKE weshare.fan;
 CREATE TABLE weshare_test.item LIKE weshare.item;
 CREATE TABLE weshare_test.order_table LIKE weshare.order_table;
 CREATE TABLE weshare_test.event_table LIKE weshare.event_table;
