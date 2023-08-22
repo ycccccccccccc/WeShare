@@ -93,7 +93,6 @@ module.exports = {
                 FROM item LEFT JOIN user ON item.seller_id = user.id\
                 WHERE item.id <= ${item_id} ${keywordCondition} ${tagCondition} ${locationCondition}\
                 ORDER BY item.id DESC LIMIT ?`;
-            console.log(sql);
             const [results] = await db.query(sql, [limit]);
             if(results.length === 0){
                 return [];
