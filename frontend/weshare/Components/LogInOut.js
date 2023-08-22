@@ -1,20 +1,42 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import "../src/app/globals.css";
+import { useState } from "react";
 import Image from "next/image";
 import styles from "../styles/logInOut.module.scss";
-import '../src/app/globals.css';
-
-
+import useLogIn from "../hooks/useLogin";
+import useSignUp from "../hooks/useSingUp";
 
 export default function LogInOut() {
   // const router = useRouter();
-  // const isRegisterPage = true;
-  const [isRegisterPage, setIsRegisterPage] = useState(true)
+  // const { data: userData, error: userError } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+
+  const [isRegisterPage, setIsRegisterPage] = useState(false);
   const handleTogglePage = () => {
     // 切換註冊/登入頁面
     setIsRegisterPage((prev) => !prev);
   };
+
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordAgain, setPasswordAgain] = useState("");
+
+  const { signUp, error: signUpError } = useSignUp();
+  const { logIn, error } = useLogIn();
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    if (password !== passwordAgain) {
+      alert("兩次密碼不一致，請檢查！");
+    } else signUp(name, phone, password, setIsRegisterPage);
+  };
+
+  const handleLogIn = (e) => {
+    e.preventDefault();
+    logIn(phone, password);
+  };
+
   return (
     <div id={styles.wholePage}>
       <div id={styles.border}>
@@ -39,9 +61,10 @@ export default function LogInOut() {
                   <input
                     type="text"
                     name="name"
+                    value={name}
                     placeholder="例: Chou Chou Hu"
                     className={styles.inputFrame}
-                    // onChange={handleInputChange}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
               )}
@@ -49,7 +72,7 @@ export default function LogInOut() {
             <div className={styles.textAndInput}>
               <div className={styles.iconAndInput}>
                 <Image
-                  src="/tel_icon.png"
+                  src="/phone_icon.png"
                   width={30}
                   height={30}
                   alt="Example"
@@ -59,15 +82,16 @@ export default function LogInOut() {
                   type="text"
                   name="email"
                   placeholder="例: 0912-345-678"
+                  value={phone}
                   className={styles.inputFrame}
-                  // onChange={handleInputChange}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
             </div>
             <div className={styles.textAndInput}>
               <div className={styles.iconAndInput}>
                 <Image
-                  src="/lock_icon.png"
+                  src="/lock.png"
                   width={30}
                   height={30}
                   alt="Example"
@@ -77,8 +101,9 @@ export default function LogInOut() {
                   type="password"
                   name="password"
                   placeholder="密碼"
+                  value={password}
                   className={styles.inputFrame}
-                  // onChange={handleInputChange}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -96,17 +121,20 @@ export default function LogInOut() {
                     type="password"
                     name="confirmPassword"
                     placeholder="再次輸入密碼"
+                    value={passwordAgain}
                     className={styles.inputFrame}
-                    // onChange={handleInputChange}
+                    onChange={(e) => setPasswordAgain(e.target.value)}
                   />
                 </div>
               )}
+              {signUpError && <p className="errorMessage">{signUpError}</p>}
+              {error && <p className="errorMessage">{error}</p>}
             </div>
-            {isRegisterPage ? (
+            {!isRegisterPage ? (
               <button
                 type="button"
                 className={styles.register}
-                // onClick={handleSignin}
+                onClick={handleLogIn}
               >
                 登入
               </button>
@@ -114,13 +142,24 @@ export default function LogInOut() {
               <button
                 type="button"
                 className={styles.register}
-                // onClick={handleRegister}
+                onClick={handleSignUp}
               >
                 註冊
               </button>
             )}
 
             {isRegisterPage ? (
+              <div className={styles.blackBlueWords}>
+                <div>已經是會員了？ </div>
+                <button
+                  type="button"
+                  className={styles.swichmode}
+                  onClick={handleTogglePage}
+                >
+                  會員登入
+                </button>
+              </div>
+            ) : (
               <div className={styles.blackBlueWords}>
                 <div>尚未成為會員？</div>
                 <button
@@ -131,24 +170,10 @@ export default function LogInOut() {
                   會員註冊
                 </button>
               </div>
-            ) : (
-              <div className={styles.blackBlueWords}>
-                <div>已經是會員了？</div>
-                <button
-                  type="button"
-                  className={styles.swichmode}
-                  onClick={handleTogglePage}
-                >
-                  會員登入
-                </button>
-              </div>
             )}
           </div>
         </div>
       </div>
-      <footer className={styles.copyRight}>
-        關於我們 · 隱私權條款 · Cookie 條款 · © 2023 CanChu, Inc.
-      </footer>
     </div>
   );
 }

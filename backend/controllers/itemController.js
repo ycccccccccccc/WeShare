@@ -1,25 +1,65 @@
 const itemModel = require('../models/itemModel');
 const fs = require('fs');
+const redis = require('../utils/redis');
 require('dotenv').config();
 
 module.exports = {
     addItem: async (req, res) => {
         const seller_id = req.user.id;
-        const { buyers_limit, title, introduction, cost, tag, costco, location, expires_at } = req.body;
-        if ( !buyers_limit || !title || !introduction || !cost || !tag || !location || !expires_at) {    
+        const { buyers_limit, title, image, introduction, cost, tag, costco, location, latitude, longitude, expires_at } = req.body;
+        if ( !buyers_limit || !title || !image || !introduction || !cost || !tag || !location || !latitude || !longitude ) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, expires_at);
+        const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
+        const file_name = image.split('.');
+        fs.rename(`static/${image}`, `static/item_${result.id}.${file_name[file_name.length-1]}`, (err) => {
+            if (err) {
+              console.error('重命名文件失敗:', err);
+            }
+        });
+        const pic_path = `http://${process.env.ip}/static/item_${result.id}.${file_name[file_name.length-1]}`;
+        const update_url = await itemModel.updateItemImage(res, result.id, pic_path);
         return res.status(200).json({ item: result });
     },
 
+    addItemImage: async (req, res) => {
+        const image = req.file;
+        if(!image){
+            return res.status(400).json({
+                message: 'No image provided.'
+            })
+        }
+        return res.status(200).json({ item: {image: req.file.originalname} });
+    },    
+
     getItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
-        const item = await itemModel.getItem(res, item_id);
-        return res.status(200).json({ item: item });
+        if(!item_id){
+            res.status(400).json({ error: 'Lost Item ID!!!' })
+        }
+        const cacheKey = `item_${item_id}`;
+        const cache_item = await redis.get_cache(cacheKey);
+        if(cache_item){
+            return res.status(200).json({
+                data: {
+                    message: "Get cache item!",
+                    item: cache_item
+                }
+            });
+        }
+        else{
+            const item = await itemModel.getItem(res, item_id);
+            const set_cache = await redis.set_cache(cacheKey, item);
+            console.log(set_cache);
+            return res.status(200).json({ data: { item: item }});
+        }
     },
     
     getItems: async (req, res) => {
+        const keyword = req.query.keyword;
+        const tag = req.query.tag;
+        const latitude = req.body.latitude;
+        const longitude = req.body.longitude;
         let cursor = req.query.cursor;
         let jsonObject = '';
         if(cursor){
@@ -29,7 +69,7 @@ module.exports = {
             jsonObject = JSON.parse(decodedString);
         }
         const limit = 10;
-        let result = await itemModel.getItems(res, jsonObject.item_id, limit);
+        let result = await itemModel.getItems(res, jsonObject.item_id, limit, latitude, longitude, keyword, tag);
         let base64String = '';
         if(result.length == (limit + 1)){
             const last_index = result.length - 1;
@@ -49,22 +89,41 @@ module.exports = {
             'next_cursor': base64String
         }})
     },
+
     checkAuth: async (req, res, item_id) => {
         const seller_id = await itemModel.getSeller(res, item_id);
         if( req.user.id !== seller_id.seller_id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
     },
+
     updateItem: async (req, res) => {
         const item_id = parseInt(req.params.id);
         const seller_id = await itemModel.getSeller(res, item_id);
         if( req.user.id !== seller_id.seller_id){
             return res.status(400).json({ error: 'Insufficient permissions!' });
         }
-        const { title, introduction, cost, tag, costco, location, expires_at } = req.body;
-        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, costco, location, expires_at);
+        const { title, introduction, cost, tag, location, latitude, longitude } = req.body;
+        const cacheKey = `item_${item_id}`;
+        const item_cache = await redis.get_cache(cacheKey);
+        if(item_cache){
+            item_cache['title'] = title;
+            item_cache['introduction'] = introduction;
+            item_cache['cost'] = cost;
+            item_cache['tag'] = tag;
+            item_cache['location'] = location;
+            item_cache['latitude'] = latitude;
+            item_cache['longitude'] = longitude;
+            try {
+                await redis.set_cache(cacheKey, item_cache);
+            } catch (err) {
+                return res.status(400).json({ error: 'Set cache error!' });
+            }
+        }
+        const result = await itemModel.updateItem( res, item_id, title, introduction, cost, tag, location, latitude, longitude);
         return res.status(200).json({ item: result });
     },
+
     updateItemImage: async (req, res) => {
         const image = req.file;
         const item_id = parseInt(req.params.id);
@@ -78,14 +137,22 @@ module.exports = {
             })
         }
         const file_name = (req.file.originalname).split('.');
-        fs.rename(`public/images/${req.file.originalname}`, `public/images/item_${item_id}.${file_name[file_name.length-1]}`, (err) => {
+        fs.rename(`static/${req.file.originalname}`, `static/item_${item_id}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
               console.error('重命名文件失敗:', err);
-            } else {
-              console.log('文件重命名成功！');
             }
         });
-        const pic_path = `https://${process.env.ip}/images/item_${item_id}.${file_name[file_name.length-1]}`;
+        const pic_path = `http://${process.env.ip}/static/item_${item_id}.${file_name[file_name.length-1]}`;
+        const cacheKey = `item_${item_id}`;
+        const item_cache = await redis.get_cache(cacheKey);
+        if(item_cache){
+            item_cache['image'] = pic_path;
+            try {
+                await redis.set_cache(cacheKey, item_cache);
+            } catch (err) {
+                return res.status(400).json({ error: 'Set cache error!' });
+            }
+        }
         const result = await itemModel.updateItemImage(res, item_id, pic_path);
         return res.status(200).json({ item: result });
     }

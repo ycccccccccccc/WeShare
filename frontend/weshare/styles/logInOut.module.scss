@@ -1,8 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Pattaya&display=swap%22");
 #wholePage {
   margin: 0px;
+
   #border {
     height: 100vh;
+
     background-color: #2d6047;
     display: flex;
     justify-content: center;
@@ -38,15 +40,15 @@
           .icon {
             position: absolute;
             top: 25%;
-            left: 0.5rem;
+            left: 1.5rem;
           }
           .inputFrame {
             padding: 10px;
-            padding-left: 50px;
+            padding-left: 4rem;
             border-radius: 6px;
             background: #fff;
             height: 2rem;
-            width: 30vw;
+            width: 20vw;
           }
         }
       }

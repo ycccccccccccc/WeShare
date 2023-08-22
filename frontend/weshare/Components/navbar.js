@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import style from "../styles/navbar.module.scss";
 
 export default function Navbar() {
@@ -6,8 +7,10 @@ export default function Navbar() {
 
   return (
     <header className={style.border}>
-      <Image src="/logo.png" width={100} height={100} alt="" />
-      <div className={style.weshare}>We Share</div>
+      <Link href="/">
+        <Image className={style.logo}src="/logo.png" width={100} height={100} alt="" />
+      </Link>
+        <div className={style.weshare}>We Share</div>
       <div>
         <div className={style.search_bar}>
           <Image
@@ -35,7 +38,9 @@ export default function Navbar() {
           </select>
         </div>
       </div>
-      <div className={style.share_post}>Share</div>
+      <Link href="/share" className={style.share_post}>
+        Share
+      </Link>
       <Image
         className={style.message_box}
         src="/message_box.png"

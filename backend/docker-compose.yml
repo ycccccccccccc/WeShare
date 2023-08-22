@@ -31,8 +31,25 @@ services:
       - weshare-network
     depends_on:
       - mysql
+      - redis
     ports:
       - "3000:3000"
+
+  redis:
+    image: redis:6.0-alpine
+    command: redis-server --requirepass ''    
+    container_name: redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DATABASE_HOST: mysql
+      DATABASE_USER: root
+      DATABASE_PASSWORD: pwd
+      DATABASE_NAME: weshare 
+    ports:
+      - "6380:6379"
+    networks:
+      - weshare-network
 
   nginx:
     image: nginx:alpine3.17
