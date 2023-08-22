@@ -87,12 +87,12 @@ describe('API Sign Up Test', () => {
 
 describe('API Sign Up Test', () => {
 
-  //註冊帳戶(email)已存在(403)
-  it('註冊帳戶(email)已存在', async () => {
+  //註冊帳戶(phone)已存在(403)
+  it('註冊帳戶(phone)已存在', async () => {
     const newUser = {
-    name: `${test_index}_user_1`,
-    phone: `09${test_index}123`,
-    password: `${test_index}_user_1`
+      name: `${test_index}_user_1`,
+      phone: `09${test_index}123`,
+      password: `${test_index}_user_1`
     };
 
     const response = await request(server)
