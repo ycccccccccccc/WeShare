@@ -1,5 +1,4 @@
 const userModel = require('../models/userModel')
-const util = require('../utils/util')
 const fs = require('fs');
 require('dotenv').config();
 
@@ -9,7 +8,6 @@ module.exports = {
         if ( !phone || !password ) {
             return res.status(400).json({ error: 'Phone and password are required' });
         }
-        // 確認密碼跟信箱相符
         const result = await userModel.signin(res, phone, password);
         if ( !result.user ) {
             return res.status(403).json({ error: result }); 
@@ -37,8 +35,7 @@ module.exports = {
     },
     updateProfilePic: async (req, res) => {
         const my_ID = req.user.id;
-        const image = req.file;
-	const file_name = (req.file.originalname).split('.');
+	    const file_name = (req.file.originalname).split('.');
         console.log(file_name)
         const pic_path = `http://${process.env.ip}/static/user_${my_ID}`;
         fs.rename(`static/${req.file.originalname}`, `static/user_${my_ID}`, (err) => {
@@ -53,14 +50,16 @@ module.exports = {
         const user_ID = req.params.id
         const user_info = await userModel.getUserInfo(res,user_ID)
         const user_item = await userModel.getUserItem(res,user_ID)
-	try {
+        const user_fan = await userModel.getUserFan(res,user_ID)
+	    try {
         	user_info.user.item.push(...user_item)
-		console.log(user_info)
+            user_info.user.fans.push(...user_fan)
+		    console.log(user_info)
         	return res.status(200).json({ data: user_info })
-	} catch (err) {
-                console.log("GetProfile報錯：ID為",user_ID)
-		return res.status(403).json({ error: "ID為${user_ID}的使用者不存在" })
-	}
+	    } catch (err) {
+            console.log("GetProfile報錯：ID為",user_ID)
+		    return res.status(403).json({ error: "ID為${user_ID}的使用者不存在" })
+	    }
     },
     addTest: async (req,res) => {
         const result = await userModel.addTest(res)
