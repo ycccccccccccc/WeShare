@@ -89,7 +89,10 @@ module.exports = {
             const sql = "UPDATE user SET image = ? WHERE id = ?"
             await db.query(sql, [image,id]);
             const data = {
-                user: { id: id }
+                user: { 
+			id: id,
+			image: image
+		 }
             }
             return data
         } catch (err) {
