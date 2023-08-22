@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Pattaya&display=swap%22");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap");
 
 body {
   margin: 0;
@@ -16,6 +17,7 @@ body {
     left:20px;
     z-index: 1;
 }
+
 .itemplace{
   padding-top:3.87rem;
   padding-left:5.23rem;
@@ -46,7 +48,11 @@ body {
   border-radius: 5px;
 }
 
-
+.itemdetail{
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
 
 
 
