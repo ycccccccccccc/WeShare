@@ -9,6 +9,15 @@ const db = mysql.createPool({
     database: process.env.NODE_ENV === 'test' ? 'weshare_test' : 'weshare'
 });
 
+db.getConnection((err, connection) => {
+    if (err) {
+        console.error('Database connection failed:', err);
+    } else {
+        console.log('Database connection successful!');
+        connection.release(); // Release the connection back to the pool
+    }
+});
+
 module.exports = {
 
     db: db,
