@@ -16,7 +16,7 @@ module.exports = {
     },
     getEvent: async (res, id) => {
         try {
-            const sql = 'SELECT event_table.item_id, event_table.id, event_table.type, event_table.sender_id, event_table.recipient_id, event_table.created_at, user.name, user.image, order_table.quantity, order_table.status, item.title \
+            const sql = 'SELECT event_table.item_id, event_table.id, event_table.type, event_table.sender_id, event_table.recipient_id, event_table.is_read, event_table.created_at, user.name, user.image, order_table.quantity, order_table.status, item.title \
             FROM event_table \
             LEFT JOIN user ON event_table.sender_id = user.id \
             LEFT JOIN item ON event_table.item_id = item.id \
@@ -32,6 +32,7 @@ module.exports = {
                     id: result.id, 
                     type: result.type,
                     recipient_id: result.recipient_id,
+                    is_read: result.is_read,
                     created_at: result.created_at,
                     order:{
                         item_id: result.item_id,
