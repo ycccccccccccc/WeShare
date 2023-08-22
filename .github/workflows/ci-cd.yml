@@ -20,6 +20,7 @@ jobs:
     - name: Run test file
       run: |
         docker ps
+        ls
         docker exec weshare jest -- --watch=false --force-exit --maxWorkers=1
 
   deploy_canchu:
