@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-array-index-key */
@@ -18,6 +19,7 @@ import Image from "next/image";
 import styles from "../styles/Map.module.scss";
 import "react-loading-skeleton/dist/skeleton.css";
 import mapStylecolor from "../styles/mapStyles.json";
+import Cookie from "js-cookie";
 
 const mapStyle = {
   height: "85.4vh",
@@ -46,14 +48,26 @@ export default function Map({
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        setLocation({
+        const userLocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-        });
+        };
+        setLocation(userLocation);
+        
+        // 將經緯度存到 cookie 中
+        Cookie.set("userLocation", JSON.stringify(userLocation));
+  
+        // Set the focused location to user's current location
+        setFocusedLocation(userLocation);
+  
+        // Set the zoom level to desired zoom (e.g., 16)
+        setZoom(16);
+        
       });
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
+    
   }, []);
 
   const handleMapClick = () => {
@@ -90,6 +104,7 @@ export default function Map({
               position={location}
               options={{ pixelOffset: new window.google.maps.Size(0, -40) }}
             >
+              
               <div className={styles.infoWindow}>
                 <p>您的位置</p>
               </div>

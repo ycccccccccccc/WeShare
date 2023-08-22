@@ -1,5 +1,8 @@
+import Cookie from "js-cookie";
 import useSWRfetch from '../useSWRfetch'; // 根據你的目錄結構調整引入的路徑
 
+const userLocation = JSON.parse(Cookie.get("userLocation") || "{}");
+console.log("6666666",userLocation)
 const useGetAllItems = (cursor = null, keyword = null, tag = null) => {
   // 設定基礎 URL
   const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/items`;

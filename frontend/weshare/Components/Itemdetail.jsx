@@ -20,7 +20,7 @@ export default function Itemdetail({ params }) {
   const itemLoaction = item?.location ?? "";
   const itemCreateat = item?.created_at ?? "";
   const itemSellerName = item?.user.name ?? "";
-  const itemSellerRating = item?.user.rating ?? "尚未評價紀錄";
+  const itemSellerRating = item?.user.rating ?? "尚未評價";
   const itemSellerPhone = item?.user.phone ?? "";
   const itemSellerImage = item?.user.image ?? "";
   const [quantity, setQuantity] = useState(1);
@@ -34,7 +34,7 @@ export default function Itemdetail({ params }) {
   const handleDecrement = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
-
+console.log(item)
   return (
     <div>
       <div className={styles.ItemBoard}>

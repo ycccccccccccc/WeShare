@@ -23,6 +23,7 @@ export default function Navbar() {
   const router = useRouter();
   const { user, isLoading } = useGetProfile(userId);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [maxNotifications, setMaxNotifications] = useState(3);
   const [showAllNotifications, setShowAllNotifications] = useState(false);
   const {
     events,
@@ -111,18 +112,23 @@ export default function Navbar() {
               <p className={style.notititle}>通知</p>
             </div>
             {Array.isArray(events) &&
-              events.map((event) => (
-                <Notification key={event.id} event={event} />
-              ))}
-            {events.length > 5 && !showAllNotifications && (
-              <button
-                type="button"
-                className={style.viewMoreButton}
-                onClick={() => setShowAllNotifications(true)}
-              >
-                查看全部通知
-              </button>
-            )}
+              events
+                .slice(
+                  0,
+                  showAllNotifications ? events.length : maxNotifications
+                )
+                .map((event) => <Notification key={event.id} event={event} />)}
+            {Array.isArray(events) &&
+              events.length > maxNotifications &&
+              !showAllNotifications && (
+                <button
+                  type="button"
+                  className={style.viewMoreButton}
+                  onClick={() => setShowAllNotifications(true)}
+                >
+                  查看全部通知
+                </button>
+              )}
           </div>
           <div className={style.is_readcircle}>{notificationCount}</div>
         </div>
@@ -137,7 +143,7 @@ export default function Navbar() {
           />
         ) : (
           <Image
-            className={style.profile_pic}
+            className={style.profile_pic1}
             src={userImage2}
             width={36}
             height={36}

@@ -7,12 +7,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Cookie from "js-cookie";
 import Navbar from "../../Components/navbar";
 import Map from "../../Components/Map";
 import Mapsearch from "../../Components/Mapsearch";
 import Itemcard from "../../Components/Itemcard";
 import useGetAllItems from "../../hooks/Item/useGetAllItem"; // 請確定這個路徑是正確的
-
 
 const GEOCODING_ENDPOINT = "https://maps.googleapis.com/maps/api/geocode/json";
 function getLatLngFromAddress(address, apiKey) {
@@ -34,8 +34,12 @@ export default function Home() {
   const [itemAddress, setItemAddress] = useState(null);
   const [itemLocations, setItemLocations] = useState([]);
   const [selectedItemId, setSelectedItemId] = useState(null);
-  const [focusedLocation, setFocusedLocation] = useState(null); // 新增此行
-  const [zoom, setZoom] = useState(12); // 初始化為12或您的初始放大值
+  const userLocationFromCookie = Cookie.get("userLocation")
+  ? JSON.parse(Cookie.get("userLocation"))
+  : null;
+console.log()
+const [focusedLocation, setFocusedLocation] = useState(userLocationFromCookie);
+  const [zoom, setZoom] = useState(0); // 初始化為12或您的初始放大值
   const [hoveredItemId, setHoveredItemId] = useState(null);
 
   const { items, isLoading, error } = useGetAllItems();
@@ -60,7 +64,6 @@ export default function Home() {
     const focusedItem = itemLocations.find((item) => item.id === itemId);
     if (focusedItem) {
       setFocusedLocation({ lat: focusedItem.lat, lng: focusedItem.lng });
-      setZoom(16); // 或任何您希望放大的值
     }
   };
 

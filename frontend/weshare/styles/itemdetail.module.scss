@@ -22,7 +22,7 @@ $common-font: 'Noto Serif TC', serif;
 .rightblock{
     display: flex;
     align-items: center;
-    width:50%;
+    width:40%;
     padding: 5%;
     .Pic{
         width: 25rem;
@@ -41,7 +41,7 @@ $common-font: 'Noto Serif TC', serif;
 }
 .leftblock{
     display: flex;
-    width:50%;
+    width:60%;
     padding-top: 5%;
     flex-direction: column;
     .div1{
@@ -90,7 +90,7 @@ $common-font: 'Noto Serif TC', serif;
         color: #FFF;
         font-size: 1rem;
         font-style: normal;
-        line-height: 2.5rem;
+        line-height: 2rem;
         .title{
             display: flex;
             flex-direction: row;
