@@ -46,7 +46,7 @@ module.exports = {
                 id: id,
                 title: results.title, 
                 buyers_limit: results.buyers_limit,
-                quantity: results.num_of_buyers,
+                num_of_buyers: results.num_of_buyers,
                 image: results.image, 
                 introduction: results.introduction, 
                 cost: results.cost, 
@@ -102,7 +102,7 @@ module.exports = {
                 const item = {
                     id: result.id,
                     buyers_limit: result.buyers_limit,
-                    quantity: result.num_of_buyers,
+                    num_of_buyers: result.num_of_buyers,
                     title: result.title, 
                     image: result.image, 
                     introduction: result.introduction, 
