@@ -20,7 +20,7 @@ jobs:
     - name: Run test file
       run: |
         docker ps
-        docker exec weshare npm test -- --watch=false --force-exit --maxWorkers=1
+        docker exec weshare jest -- --watch=false --force-exit --maxWorkers=1
 
   deploy_canchu:
     needs: test_weshare
