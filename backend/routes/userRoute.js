@@ -28,7 +28,7 @@ router.post('/signup', [util.authorize_json], userController.signup);
 router.post('/:id/rating', [util.authorize_json,util.authorize_bearer], userController.giveRating);
 
 router.put('/', [util.authorize_json,util.authorize_bearer], userController.updateProfileName);
-router.put('/image', upload.single('picture'), [util.authorize_multipart,util.authorize_bearer], userController.updateProfilePic);
+router.post('/image', upload.single('picture'), [util.authorize_multipart,util.authorize_bearer], userController.updateProfilePic);
 
 router.get('/:id', [util.authorize_bearer], userController.getProfile);
 
