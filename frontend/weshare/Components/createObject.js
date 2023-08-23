@@ -19,7 +19,7 @@ export default function CreateObject() {
       </div>
       <div className={styles.contentAndPic}>
         <div className={styles.fontType}>內容</div>
-        <input type="text" className={styles.inputFrame} />
+        <textarea className={styles.inputFrame} placeholder="物品詳細資訊" />
         <div className={styles.uploadPic}>上傳圖片</div>
       </div>
       <div className={styles.loactionAndPrice}>

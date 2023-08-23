@@ -51,7 +51,7 @@ module.exports = {
                 cost: results.cost, 
                 tag: results.tag, 
                 costco: results.costco,
-                item_location: results.item_location,
+                location: results.item_location,
                 latitude: results.latitude, 
                 longitude: results.longitude,
                 expires_at: results.expires_at,
@@ -105,7 +105,7 @@ module.exports = {
                     cost: result.cost, 
                     tag: result.tag, 
                     costco: result.costco,
-                    item_location: result.item_location,
+                    location: result.item_location,
                     latitude: result.latitude, 
                     longitude: result.longitude,
                     expires_at: result.expires_at,
@@ -145,6 +145,18 @@ module.exports = {
         } catch (err) {
             return util.databaseError(err,'updateItemImage',res);
         }
+    },
+    updateNumOfBuyers: async ( res, quantity, id ) => {
+        try{
+            const sql = 'UPDATE item SET num_of_buyers = ? WHERE id = ?'
+            const [results] = await db.query(sql, [quantity, id]);
+            const item = {
+                id: id,
+                quantity: quantity 
+            }
+            return item;
+        } catch (err) {
+            return util.databaseError(err,'updateItemImage',res);
+        }
     }
-    
 }
