@@ -48,12 +48,17 @@ services:
       - weshare-network
 
   nginx:
-    image: nginx:alpine3.17
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     container_name: nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/bundle_chained.crt:/etc/ssl/bundle_chained.crt
+      - ./nginx/private.key:/etc/ssl/private.key
     restart: always
     networks:
       - weshare-network
