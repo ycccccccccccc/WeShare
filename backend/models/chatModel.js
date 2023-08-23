@@ -10,7 +10,6 @@ module.exports = {
             SELECT c.id, c.message, u.id AS user_id, u.name, u.image
             FROM chat AS c LEFT JOIN user AS u ON c.sender_id = u.id
             WHERE ( c.sender_id = ? AND c.receiver_id = ? ) OR ( c.sender_id = ? AND c.receiver_id = ? )
-            ORDER BY c.id DESC
             LIMIT 11 OFFSET ?;
             `
             const [results] = await db.query(sql, [my_ID,seller_ID,seller_ID,my_ID,cursor])

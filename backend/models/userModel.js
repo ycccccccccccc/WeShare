@@ -4,15 +4,16 @@ const { db } = require('../utils/util');
 
 module.exports = {
 
-    signup: async ( res, name, phone, password ) => {
+    signup: async ( res, name, phone, password, imageURL ) => {
         try {
             const hashPwd = bcrypt.hashSync(password, 10);
-            const sql = "INSERT INTO user (name, phone, password) VALUES (?,?,?)"
-            const [results] = await db.query(sql, [name,phone,hashPwd])
+            const sql = "INSERT INTO user (name, phone, password, image) VALUES (?,?,?)"
+            const [results] = await db.query(sql, [name,phone,hashPwd,imageURL])
             const user = {
                 id: results.insertId, 
                 name: name, 
                 phone: phone, 
+		        image: imageURL
             };
             const data = {
                 access_token: util.generateToken(user),
@@ -89,7 +90,10 @@ module.exports = {
             const sql = "UPDATE user SET image = ? WHERE id = ?"
             await db.query(sql, [image,id]);
             const data = {
-                user: { id: id }
+                user: { 
+                    id: id,
+                    image: image
+                }
             }
             return data
         } catch (err) {
@@ -179,8 +183,8 @@ module.exports = {
             for ( var i = 1 ; i <= 11 ; i++ ){
                 const sql = `INSERT INTO user (name, phone, password) VALUES (?,?,?)`
                 const phoneNum = util.generateRandomNum(10)
-		console.log("新增用戶：","user" + i.toString(),phoneNum)
-		await db.query(sql, [
+                console.log("新增用戶：","user" + i.toString(),phoneNum)
+                await db.query(sql, [
                     "user" + i.toString(),
                     phoneNum,
                     "pwd"
