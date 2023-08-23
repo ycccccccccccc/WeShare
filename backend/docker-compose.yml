@@ -51,6 +51,7 @@ services:
 
   elasticsearch:
     image: elasticsearch:7.17.10
+    container_name: elasticsearch
     networks:
       - elastic_stack
     ports:
