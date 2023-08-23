@@ -13,7 +13,6 @@ export default (url, options) => {
   const { accessToken } = cookies;
   const { mutate } = useSWRConfig();
   const [isSent, setIsSent] = useState(false);
-
   const { data, error,isLoading } = useSWR(
     url,
     async (fetchUrl) => {
@@ -64,3 +63,4 @@ export default (url, options) => {
 
   return { data: data?.data, error ,isLoading};
 };
+
