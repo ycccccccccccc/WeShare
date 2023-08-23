@@ -1,24 +1,66 @@
-import useSWR from 'swr';
-import axios from 'axios';
+/* eslint-disable import/no-extraneous-dependencies /
+/ eslint-disable no-shadow */
 
+"use client";
 
-const fetcher = (url) => axios.get(url).then((res) => res.data);
+import { parseCookies } from "nookies";
+import { useState } from "react";
+import axios from "axios"; // 首先，引入 axios
+import useSWR, { useSWRConfig } from "swr";
 
-/**
- * 自定義 hook: useSWRfetch
- * @param {string} url - API 的 URL
- * @param {object} options - SWR 的額外配置選項
- */
-function useSWRFetch(url, options = {}) {
-  const { data, error, ...rest } = useSWR(url, fetcher, options);
+export default (url, options) => {
+  const cookies = parseCookies();
+  const { accessToken } = cookies;
+  const { mutate } = useSWRConfig();
+  const [isSent, setIsSent] = useState(false);
+  const { data, error,isLoading } = useSWR(
+    url,
+    async (fetchUrl) => {
+      try {
+        const res = await axios.get(fetchUrl, {
+          headers: { authorization: `Bearer ${accessToken}` }
+        });
 
-  return {
-    data,
-    error,
-    isLoading: !error && !data,
-    isError: error,
-    ...rest
-  };
-}
+        // Check if the status code is not in the range 200-299
+        if (res.status < 200 || res.status >= 300) {
+          const error = new Error("An error occurred while fetching the data.");
+          error.info = res.data; // axios automatically parses JSON
+          error.status = res.status;
+          throw error;
+        }
 
-export default useSWRFetch;
+        return res.data; // axios automatically parses JSON
+
+      } catch (error) {
+        if (error.response) {
+          const axiosError = new Error("An error occurred while fetching the data.");
+          axiosError.info = error.response.data;
+          axiosError.status = error.response.status;
+          throw axiosError;
+        }
+        throw error;
+      }
+    },
+    {
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        console.log(`on error retry: ${key}`);
+        if (error.status === 404) return;
+        if (retryCount >= 5) return;
+        setTimeout(() => revalidate({ retryCount }), 5000);
+      },
+      onLoadingSlow: (key) => {
+        console.log(`on loading slow retry: ${key}`);
+        if (!isSent) mutate(url);
+        setIsSent(true);
+      },
+      ...options
+    }
+  );
+
+  if (error) {
+    console.log(error);
+  }
+
+  return { data: data?.data, error ,isLoading};
+};
+

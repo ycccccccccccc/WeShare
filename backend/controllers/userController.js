@@ -1,5 +1,6 @@
 const userModel = require('../models/userModel')
 const fs = require('fs');
+const util = require('../utils/util')
 require('dotenv').config();
 
 module.exports = {
@@ -24,7 +25,8 @@ module.exports = {
         if ( existUser ) {
             return res.status(403).json({ error: 'Phone already exists' });
         }
-        const result = await userModel.signup(res,name,phone,password)
+        const pic_path = `http://${process.env.ip}/static/default.png`;
+        const result = await userModel.signup(res,name,phone,password,pic_path)
         return res.status(200).json({ data: result })
     },
     updateProfileName: async (req, res) => {
@@ -35,10 +37,12 @@ module.exports = {
     },
     updateProfilePic: async (req, res) => {
         const my_ID = req.user.id;
-	    const file_name = (req.file.originalname).split('.');
-        console.log(file_name,req.file.originalname)
-        const pic_path = `http://${process.env.ip}/static/user_${my_ID}.${file_name[file_name.length-1]}`;
-        fs.rename(`static/${req.file.originalname}`, `static/user_${my_ID}.${file_name[file_name.length-1]}`, (err) => {
+        console.log("FILE:",req.file)
+        const file_name = (req.file.originalname).split('.');
+        console.log(file_name)
+        const randomStr = util.generateRandomString(5)
+        const pic_path = `http://${process.env.ip}/static/user_${my_ID}_${randomStr}.${file_name[file_name.length-1]}`;
+        fs.rename(`static/${req.file.originalname}`, `static/user_${my_ID}_${randomStr}.${file_name[file_name.length-1]}`, (err) => {
             if (err) {
               console.error('重命名文件失敗:', err);
             }

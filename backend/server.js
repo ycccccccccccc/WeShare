@@ -6,6 +6,7 @@ const cors = require('cors');
 const http = require('http');
 const path = require('path');
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
 const { db } = require('./utils/util');
 
 app.use(bodyParser.json());
@@ -35,10 +36,11 @@ app.use('/events', event_route);
 const fan_route = require('./routes/fanRoute');
 app.use('/fans', fan_route);
 
+
 const server = http.createServer(app); // Create an HTTP server
 
 const io = require("socket.io")(server, {
-  cors: {
+   cors: {
     origin: "http://localhost:3000",
   },
 });
@@ -63,33 +65,39 @@ io.use((socket, next) => {
 })
 
 io.on("connection", (socket) => {
+
+  socket.on("test", (msg) => {
+        const accessToken = socket.handshake.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(accessToken, 'WeShare');
+	socket.join(msg)
+        console.log("Client",decoded.id,"has enter room",msg)
+  })
+
   socket.on("message", async (msg) => {
     const accessToken = socket.handshake.headers.authorization.split(' ')[1];
     const decoded = jwt.verify(accessToken, 'WeShare');
     const room_ID = decoded.id > msg.id ? `${msg.id}${decoded.id}` : `${decoded.id}${msg.id}`
-    socket.join(`chat${room_ID}`)
-    console.log(`chat${room_ID}`)
     try {
     	const sql = "INSERT INTO chat (sender_id, receiver_id, message) VALUES (?, ?, ?)"
     	const [results] = await db.query(sql, [decoded.id,msg.id,msg.message])
     	const data = {
     		id: results.insertId,
-        message: msg.message,
-        user: {
-          id:decoded.id
-        }
+                message: msg.message,
+                user: {
+                	id:decoded.id
+                }
     	}
     	io.to(`chat${room_ID}`).emit("response",data)
-      console.log("Send success")
+        console.log("Send success")
     } catch (err) {
 	    console.error(err)
     }
   })
 });
 
-// server.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`)
-// })
-io.listen(server); // 让 Socket.IO 监听现有的 HTTP 服务器
+server.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+// io.listen(server); // 让 Socket.IO 监听现有的 HTTP 服务器
 
 module.exports = server;

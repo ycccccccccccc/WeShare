@@ -39,7 +39,7 @@ module.exports = {
             const [[user_id]] = await db.query('SELECT seller_id FROM item WHERE id = ?', [id])
             const seller_id = user_id.seller_id;
             const user = await getUserInfo(res, seller_id);
-            const sql = 'SELECT title, buyers_limit, num_of_buyers, image, introduction, cost, tag, item_location, latitude, longitude, DATE_FORMAT(created_at, "%Y-%m-%d %H:%i:%s") AS created_at, expires_at \
+            const sql = 'SELECT title, buyers_limit, num_of_buyers, image, introduction, cost, tag, item_location, latitude, longitude, DATE_FORMAT(created_at, "%Y-%m-%d %H:%i:%s") AS created_at, DATE_FORMAT(expires_at, "%Y-%m-%d %H:%i:%s") AS expires_at \
             FROM item WHERE id = ?'
             const [[results]] = await db.query(sql, [id]);
             const item = {
@@ -89,7 +89,7 @@ module.exports = {
             if (latitude && longitude){
                 locationCondition = `AND item.latitude < ${latitude+0.01} AND item.latitude > ${latitude-0.01} AND item.longitude < ${longitude+0.01} AND item.longitude > ${longitude-0.01}`;
             }
-            const sql = `SELECT item.id, item.buyers_limit, item.num_of_buyers, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, item.expires_at, item.seller_id, user.name, user.rating, user.image AS user_image, user.phone \
+            const sql = `SELECT item.id, item.buyers_limit, item.num_of_buyers, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, DATE_FORMAT(item.expires_at, "%Y-%m-%d %H:%i:%s") AS expires_at, item.seller_id, user.name, user.rating, user.image AS user_image, user.phone \
                 FROM item LEFT JOIN user ON item.seller_id = user.id\
                 WHERE item.id <= ${item_id} ${keywordCondition} ${tagCondition} ${locationCondition}\
                 ORDER BY item.id DESC LIMIT ?`;
