@@ -9,10 +9,10 @@ module.exports = {
             const sql = `
             SELECT c.id, c.message, u.id AS user_id, u.name, u.image
             FROM chat AS c LEFT JOIN user AS u ON c.sender_id = u.id
-            WHERE ( c.sender_id = ? AND c.receiver_id = ? ) OR ( c.sender_id = ? AND c.receiver_id = ? )
-            LIMIT 11 OFFSET ?;
+            WHERE chat.id <= ? AND (( c.sender_id = ? AND c.receiver_id = ? ) OR ( c.sender_id = ? AND c.receiver_id = ? ))
+            LIMIT 11;
             `
-            const [results] = await db.query(sql, [my_ID,seller_ID,seller_ID,my_ID,cursor])
+            const [results] = await db.query(sql, [cursor,my_ID,seller_ID,seller_ID,my_ID])
             const next_cursor = (results.length > 10) ? Buffer.from((cursor+10).toString(), 'ascii').toString('base64') : null
             if ( results.length > 10 ) { results.pop() }
             const msgList = results.map((result) => {
