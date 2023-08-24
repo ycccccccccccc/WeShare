@@ -33,22 +33,26 @@ module.exports = {
     getOrders: async ( res, buyer_id, seller_id  ) => {
         try {
             let userCondition = ''
-            let buyerCondition = ''; 
-            if(!buyer_id){
-                buyerCondition = `AND buyer_id = ${buyer_id}`;
-                userCondition =  `LEFT JOIN user ON order_table.seller_id = user.id`
+            let buyerCondition = '';
+            let and = '' 
+            if(buyer_id && seller_id){
+                and = 'AND'
+            }
+            if(buyer_id){
+                buyerCondition = `buyer_id = ${buyer_id}`;
+                userCondition =  `LEFT JOIN user ON order_table.buyer_id = user.id`
             }
             let sellerCondition = ''; 
-            if(!seller_id){
-                sellerCondition = `AND seller_id = ${seller_id}`;
-                userCondition =  `LEFT JOIN user ON order_table.buyer_id = user.id`
+            if(seller_id){
+                sellerCondition = `seller_id = ${seller_id}`;
+                userCondition =  `LEFT JOIN user ON order_table.seller_id = user.id`
             }
             const sql = `SELECT order_table.id, order_table.item_id, order_table.quantity, order_table.seller_id, order_table.buyer_id, order_table.status,  \
             item.buyers_limit, item.num_of_buyers, item.title, item.image, item.introduction, item.cost, item.tag, item.location, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, user.id, user.name, user.phone, user.image, user.rating \
             FROM order_table \
             ${userCondition} \
             LEFT JOIN item ON order_table.item_id = item.id \
-            WHERE ${buyerCondition} ${sellerCondition}\
+            WHERE ${buyerCondition} ${and} ${sellerCondition}\
             ORDER BY order_table.id DESC`
             const [results] = await db.query(sql, []);
             let orders = [];
