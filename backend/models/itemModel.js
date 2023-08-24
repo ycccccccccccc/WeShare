@@ -87,7 +87,9 @@ module.exports = {
             }
             let locationCondition = ''; 
             if (latitude && longitude){
-                locationCondition = `AND item.latitude < ${latitude+0.01} AND item.latitude > ${latitude-0.01} AND item.longitude < ${longitude+0.01} AND item.longitude > ${longitude-0.01}`;
+                latitude = Number(latitude);
+                longitude = Number(longitude);
+                locationCondition = `AND item.latitude BETWEEN ${latitude - 0.01} AND ${latitude + 0.01} AND item.longitude BETWEEN ${longitude - 0.01} AND ${longitude + 0.01}`;
             }
             const sql = `SELECT item.id, item.buyers_limit, item.num_of_buyers, item.title, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, DATE_FORMAT(item.expires_at, "%Y-%m-%d %H:%i:%s") AS expires_at, item.seller_id, user.name, user.rating, user.image AS user_image, user.phone \
                 FROM item LEFT JOIN user ON item.seller_id = user.id\
