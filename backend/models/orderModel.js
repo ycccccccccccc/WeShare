@@ -39,12 +39,12 @@ module.exports = {
                 and = 'AND'
             }
             if(buyer_id){
-                buyerCondition = `buyer_id = ${buyer_id}`;
+                buyerCondition = `order_table.buyer_id = ${buyer_id}`;
                 userCondition =  `LEFT JOIN user ON order_table.buyer_id = user.id`
             }
             let sellerCondition = ''; 
             if(seller_id){
-                sellerCondition = `seller_id = ${seller_id}`;
+                sellerCondition = `order_table.seller_id = ${seller_id}`;
                 userCondition =  `LEFT JOIN user ON order_table.seller_id = user.id`
             }
             const sql = `SELECT order_table.id, order_table.item_id, order_table.quantity, order_table.seller_id, order_table.buyer_id, order_table.status,  \
