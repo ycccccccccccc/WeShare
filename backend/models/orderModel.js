@@ -45,27 +45,31 @@ module.exports = {
             ${userCondition} \
             WHERE item_id = ? \
             ORDER BY order_table.id DESC`;
-            const [[results]] = await db.query(sql, [item_id]);
+            const [resultresults] = await db.query(sql, [item_id]);
             if(results.length == 0){
                 return [];
             };
-            const order = {
-                id: results.id,
-                item_id: item_id,
-                quantity: results.quantity,
-                seller_id: results.seller_id, 
-                buyer_id: results.buyer_id, 
-                status: results.status,
-                created_at: results.created_at,
-                user: {
-                    id: results.user_id,
-                    name: results.name,
-                    phone: results.phone,
-                    image: results.image,                    
-                    rating: results.rating
-                }
-            };
-            return order;
+            let orders = [];
+            results.map(result => {
+                const order = {
+                    id: result.id,
+                    item_id: item_id,
+                    quantity: result.quantity,
+                    seller_id: result.seller_id, 
+                    buyer_id: result.buyer_id, 
+                    status: result.status,
+                    created_at: result.created_at,
+                    user: {
+                        id: result.user_id,
+                        name: result.name,
+                        phone: result.phone,
+                        image: result.image,                    
+                        rating: result.rating
+                    }
+                };
+                orders.push(order);
+            })
+            return orders;
         } catch (err) {
             return util.databaseError(err,'getItemOrders',res);
         }
