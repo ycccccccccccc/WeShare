@@ -73,9 +73,10 @@ module.exports = {
 
     getBuyItems: async (res, user_id) => {
         try {
-            const sql = 'SELECT item.id, item.title, item.buyers_limit, item.num_of_buyers, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, DATE_FORMAT(item.expires_at, "%Y-%m-%d %H:%i:%s") AS expires_at \
-            LEFT JOIN item ON order_table.item_id = item.id \
-            FROM order_table WHERE order_table.buyer_id = ?'
+            const sql = `SELECT item.id, item.title, item.buyers_limit, item.num_of_buyers, item.image, item.introduction, item.cost, item.tag, item.item_location, item.latitude, item.longitude, DATE_FORMAT(item.created_at, "%Y-%m-%d %H:%i:%s") AS created_at, DATE_FORMAT(item.expires_at, "%Y-%m-%d %H:%i:%s") AS expires_at
+            FROM order_table
+            LEFT JOIN item ON order_table.item_id = item.id
+            WHERE order_table.buyer_id = ?`;
             const [[results]] = await db.query(sql, [user_id]);
             let items = [];
             results.map((result) => {
