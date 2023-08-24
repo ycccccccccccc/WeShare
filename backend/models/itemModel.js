@@ -1,6 +1,6 @@
 const util = require('../utils/util')
 const { db } = require('../utils/util');
-const { getUser, getUserInfo } = require('./userModel')
+const { getUserInfo } = require('./userModel')
 
 module.exports = {
 
@@ -16,7 +16,7 @@ module.exports = {
             return util.databaseError(err,'addItem',res);
         }
     },
-    SELECT seller_id FROM item WHERE id: async ( res, id ) => {
+    getSeller: async ( res, id ) => {
         try {
             const sql = 'SELECT seller_id FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id])
