@@ -16,7 +16,7 @@ module.exports = {
             return util.databaseError(err,'addItem',res);
         }
     },
-    getSeller: async ( res, id ) => {
+    SELECT seller_id FROM item WHERE id: async ( res, id ) => {
         try {
             const sql = 'SELECT seller_id FROM item WHERE id = ?'
             const [results] = await db.query(sql, [id])
