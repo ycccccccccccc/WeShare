@@ -53,7 +53,7 @@ module.exports = {
         const user_id = req.user.id;
         const buy_list = await orderModel.getOrders( res, user_id, false );
         const sell_list = await orderModel.getOrders( res, false, user_id );
-        return res.status(200),json({ data: { buy: buy_list, sell: sell_list}});
+        return res.status(200).json({ data: { buy: buy_list, sell: sell_list}});
     },
     delOrder: async (req, res) => {
         const order_id = parseInt(req.params.order_id);
