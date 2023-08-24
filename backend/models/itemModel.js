@@ -77,7 +77,7 @@ module.exports = {
             FROM order_table
             LEFT JOIN item ON order_table.item_id = item.id
             WHERE order_table.buyer_id = ?`;
-            const [[results]] = await db.query(sql, [user_id]);
+            const [results] = await db.query(sql, [user_id]);
             let items = [];
             results.map((result) => {
                 const item = {
@@ -88,8 +88,7 @@ module.exports = {
                     image: result.image, 
                     introduction: result.introduction, 
                     cost: result.cost, 
-                    tag: result.tag, 
-                    costco: result.costco,
+                    tag: result.tag,
                     location: result.item_location,
                     latitude: result.latitude, 
                     longitude: result.longitude,
