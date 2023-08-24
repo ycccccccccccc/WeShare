@@ -45,7 +45,7 @@ module.exports = {
             ${userCondition} \
             WHERE item_id = ? \
             ORDER BY order_table.id DESC`;
-            const [resultresults] = await db.query(sql, [item_id]);
+            const [results] = await db.query(sql, [item_id]);
             if(results.length == 0){
                 return [];
             };
