@@ -11,7 +11,6 @@ module.exports = {
         if ( !buyers_limit || !title || !image || !introduction || !cost || !tag || !location || !latitude || !longitude ) {    
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        console.log(buyers_limit, title, image, introduction, cost, tag, costco, location, latitude, longitude, expires_at)
         const result = await itemModel.addItem(res, seller_id, buyers_limit, title, introduction, cost, tag, costco, location, latitude, longitude, expires_at);
         const file_name = image.split('.');
         const randomNum = util.generateRandomString(5);
