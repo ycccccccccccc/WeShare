@@ -53,6 +53,8 @@ module.exports = {
         const user_id = req.user.id;
         const item_id = parseInt(req.params.item_id);
         const seller_id = await itemModel.getSeller(res, item_id);
+        console.log('====================');
+        console.log(user_id , seller_id);
         if(user_id !== seller_id){
             return res.status(400).json({
                 error: "Insufficient permissions!"
