@@ -1,7 +1,7 @@
 # WeShare - let's share 🍻
 💡 According to statistical data from the Ministry of the Interior, Executive Yuan, it is currently observed that **over 50% of households in Taiwan consist of two individuals or fewer**. 
 
-#### In the summer of 2023, I and my team have completed a group-buying platform where anyone can become the initiator of a group purchase and, of course, also participate as a buyer. We have integrated Google Maps to enhance the search user experience. Here are some key features:
+#### In summer 2023, I and my team have completed a group-buying platform where anyone can become the initiator of a group purchase and, of course, also participate as a buyer. We have integrated Google Maps to enhance the search user experience. Here are some key features:
 
 * We set up the environment using **Docker**, ensuring it's not bound by specific computer operating systems.
 * We used **Redis' Rate Limiter** to implemented IP traffic control.
